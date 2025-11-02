@@ -10,7 +10,7 @@ class ApiController extends Controller
     // Récupérer tous les événements
     public function getEvenements()
     {
-        $response = Http::get('http://127.0.0.1:8000/api/evenements');
+        $response = Http::get('https://gestionticket.menjidrc.com/api/evenements');
 
         if ($response->successful()) {
             $data = $response->json();
