@@ -23,9 +23,8 @@ class ApiController extends Controller
     // Récupérer un événement spécifique via short_url
     public function getEvenement($short_url)
     {
-        $response = Http::get("http://127.0.0.1:8000/api/evenements/{$short_url}");
+        $response = Http::get("https://gestionticket.menjidrc.com/api/evenements/{$short_url}");
 
-      
 
         if ($response->successful()) {
             $data = $response->json();
