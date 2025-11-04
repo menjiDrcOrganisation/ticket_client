@@ -15,7 +15,7 @@
     <p class="text-red-500 text-center mt-10">{{ $error }}</p>
 @else
     <header class="relative bg-cover bg-center h-96 md:h-screen"
-    style="background-image: url('https://gestionticket.menjidrc.com/storage/{{ $evenement['ressource'][0]['photo_affiche'] ?? 'img/concert.jpg' }}');">
+    style="background-image: url('https://gestionticket.menjidrc.com/storage/app/public/{{ $evenement['ressource'][0]['photo_affiche'] ?? 'img/concert.jpg' }}');">
         <div class="absolute inset-0 bg-black opacity-60"></div>
         <div class="relative z-10 flex flex-col items-center justify-center h-full text-center px-4">
             <h1 class="text-3xl md:text-5xl font-bold text-white mb-4">{{ $evenement['nom'] }}</h1>
