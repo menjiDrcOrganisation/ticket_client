@@ -10,10 +10,10 @@ class ApiController extends Controller
     // Récupérer tous les événements
     public function getEvenements()
     {
-        $response = Http::get('https://gestionticket.menjidrc.com/api/evenements');
-
-   
-
+        // $response = Http::get('https://gestionticket.menjidrc.com/api/evenements');
+        $response = Http::withoutVerifying()->get('https://gestionticket.menjidrc.com/api/evenements');
+ 
+// dd($response->json());
         if ($response->successful()) {
             $data = $response->json();
             return view('evenements', ['evenements' => $data['data']]);
@@ -25,9 +25,10 @@ class ApiController extends Controller
     // Récupérer un événement spécifique via short_url
     public function getEvenement($short_url)
     {
-        $response = Http::get("https://gestionticket.menjidrc.com/api/evenements/{$short_url}");
+        // $response = Http::get("https://gestionticket.menjidrc.com/api/evenements/{$short_url}");
+        $response = Http::withoutVerifying()->get("https://gestionticket.menjidrc.com/api/evenements/{$short_url}");
 
-
+            // dd($response->json());
         if ($response->successful()) {
             $data = $response->json();
 
