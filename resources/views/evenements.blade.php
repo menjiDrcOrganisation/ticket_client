@@ -247,6 +247,7 @@
     </header>
 
     <!-- Section Événements -->
+<<<<<<< HEAD
     <section id="evenements" class="py-20 px-4 md:px-12 bg-white">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-16">
@@ -254,6 +255,35 @@
                 <p class="text-xl text-gray-600 max-w-2xl mx-auto slide-in-right">
                     Découvrez notre sélection d'événements exceptionnels et réservez votre place dès maintenant
                 </p>
+=======
+    <section class="py-12 px-4 md:px-12">
+        <h2 class="text-3xl font-bold text-center mb-10">Événements à venir</h2>
+
+        @if(isset($error))
+            <p class="text-red-600 text-center">{{ $error }}</p>
+        @endif
+
+        @if(!empty($evenements))
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                @foreach($evenements as $evenement)
+                    <div class="bg-white rounded-xl shadow-md p-6 flex flex-col justify-between">
+                        <h3 class="text-2xl font-bold mb-2">{{ $evenement['nom'] }}</h3>
+                        <p class="mb-1"><strong>Date :</strong> {{ $evenement['date_debut'] }} - {{ $evenement['date_fin'] }}</p>
+                        <p class="mb-1"><strong>Adresse :</strong> {{ $evenement['adresse'] }}</p>
+                        <p class="mb-1"><strong>Salle :</strong> {{ $evenement['salle'] }}</p>
+                        <p class="mb-1"><strong>Statut :</strong> {{ $evenement['statut'] }}</p>
+                        <p class="mb-2"><strong>Types de billets :</strong>
+                            @if(!empty($evenement['type_billets']))
+                                {{ implode(', ', array_map(function($b){ return $b['nom_type'].' ('.$b['pivot']['nombre_billet'].')'; }, $evenement['type_billets'])) }}
+                            @else
+                                Aucun billet
+                            @endif
+                        </p>
+                        <a href="https://ticket.menjidrc.com/{{ $evenement['url_evenement'] }}" class="mt-auto bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-lg text-center font-semibold transition">
+                        Réserver maintenant</a>
+                    </div>
+                @endforeach
+>>>>>>> main
             </div>
 
             @if(isset($error))
@@ -357,6 +387,7 @@
         </div>
     </section>
 
+<<<<<<< HEAD
     <!-- Section Infos pratiques -->
     <section id="infos" class="py-20 bg-gray-50 px-6">
         <div class="max-w-6xl mx-auto">
@@ -423,6 +454,10 @@
             </div>
         </div>
     </section>
+=======
+    <!-- Infos pratiques -->
+    
+>>>>>>> main
 
     <!-- Section Billetterie -->
     <section id="billets" class="py-20 bg-white px-6">
