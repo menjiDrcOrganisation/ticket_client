@@ -42,7 +42,8 @@
                                 Aucun billet
                             @endif
                         </p>
-                        <a href="#billets" class="mt-auto bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-lg text-center font-semibold transition">Réserver maintenant</a>
+                        <a href="https://ticket.menjidrc.com/{{ $evenement['url_evenement'] }}" class="mt-auto bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-lg text-center font-semibold transition">
+                        Réserver maintenant</a>
                     </div>
                 @endforeach
             </div>
@@ -52,31 +53,7 @@
     </section>
 
     <!-- Infos pratiques -->
-    <section class="bg-white py-12 px-6">
-        <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            <div>
-                <div class="flex justify-center mb-2">
-                    <i data-lucide="map-pin" class="w-10 h-10 text-red-600"></i>
-                </div>
-                <h3 class="text-xl font-semibold mb-1">Lieu</h3>
-                <p>Salle Splendeur ex 13'Or Room, IMMEUBLE EXCELENCIA, Saio & Kasa-vubu Ref: Upak</p>
-            </div>
-            <div>
-                <div class="flex justify-center mb-2">
-                    <i data-lucide="calendar-days" class="w-10 h-10 text-red-600"></i>
-                </div>
-                <h3 class="text-xl font-semibold mb-1">Date</h3>
-                <p>Dimanche 31 AOUT 2025</p>
-            </div>
-            <div>
-                <div class="flex justify-center mb-2">
-                    <i data-lucide="clock" class="w-10 h-10 text-red-600"></i>
-                </div>
-                <h3 class="text-xl font-semibold mb-1">Heure</h3>
-                <p>À partir de 16h00</p>
-            </div>
-        </div>
-    </section>
+    
 
     <!-- Billetterie -->
     <section id="billets" class="py-16 bg-gray-100 px-6">
