@@ -280,7 +280,7 @@
 
     <!-- Section Hero -->
     <header class="relative min-h-screen bg-cover bg-center bg-fixed flex items-center justify-center pt-16"
-        style="background-image: url('https://gestionticket.menjidrc.com/storage/app/public/{{ $evenement['ressource'][0]['photo_affiche'] ?? 'img/concert.jpg' }}');">
+        style="background-image: url('http://127.0.0.1:8000/storages/{{ $evenement['ressource'][0]['photo_affiche'] ?? 'img/concert.jpg' }}');">
         <div class="absolute inset-0 hero-gradient"></div>
         
         <div class="absolute inset-0 bg-pattern"></div>
@@ -342,7 +342,7 @@
             </div>
             @endif
 
-            <div>
+            <div class="my-6">
                 <a href="#tickets" class="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300 transform hover:scale-105 pulse-animation">
                     <i data-lucide="shopping-cart" class="w-5 h-5"></i>
                     Acheter des billets
