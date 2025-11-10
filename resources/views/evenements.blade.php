@@ -247,51 +247,9 @@
     </header>
 
     <!-- Section Événements -->
-<<<<<<< HEAD
-    <section id="evenements" class="py-20 px-4 md:px-12 bg-white">
-        <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold mb-4 slide-in-left">Événements à venir</h2>
-                <p class="text-xl text-gray-600 max-w-2xl mx-auto slide-in-right">
-                    Découvrez notre sélection d'événements exceptionnels et réservez votre place dès maintenant
-                </p>
-=======
     <section class="py-12 px-4 md:px-12">
         <h2 class="text-3xl font-bold text-center mb-10">Événements à venir</h2>
 
-        @if(isset($error))
-            <p class="text-red-600 text-center">{{ $error }}</p>
-        @endif
-
-        @if(!empty($evenements))
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                @foreach($evenements as $evenement)
-                    <div class="bg-white rounded-xl shadow-md p-6 flex flex-col justify-between">
-                        <h3 class="text-2xl font-bold mb-2">{{ $evenement['nom'] }}</h3>
-                        <p class="mb-1"><strong>Date :</strong> {{ $evenement['date_debut'] }} - {{ $evenement['date_fin'] }}</p>
-                        <p class="mb-1"><strong>Adresse :</strong> {{ $evenement['adresse'] }}</p>
-                        <p class="mb-1"><strong>Salle :</strong> {{ $evenement['salle'] }}</p>
-                        <p class="mb-1"><strong>Statut :</strong> {{ $evenement['statut'] }}</p>
-                        <p class="mb-2"><strong>Types de billets :</strong>
-                            @if(!empty($evenement['type_billets']))
-                                {{ implode(', ', array_map(function($b){ return $b['nom_type'].' ('.$b['pivot']['nombre_billet'].')'; }, $evenement['type_billets'])) }}
-                            @else
-                                Aucun billet
-                            @endif
-                        </p>
-                        <a href="https://ticket.menjidrc.com/{{ $evenement['url_evenement'] }}" class="mt-auto bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-lg text-center font-semibold transition">
-                        Réserver maintenant</a>
-                    </div>
-                @endforeach
->>>>>>> main
-            </div>
-
-            @if(isset($error))
-                <div class="bg-red-50 border border-red-200 rounded-xl p-6 text-center max-w-2xl mx-auto fade-in">
-                    <i data-lucide="alert-circle" class="w-12 h-12 text-red-500 mx-auto mb-4"></i>
-                    <p class="text-red-700 text-lg">{{ $error }}</p>
-                </div>
-            @endif
 
             @if(!empty($evenements))
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 stagger-animation">
@@ -368,10 +326,10 @@
                                     </div>
                                 @endif
                                 
-                                <a href="/evenement/{{ $evenement['id'] ?? '1' }}" 
+                                <a href="/evenements/{{ $evenement['url_evenement'] ?? '1' }}" 
                                    class="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2 group-hover:scale-105">
                                     <i data-lucide="eye" class="w-4 h-4"></i>
-                                    Voir détails
+                                    Acheter
                                 </a>
                             </div>
                         </div>
@@ -384,148 +342,12 @@
                     <p class="text-gray-400">Revenez bientôt pour découvrir nos prochains événements</p>
                 </div>
             @endif
+
+            
         </div>
     </section>
 
-<<<<<<< HEAD
-    <!-- Section Infos pratiques -->
-    <section id="infos" class="py-20 bg-gray-50 px-6">
-        <div class="max-w-6xl mx-auto">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold mb-4 slide-in-left">Informations pratiques</h2>
-                <p class="text-xl text-gray-600 max-w-2xl mx-auto slide-in-right">
-                    Tout ce que vous devez savoir pour profiter au maximum de votre expérience
-                </p>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 stagger-animation">
-                <div class="bg-white rounded-2xl shadow-lg p-8 text-center transform hover:scale-105 transition duration-300">
-                    <div class="flex justify-center mb-4">
-                        <div class="bg-red-100 p-4 rounded-2xl">
-                            <i data-lucide="map-pin" class="w-8 h-8 text-red-600"></i>
-                        </div>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-3">Lieu</h3>
-                    <p class="text-gray-600">Salle Splendeur ex 13'Or Room, IMMEUBLE EXCELENCIA, Saio & Kasa-vubu Ref: Upak</p>
-                </div>
-                
-                <div class="bg-white rounded-2xl shadow-lg p-8 text-center transform hover:scale-105 transition duration-300">
-                    <div class="flex justify-center mb-4">
-                        <div class="bg-blue-100 p-4 rounded-2xl">
-                            <i data-lucide="calendar-days" class="w-8 h-8 text-blue-600"></i>
-                        </div>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-3">Date</h3>
-                    <p class="text-gray-600">Dimanche 31 Août 2025</p>
-                </div>
-                
-                <div class="bg-white rounded-2xl shadow-lg p-8 text-center transform hover:scale-105 transition duration-300">
-                    <div class="flex justify-center mb-4">
-                        <div class="bg-green-100 p-4 rounded-2xl">
-                            <i data-lucide="clock" class="w-8 h-8 text-green-600"></i>
-                        </div>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-3">Heure</h3>
-                    <p class="text-gray-600">À partir de 16h00</p>
-                </div>
-            </div>
-            
-            <!-- Informations supplémentaires -->
-            <div class="mt-12 bg-white rounded-2xl shadow-lg p-8 stagger-animation">
-                <h3 class="text-2xl font-bold mb-6 text-center">Services sur place</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
-                    <div class="flex flex-col items-center">
-                        <i data-lucide="utensils" class="w-10 h-10 text-red-600 mb-3"></i>
-                        <p class="font-medium">Restauration</p>
-                    </div>
-                    <div class="flex flex-col items-center">
-                        <i data-lucide="car" class="w-10 h-10 text-red-600 mb-3"></i>
-                        <p class="font-medium">Parking sécurisé</p>
-                    </div>
-                    <div class="flex flex-col items-center">
-                        <i data-lucide="wheelchair" class="w-10 h-10 text-red-600 mb-3"></i>
-                        <p class="font-medium">Accès PMR</p>
-                    </div>
-                    <div class="flex flex-col items-center">
-                        <i data-lucide="wifi" class="w-10 h-10 text-red-600 mb-3"></i>
-                        <p class="font-medium">Wi-Fi gratuit</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-=======
-    <!-- Infos pratiques -->
-    
->>>>>>> main
 
-    <!-- Section Billetterie -->
-    <section id="billets" class="py-20 bg-white px-6">
-        <div class="max-w-6xl mx-auto">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold mb-4 slide-in-left">Réservez vos billets</h2>
-                <p class="text-xl text-gray-600 max-w-2xl mx-auto slide-in-right">
-                    Choisissez la formule qui correspond le mieux à vos attentes
-                </p>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 stagger-animation">
-                <div class="ticket-card p-8 flex flex-col items-center text-center">
-                    <div class="bg-red-100 p-4 rounded-2xl mb-6">
-                        <i data-lucide="ticket" class="w-12 h-12 text-red-600"></i>
-                    </div>
-                    <h3 class="text-2xl font-semibold mb-3">Place Standard</h3>
-                    <p class="text-gray-600 mb-6">Accès à l'événement avec placement libre</p>
-                    <p class="text-4xl font-bold text-red-600 mb-2">5 000 FC</p>
-                    <p class="text-sm text-gray-500 mb-6">Par personne</p>
-                    <a href="#!" class="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-105">
-                        Acheter maintenant
-                    </a>
-                </div>
-                
-                <div class="ticket-card p-8 flex flex-col items-center text-center transform scale-105 relative">
-                    <div class="absolute top-0 right-0 bg-yellow-400 text-black px-4 py-1 rounded-bl-xl rounded-tr-xl text-sm font-bold">
-                        Populaire
-                    </div>
-                    <div class="bg-yellow-100 p-4 rounded-2xl mb-6">
-                        <i data-lucide="crown" class="w-12 h-12 text-yellow-600"></i>
-                    </div>
-                    <h3 class="text-2xl font-semibold mb-3">Place VIP</h3>
-                    <p class="text-gray-600 mb-6">Accès privilégié avec services exclusifs</p>
-                    <p class="text-4xl font-bold text-yellow-600 mb-2">10 $</p>
-                    <p class="text-sm text-gray-500 mb-6">Par personne</p>
-                    <a href="#!" class="w-full bg-yellow-400 hover:bg-yellow-500 text-black py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-105">
-                        Acheter maintenant
-                    </a>
-                </div>
-                
-                <div class="ticket-card p-8 flex flex-col items-center text-center">
-                    <div class="bg-purple-100 p-4 rounded-2xl mb-6">
-                        <i data-lucide="star" class="w-12 h-12 text-purple-600"></i>
-                    </div>
-                    <h3 class="text-2xl font-semibold mb-3">Place Premium</h3>
-                    <p class="text-gray-600 mb-6">Expérience complète avec avantages exclusifs</p>
-                    <p class="text-4xl font-bold text-purple-600 mb-2">15 $</p>
-                    <p class="text-sm text-gray-500 mb-6">Par personne</p>
-                    <a href="#!" class="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-105">
-                        Acheter maintenant
-                    </a>
-                </div>
-            </div>
-            
-            <!-- Information de paiement -->
-            <div class="mt-12 text-center fade-in">
-                <p class="text-gray-600 mb-4">Paiement sécurisé accepté :</p>
-                <div class="flex justify-center gap-6 text-gray-400">
-                    <i data-lucide="credit-card" class="w-8 h-8"></i>
-                    <i data-lucide="smartphone" class="w-8 h-8"></i>
-                    <i data-lucide="shield" class="w-8 h-8"></i>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
     <footer id="contact" class="bg-gray-900 text-white py-12">
         <div class="max-w-6xl mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8 stagger-animation">

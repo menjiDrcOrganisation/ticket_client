@@ -252,7 +252,7 @@
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center space-x-2">
                 <i data-lucide="ticket" class="w-8 h-8 text-red-500"></i>
-                <span class="text-xl font-bold">Menji<span class="text-red-500">DRC</span></span>
+                <span class="text-xl font-bold"> {{ $evenement['nom'] }}</span>
             </div>
             
             <div class="hidden md:flex space-x-8">
@@ -280,7 +280,9 @@
 
     <!-- Section Hero -->
     <header class="relative min-h-screen bg-cover bg-center bg-fixed flex items-center justify-center pt-16"
-        style="background-image: url('http://127.0.0.1:8000/storages/{{ $evenement['ressource'][0]['photo_affiche'] ?? 'img/concert.jpg' }}');">
+        style="background-image: url('https://gestionticket.menjidrc.com/storage/public/{{
+                $evenement['ressource'][0]['photo_affiche'] ?? 'img/concert.jpg'
+            }}'); background-size: cover; ">
         <div class="absolute inset-0 hero-gradient"></div>
         
         <div class="absolute inset-0 bg-pattern"></div>
@@ -342,12 +344,7 @@
             </div>
             @endif
 
-            <div class="my-6">
-                <a href="#tickets" class="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300 transform hover:scale-105 pulse-animation">
-                    <i data-lucide="shopping-cart" class="w-5 h-5"></i>
-                    Acheter des billets
-                </a>
-            </div>
+          
         </div>
         
         <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-bounce">
@@ -379,30 +376,20 @@
         
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             @foreach($evenement['type_billets'] as $index => $billet)
-                <div class="ticket-shape bg-gradient-to-br from-gray-800 to-gray-900 text-white shadow-2xl hover-lift ticket-card">
-                    
-                    <div class="p-6 text-center">
-                        <i data-lucide="ticket" class="w-12 h-12 text-red-600 mb-4 mx-auto"></i>
-                        <h3 class="text-2xl font-bold mb-2">{{ $billet['nom_type'] }}</h3>
-                        <p class="text-3xl font-bold text-red-600 mb-4">
-                            {{ number_format($billet['pivot']['prix_unitaire'] ?? 0, 0, ',', ' ') }} {{ $billet['pivot']['devise'] ?? 'FC' }}
-                        </p>
-                        <p class="text-gray-400 mb-4">
-                            Disponible: {{ $billet['pivot']['nombre_billet'] }} billets
-                        </p>
-                        
-                        
-                        
-                        <button 
-                            class="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2 buy-ticket-btn"
-                            data-ticket-type="{{ $billet['nom_type'] }}"
-                            data-ticket-price="{{ $billet['pivot']['prix_unitaire'] ?? '0' }}"
-                            data-ticket-id="{{ $billet['id'] }}"
-                        >
-                            <i data-lucide="shopping-cart" class="w-5 h-5"></i>
-                            Acheter 
-                        </button>
+                <div class="ticket-card shadow-2xl hover-lift rounded-2xl p-8 flex flex-col items-center text-center">
+                    <div class="bg-red-100 p-4 rounded-2xl mb-6">
+                        <i data-lucide="ticket" class="w-12 h-12 text-red-600"></i>
                     </div>
+                    <h3 class="text-2xl font-semibold mb-3">Billet {{ $billet['nom_type'] }}</h3>
+                    <p class="text-gray-600 mb-6">Accès à l'événement avec placement libre</p>
+                    <p class="text-4xl font-bold text-red-600 mb-2">{{ number_format($billet['pivot']['prix_unitaire'] ?? 0, 0, ',', ' ') }} {{ $billet['pivot']['devise'] ?? 'FC' }}</p>
+                    <p class="text-sm text-gray-500 mb-6">Disponible</p>
+                    <a  class="w-full buy-ticket-btn  bg-red-600 hover:bg-red-700 text-white py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-105
+                    "   data-ticket-type="{{ $billet['nom_type'] }}"
+                            data-ticket-price="{{ $billet['pivot']['prix_unitaire'] ?? '0' }}"
+                            data-ticket-id="{{ $billet['id'] }}">
+                        Acheter maintenant
+                    </a>
                 </div>
             @endforeach
         </div>
@@ -417,8 +404,16 @@
             <div class="bg-gray-900 rounded-2xl overflow-hidden shadow-2xl">
                 <div class="md:flex">
                     <div class="w-full p-8 md:p-12">
-                        <h3 class="text-2xl font-bold mb-4">{{ $evenement['salle'] }}</h3>
+                      
                         <div class="space-y-4">
+
+                            <div class="flex items-start gap-3">
+                                <i data-lucide="map-pin" class="w-5 h-5 text-red-500 mt-1"></i>
+                                <div>
+                                    <p class="font-medium">Salle</p>
+                                    <p class="text-gray-400">{{ $evenement['salle'] }}</p>
+                                </div>
+                            </div>
                             <div class="flex items-start gap-3">
                                 <i data-lucide="map-pin" class="w-5 h-5 text-red-500 mt-1"></i>
                                 <div>
@@ -583,7 +578,6 @@
                         <li><a href="#location" class="text-gray-400 hover:text-white transition-colors">Lieu</a></li>
                     </ul>
                 </div>
-                
                 <div>
                     <h4 class="text-lg font-semibold mb-4">Contact</h4>
                     <ul class="space-y-2 text-gray-400">
@@ -781,7 +775,7 @@
                 submitBtn.innerHTML = '<i data-lucide="loader" class="w-5 h-5 animate-spin"></i> Traitement...';
                 lucide.createIcons();
                 
-                const response = await fetch("http://127.0.0.1:8000/api/billet/achatBillet", {
+                const response = await fetch("https://gestionticket.menjidrc.com/api/billet/achatBillet", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
