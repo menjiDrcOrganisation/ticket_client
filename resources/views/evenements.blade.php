@@ -186,7 +186,7 @@
             
             <div class="hidden md:flex space-x-8 stagger-animation">
                 <a href="#evenements" class="text-gray-600 hover:text-red-600 transition-colors font-medium">Événements</a>
-                <a href="#infos" class="text-gray-600 hover:text-red-600 transition-colors font-medium">Infos</a>
+                <!-- <a href="#infos" class="text-gray-600 hover:text-red-600 transition-colors font-medium">Infos</a> -->
                 <a href="#billets" class="text-gray-600 hover:text-red-600 transition-colors font-medium">Billetterie</a>
                 <a href="#contact" class="text-gray-600 hover:text-red-600 transition-colors font-medium">Contact</a>
             </div>
@@ -400,7 +400,7 @@
             </div>
             
             <!-- Informations supplémentaires -->
-            <div class="mt-12 bg-white rounded-2xl shadow-lg p-8 stagger-animation">
+            <!-- <div class="mt-12 bg-white rounded-2xl shadow-lg p-8 stagger-animation">
                 <h3 class="text-2xl font-bold mb-6 text-center">Services sur place</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
                     <div class="flex flex-col items-center">
@@ -420,7 +420,7 @@
                         <p class="font-medium">Wi-Fi gratuit</p>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </section>
 
@@ -443,9 +443,9 @@
                     <p class="text-gray-600 mb-6">Accès à l'événement avec placement libre</p>
                     <p class="text-4xl font-bold text-red-600 mb-2">5 000 FC</p>
                     <p class="text-sm text-gray-500 mb-6">Par personne</p>
-                    <a href="#!" class="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-105">
+                    <!-- <a href="#!" class="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-105">
                         Acheter maintenant
-                    </a>
+                    </a> -->
                 </div>
                 
                 <div class="ticket-card p-8 flex flex-col items-center text-center transform scale-105 relative">
@@ -459,9 +459,9 @@
                     <p class="text-gray-600 mb-6">Accès privilégié avec services exclusifs</p>
                     <p class="text-4xl font-bold text-yellow-600 mb-2">10 $</p>
                     <p class="text-sm text-gray-500 mb-6">Par personne</p>
-                    <a href="#!" class="w-full bg-yellow-400 hover:bg-yellow-500 text-black py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-105">
+                    <!-- <a href="#!" class="w-full bg-yellow-400 hover:bg-yellow-500 text-black py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-105">
                         Acheter maintenant
-                    </a>
+                    </a> -->
                 </div>
                 
                 <div class="ticket-card p-8 flex flex-col items-center text-center">
@@ -472,9 +472,9 @@
                     <p class="text-gray-600 mb-6">Expérience complète avec avantages exclusifs</p>
                     <p class="text-4xl font-bold text-purple-600 mb-2">15 $</p>
                     <p class="text-sm text-gray-500 mb-6">Par personne</p>
-                    <a href="#!" class="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-105">
+                    <!-- <a href="#!" class="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-105">
                         Acheter maintenant
-                    </a>
+                    </a> -->
                 </div>
             </div>
             
