@@ -326,7 +326,7 @@
                                     </div>
                                 @endif
                                 
-                                <a href="/evenements/{{ $evenement['url_evenement'] ?? '1' }}" 
+                                <a href="/{{ $evenement['url_evenement'] ?? '1' }}" 
                                    class="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2 group-hover:scale-105">
                                     <i data-lucide="eye" class="w-4 h-4"></i>
                                     Acheter
