@@ -280,7 +280,7 @@
 
     <!-- Section Hero -->
     <header class="relative min-h-screen bg-cover bg-center bg-fixed flex items-center justify-center pt-16"
-        style="background-image: url('https://gestionticket.menjidrc.com/storage/public/{{
+        style="background-image: url('https://gestionticket.menjidrc.com/storage/app/public/{{
                 $evenement['ressource'][0]['photo_affiche'] ?? 'img/concert.jpg'
             }}'); background-size: cover; ">
         <div class="absolute inset-0 hero-gradient"></div>
