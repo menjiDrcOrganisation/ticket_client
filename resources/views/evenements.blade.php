@@ -172,6 +172,95 @@
             height: 60%;
             background: linear-gradient(transparent, rgba(0,0,0,0.7));
         }
+        
+        /* Styles pour la recherche et filtres */
+        .search-filter-container {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .search-box {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 3rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.1);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+        }
+        
+        .filter-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-width: 150px;
+        }
+        
+        .filter-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #475569;
+        }
+        
+        .filter-select {
+            padding: 0.5rem 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            background-color: white;
+            cursor: pointer;
+        }
+        
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #64748b;
+        }
+        
+        @media (max-width: 768px) {
+            .filter-section {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .filter-group {
+                min-width: 100%;
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800">
@@ -186,7 +275,6 @@
             
             <div class="hidden md:flex space-x-8 stagger-animation">
                 <a href="#evenements" class="text-gray-600 hover:text-red-600 transition-colors font-medium">Événements</a>
-                <!-- <a href="#infos" class="text-gray-600 hover:text-red-600 transition-colors font-medium">Infos</a> -->
                 <a href="#billets" class="text-gray-600 hover:text-red-600 transition-colors font-medium">Billetterie</a>
                 <a href="#contact" class="text-gray-600 hover:text-red-600 transition-colors font-medium">Contact</a>
             </div>
@@ -200,7 +288,6 @@
         <div id="mobile-menu" class="md:hidden bg-white border-t border-gray-200 hidden">
             <div class="container mx-auto px-4 py-4 flex flex-col space-y-4 stagger-animation">
                 <a href="#evenements" class="text-gray-600 hover:text-red-600 transition-colors py-2 font-medium">Événements</a>
-                <a href="#infos" class="text-gray-600 hover:text-red-600 transition-colors py-2 font-medium">Infos</a>
                 <a href="#billets" class="text-gray-600 hover:text-red-600 transition-colors py-2 font-medium">Billetterie</a>
                 <a href="#contact" class="text-gray-600 hover:text-red-600 transition-colors py-2 font-medium">Contact</a>
             </div>
@@ -256,6 +343,58 @@
                 </p>
             </div>
 
+            <!-- Barre de recherche et filtres -->
+            <div class="search-filter-container fade-in">
+                <div class="search-box">
+                    <i data-lucide="search" class="search-icon w-5 h-5"></i>
+                    <input type="text" id="search-input" class="search-input" placeholder="Rechercher un événement par nom...">
+                </div>
+                
+                <div class="filter-section">
+                    <!-- <div class="filter-group">
+                        <label class="filter-label" for="status-filter">Statut</label>
+                        <select id="status-filter" class="filter-select">
+                            <option value="all">Tous les statuts</option>
+                            <option value="Actif">Actif</option>
+                            <option value="À venir">À venir</option>
+                            <option value="Complet">Complet</option>
+                        </select>
+                    </div> -->
+                    
+                    <div class="filter-group">
+                        <label class="filter-label" for="date-filter">Date</label>
+                        <select id="date-filter" class="filter-select">
+                            <option value="all">Toutes les dates</option>
+                            <option value="today">Aujourd'hui</option>
+                            <option value="week">Cette semaine</option>
+                            <option value="month">Ce mois</option>
+                            <option value="future">À venir</option>
+                        </select>
+                    </div>
+                    
+                    <!-- <div class="filter-group">
+                        <label class="filter-label" for="location-filter">Lieu</label>
+                        <select id="location-filter" class="filter-select">
+                            <option value="all">Tous les lieux</option>
+                            <option value="Salle Splendeur">Salle Splendeur</option>
+                            <option value="13'Or Room">13'Or Room</option>
+                            <option value="IMMEUBLE EXCELENCIA">IMMEUBLE EXCELENCIA</option>
+                        </select>
+                    </div> -->
+                    
+                    <div class="filter-group">
+                        <label class="filter-label" for="price-filter">Prix</label>
+                        <select id="price-filter" class="filter-select">
+                            <option value="all">Tous les prix</option>
+                            <option value="free">Gratuit</option>
+                            <option value="low">Moins de 10$</option>
+                            <option value="medium">10$ - 30$</option>
+                            <option value="high">Plus de 30$</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
             @if(isset($error))
                 <div class="bg-red-50 border border-red-200 rounded-xl p-6 text-center max-w-2xl mx-auto fade-in">
                     <i data-lucide="alert-circle" class="w-12 h-12 text-red-500 mx-auto mb-4"></i>
@@ -264,9 +403,14 @@
             @endif
 
             @if(!empty($evenements))
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 stagger-animation">
+                <div id="events-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 stagger-animation">
                     @foreach($evenements as $evenement)
-                        <div class="event-card bg-white rounded-2xl shadow-lg overflow-hidden group">
+                        <div class="event-card bg-white rounded-2xl shadow-lg overflow-hidden group" 
+                             data-name="{{ strtolower($evenement['nom']) }}"
+                             data-status="{{ $evenement['statut'] }}"
+                             data-date="{{ $evenement['date_debut'] }}"
+                             data-location="{{ $evenement['salle'] }}"
+                             data-price="{{ $evenement['type_billets'][0]['pivot']['prix'] ?? 0 }}">
                             <!-- Badge de statut -->
                             @php
                                 $statusClass = 'status-upcoming';
@@ -398,29 +542,6 @@
                     <p class="text-gray-600">À partir de 16h00</p>
                 </div>
             </div>
-            
-            <!-- Informations supplémentaires -->
-            <!-- <div class="mt-12 bg-white rounded-2xl shadow-lg p-8 stagger-animation">
-                <h3 class="text-2xl font-bold mb-6 text-center">Services sur place</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
-                    <div class="flex flex-col items-center">
-                        <i data-lucide="utensils" class="w-10 h-10 text-red-600 mb-3"></i>
-                        <p class="font-medium">Restauration</p>
-                    </div>
-                    <div class="flex flex-col items-center">
-                        <i data-lucide="car" class="w-10 h-10 text-red-600 mb-3"></i>
-                        <p class="font-medium">Parking sécurisé</p>
-                    </div>
-                    <div class="flex flex-col items-center">
-                        <i data-lucide="wheelchair" class="w-10 h-10 text-red-600 mb-3"></i>
-                        <p class="font-medium">Accès PMR</p>
-                    </div>
-                    <div class="flex flex-col items-center">
-                        <i data-lucide="wifi" class="w-10 h-10 text-red-600 mb-3"></i>
-                        <p class="font-medium">Wi-Fi gratuit</p>
-                    </div>
-                </div>
-            </div> -->
         </div>
     </section>
 
@@ -443,9 +564,6 @@
                     <p class="text-gray-600 mb-6">Accès à l'événement avec placement libre</p>
                     <p class="text-4xl font-bold text-red-600 mb-2">5 000 FC</p>
                     <p class="text-sm text-gray-500 mb-6">Par personne</p>
-                    <!-- <a href="#!" class="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-105">
-                        Acheter maintenant
-                    </a> -->
                 </div>
                 
                 <div class="ticket-card p-8 flex flex-col items-center text-center transform scale-105 relative">
@@ -459,9 +577,6 @@
                     <p class="text-gray-600 mb-6">Accès privilégié avec services exclusifs</p>
                     <p class="text-4xl font-bold text-yellow-600 mb-2">10 $</p>
                     <p class="text-sm text-gray-500 mb-6">Par personne</p>
-                    <!-- <a href="#!" class="w-full bg-yellow-400 hover:bg-yellow-500 text-black py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-105">
-                        Acheter maintenant
-                    </a> -->
                 </div>
                 
                 <div class="ticket-card p-8 flex flex-col items-center text-center">
@@ -472,9 +587,6 @@
                     <p class="text-gray-600 mb-6">Expérience complète avec avantages exclusifs</p>
                     <p class="text-4xl font-bold text-purple-600 mb-2">15 $</p>
                     <p class="text-sm text-gray-500 mb-6">Par personne</p>
-                    <!-- <a href="#!" class="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-105">
-                        Acheter maintenant
-                    </a> -->
                 </div>
             </div>
             
@@ -522,7 +634,6 @@
                     <h4 class="text-lg font-semibold mb-4">Liens rapides</h4>
                     <ul class="space-y-2 text-gray-400">
                         <li><a href="#evenements" class="hover:text-white transition-colors">Événements</a></li>
-                        <li><a href="#infos" class="hover:text-white transition-colors">Infos pratiques</a></li>
                         <li><a href="#billets" class="hover:text-white transition-colors">Billetterie</a></li>
                         <li><a href="#contact" class="hover:text-white transition-colors">Contact</a></li>
                     </ul>
@@ -605,6 +716,121 @@
                     });
                 }
             });
+        });
+        
+        // Fonctionnalité de recherche et filtrage
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('search-input');
+            const statusFilter = document.getElementById('status-filter');
+            const dateFilter = document.getElementById('date-filter');
+            const locationFilter = document.getElementById('location-filter');
+            const priceFilter = document.getElementById('price-filter');
+            const eventCards = document.querySelectorAll('.event-card');
+            const eventsContainer = document.getElementById('events-container');
+            
+            // Fonction pour filtrer les événements
+            function filterEvents() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const statusValue = statusFilter.value;
+                const dateValue = dateFilter.value;
+                const locationValue = locationFilter.value;
+                const priceValue = priceFilter.value;
+                
+                let visibleCount = 0;
+                
+                eventCards.forEach(card => {
+                    const eventName = card.getAttribute('data-name');
+                    const eventStatus = card.getAttribute('data-status');
+                    const eventDate = new Date(card.getAttribute('data-date'));
+                    const eventLocation = card.getAttribute('data-location');
+                    const eventPrice = parseFloat(card.getAttribute('data-price'));
+                    
+                    // Vérifier la recherche par nom
+                    const nameMatch = eventName.includes(searchTerm);
+                    
+                    // Vérifier le statut
+                    const statusMatch = statusValue === 'all' || 
+                        (statusValue === 'Actif' && eventStatus === 'Actif') ||
+                        (statusValue === 'À venir' && eventStatus === 'À venir') ||
+                        (statusValue === 'Complet' && eventStatus === 'Complet');
+                    
+                    // Vérifier la date
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+                    
+                    const eventDateOnly = new Date(eventDate);
+                    eventDateOnly.setHours(0, 0, 0, 0);
+                    
+                    let dateMatch = true;
+                    if (dateValue !== 'all') {
+                        if (dateValue === 'today') {
+                            dateMatch = eventDateOnly.getTime() === today.getTime();
+                        } else if (dateValue === 'week') {
+                            const weekFromNow = new Date(today);
+                            weekFromNow.setDate(today.getDate() + 7);
+                            dateMatch = eventDateOnly >= today && eventDateOnly <= weekFromNow;
+                        } else if (dateValue === 'month') {
+                            const monthFromNow = new Date(today);
+                            monthFromNow.setMonth(today.getMonth() + 1);
+                            dateMatch = eventDateOnly >= today && eventDateOnly <= monthFromNow;
+                        } else if (dateValue === 'future') {
+                            dateMatch = eventDateOnly > today;
+                        }
+                    }
+                    
+                    // Vérifier le lieu
+                    const locationMatch = locationValue === 'all' || 
+                        eventLocation.toLowerCase().includes(locationValue.toLowerCase());
+                    
+                    // Vérifier le prix
+                    let priceMatch = true;
+                    if (priceValue !== 'all') {
+                        if (priceValue === 'free') {
+                            priceMatch = eventPrice === 0;
+                        } else if (priceValue === 'low') {
+                            priceMatch = eventPrice < 10;
+                        } else if (priceValue === 'medium') {
+                            priceMatch = eventPrice >= 10 && eventPrice <= 30;
+                        } else if (priceValue === 'high') {
+                            priceMatch = eventPrice > 30;
+                        }
+                    }
+                    
+                    // Afficher ou masquer la carte selon les critères
+                    if (nameMatch && statusMatch && dateMatch && locationMatch && priceMatch) {
+                        card.style.display = 'block';
+                        visibleCount++;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+                
+                // Afficher un message si aucun événement ne correspond
+                const noResults = document.getElementById('no-results');
+                if (visibleCount === 0) {
+                    if (!noResults) {
+                        const noResultsDiv = document.createElement('div');
+                        noResultsDiv.id = 'no-results';
+                        noResultsDiv.className = 'no-results';
+                        noResultsDiv.innerHTML = `
+                            <i data-lucide="search-x" class="w-16 h-16 text-gray-400 mx-auto mb-4"></i>
+                            <h3 class="text-xl font-semibold text-gray-500 mb-2">Aucun événement trouvé</h3>
+                            <p class="text-gray-400">Essayez de modifier vos critères de recherche</p>
+                        `;
+                        eventsContainer.appendChild(noResultsDiv);
+                        lucide.createIcons();
+                    }
+                } else if (noResults) {
+                    noResults.remove();
+                }
+            }
+            
+            // Écouter les changements dans les filtres
+            searchInput.addEventListener('input', filterEvents);
+            statusFilter.addEventListener('change', filterEvents);
+            dateFilter.addEventListener('change', filterEvents);
+            locationFilter.addEventListener('change', filterEvents);
+            priceFilter.addEventListener('change', filterEvents);
         });
     </script>
 
