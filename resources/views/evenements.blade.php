@@ -543,7 +543,7 @@
                 </div>
                 
                 <div class="filter-section">
-                    <div class="filter-group">
+                    <!-- <div class="filter-group">
                         <label class="filter-label text-center-mobile" for="status-filter">Statut</label>
                         <select id="status-filter" class="filter-select">
                             <option value="all">Tous les statuts</option>
@@ -551,7 +551,7 @@
                             <option value="À venir">À venir</option>
                             <option value="Complet">Complet</option>
                         </select>
-                    </div>
+                    </div> -->
                     
                     <div class="filter-group">
                         <label class="filter-label text-center-mobile" for="date-filter">Date</label>
@@ -564,7 +564,7 @@
                         </select>
                     </div>
                     
-                    <div class="filter-group">
+                    <!-- <div class="filter-group">
                         <label class="filter-label text-center-mobile" for="location-filter">Lieu</label>
                         <select id="location-filter" class="filter-select">
                             <option value="all">Tous les lieux</option>
@@ -572,7 +572,7 @@
                             <option value="13'Or Room">13'Or Room</option>
                             <option value="IMMEUBLE EXCELENCIA">IMMEUBLE EXCELENCIA</option>
                         </select>
-                    </div>
+                    </div> -->
                     
                     <div class="filter-group">
                         <label class="filter-label text-center-mobile" for="price-filter">Prix</label>
@@ -917,9 +917,9 @@
         // FONCTIONNALITÉ DE FILTRAGE AMÉLIORÉE
         document.addEventListener('DOMContentLoaded', function() {
             const searchInput = document.getElementById('search-input');
-            const statusFilter = document.getElementById('status-filter');
+            // const statusFilter = document.getElementById('status-filter');
             const dateFilter = document.getElementById('date-filter');
-            const locationFilter = document.getElementById('location-filter');
+            // const locationFilter = document.getElementById('location-filter');
             const priceFilter = document.getElementById('price-filter');
             const eventCards = document.querySelectorAll('.event-card');
             const eventsContainer = document.getElementById('events-container');
@@ -973,9 +973,9 @@
             // Fonction pour filtrer les événements
             function filterEvents() {
                 const searchTerm = searchInput.value.toLowerCase().trim();
-                const statusValue = statusFilter.value;
+                // const statusValue = statusFilter.value;
                 const dateValue = dateFilter.value;
-                const locationValue = locationFilter.value;
+                // const locationValue = locationFilter.value;
                 const priceValue = priceFilter.value;
                 
                 const today = new Date();
@@ -983,16 +983,16 @@
                 
                 eventCards.forEach(card => {
                     const eventName = card.getAttribute('data-name');
-                    const eventStatus = card.getAttribute('data-status');
+                    // const eventStatus = card.getAttribute('data-status');
                     const eventDate = new Date(card.getAttribute('data-date'));
-                    const eventLocation = card.getAttribute('data-location');
+                    // const eventLocation = card.getAttribute('data-location');
                     const eventPrice = parseFloat(card.getAttribute('data-price')) || 0;
                     
                     // Vérifier la recherche par nom
                     const nameMatch = !searchTerm || eventName.includes(searchTerm);
                     
                     // Vérifier le statut
-                    const statusMatch = statusValue === 'all' || eventStatus === statusValue;
+                    // const statusMatch = statusValue === 'all' || eventStatus === statusValue;
                     
                     // Vérifier la date
                     let dateMatch = true;
@@ -1016,8 +1016,8 @@
                     }
                     
                     // Vérifier le lieu
-                    const locationMatch = locationValue === 'all' || 
-                        eventLocation.toLowerCase().includes(locationValue.toLowerCase());
+                    // const locationMatch = locationValue === 'all' || 
+                    //     eventLocation.toLowerCase().includes(locationValue.toLowerCase());
                     
                     // Vérifier le prix
                     let priceMatch = true;
@@ -1034,7 +1034,7 @@
                     }
                     
                     // Afficher ou masquer la carte selon les critères
-                    if (nameMatch && statusMatch && dateMatch && locationMatch && priceMatch) {
+                    if (nameMatch && dateMatch && priceMatch) {
                         card.style.display = 'block';
                         visibleCount++;
                     } else {
@@ -1069,9 +1069,9 @@
             // Réinitialiser les filtres
             function resetFilters() {
                 searchInput.value = '';
-                statusFilter.value = 'all';
+                // statusFilter.value = 'all';
                 dateFilter.value = 'all';
-                locationFilter.value = 'all';
+                // locationFilter.value = 'all';
                 priceFilter.value = 'all';
                 filterEvents();
             }
@@ -1089,9 +1089,9 @@
             
             // Écouter les changements dans les filtres
             searchInput.addEventListener('input', filterEvents);
-            statusFilter.addEventListener('change', filterEvents);
+            // statusFilter.addEventListener('change', filterEvents);
             dateFilter.addEventListener('change', filterEvents);
-            locationFilter.addEventListener('change', filterEvents);
+            // locationFilter.addEventListener('change', filterEvents);
             priceFilter.addEventListener('change', filterEvents);
             
             // Initialiser les filtres et ajouter le bouton de réinitialisation
@@ -1099,7 +1099,7 @@
             addResetButton();
             
             console.log('Système de filtrage initialisé avec succès');
-        });
+        })
     </script>
 
 </body>
