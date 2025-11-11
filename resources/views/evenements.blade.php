@@ -19,6 +19,7 @@
         body {
             font-family: 'Poppins', sans-serif;
             scroll-behavior: smooth;
+            overflow-x: hidden;
         }
         
         .hero-gradient {
@@ -180,6 +181,8 @@
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             padding: 1.5rem;
             margin-bottom: 2rem;
+            width: 100%;
+            box-sizing: border-box;
         }
         
         .search-box {
@@ -194,6 +197,7 @@
             border-radius: 0.75rem;
             font-size: 1rem;
             transition: all 0.3s ease;
+            box-sizing: border-box;
         }
         
         .search-input:focus {
@@ -214,7 +218,7 @@
             display: flex;
             flex-wrap: wrap;
             gap: 1rem;
-            align-items: center;
+            align-items: flex-start;
         }
         
         .filter-group {
@@ -238,6 +242,8 @@
             font-size: 0.875rem;
             background-color: white;
             cursor: pointer;
+            width: 100%;
+            box-sizing: border-box;
         }
         
         .filter-select:focus {
@@ -249,24 +255,208 @@
             text-align: center;
             padding: 3rem 1rem;
             color: #64748b;
+            width: 100%;
+            grid-column: 1 / -1;
         }
         
+        /* Responsive amélioré */
         @media (max-width: 768px) {
+            .container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            
+            .hero-title {
+                font-size: 2.25rem !important;
+                line-height: 1.2;
+                text-align: center;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.125rem !important;
+                text-align: center;
+                padding: 0 0.5rem;
+            }
+            
+            .section-title {
+                font-size: 2rem !important;
+                text-align: center;
+                line-height: 1.3;
+            }
+            
+            .section-subtitle {
+                font-size: 1.125rem !important;
+                text-align: center;
+                padding: 0 0.5rem;
+            }
+            
+            .event-card {
+                margin: 0 auto;
+                max-width: 100%;
+            }
+            
+            .ticket-card {
+                transform: none !important;
+                margin-bottom: 1.5rem;
+            }
+            
             .filter-section {
                 flex-direction: column;
-                align-items: stretch;
+                gap: 0.75rem;
             }
             
             .filter-group {
                 min-width: 100%;
+                width: 100%;
+            }
+            
+            .search-filter-container {
+                padding: 1rem;
+                margin-left: 0;
+                margin-right: 0;
+            }
+            
+            .event-image {
+                height: 180px;
+            }
+            
+            .status-badge {
+                padding: 0.375rem 0.75rem;
+                font-size: 0.75rem;
+            }
+            
+            .mobile-padding {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            
+            .mobile-text-center {
+                text-align: center;
+            }
+            
+            .card-title {
+                font-size: 1.5rem !important;
+                text-align: center;
+            }
+            
+            .card-text {
+                font-size: 0.875rem !important;
+                text-align: center;
+            }
+            
+            .info-card {
+                padding: 1.5rem !important;
+            }
+            
+            .info-card h3 {
+                font-size: 1.25rem !important;
+            }
+            
+            .ticket-price {
+                font-size: 2.5rem !important;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .hero-title {
+                font-size: 2rem !important;
+            }
+            
+            .section-title {
+                font-size: 1.75rem !important;
+            }
+            
+            .hero-subtitle,
+            .section-subtitle {
+                font-size: 1rem !important;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 1.75rem !important;
+            }
+            
+            .section-title {
+                font-size: 1.5rem !important;
+            }
+            
+            .event-image {
+                height: 160px;
+            }
+            
+            .search-input {
+                font-size: 0.875rem;
+                padding: 0.625rem 0.875rem 0.625rem 2.5rem;
+            }
+            
+            .search-icon {
+                left: 0.875rem;
+            }
+            
+            .card-title {
+                font-size: 1.25rem !important;
+            }
+            
+            .ticket-price {
+                font-size: 2rem !important;
+            }
+            
+            .info-card {
+                padding: 1rem !important;
+            }
+        }
+        
+        @media (max-width: 360px) {
+            .hero-title {
+                font-size: 1.5rem !important;
+            }
+            
+            .section-title {
+                font-size: 1.375rem !important;
+            }
+            
+            .event-image {
+                height: 140px;
+            }
+            
+            .hero-subtitle,
+            .section-subtitle {
+                font-size: 0.875rem !important;
+            }
+        }
+        
+        /* Correction des débordements */
+        * {
+            box-sizing: border-box;
+        }
+        
+        img, video {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .overflow-fix {
+            overflow: hidden;
+        }
+        
+        /* Centrage forcé pour tous les textes sur mobile */
+        @media (max-width: 768px) {
+            .text-center-mobile {
+                text-align: center !important;
+            }
+            
+            .mx-auto-mobile {
+                margin-left: auto !important;
+                margin-right: auto !important;
             }
         }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body class="bg-gray-50 text-gray-800 overflow-x-hidden">
 
     <!-- Navigation -->
-    <nav class="fixed top-0 left-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-gray-200">
+    <nav class="fixed top-0 left-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-gray-200 overflow-fix">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center space-x-2 slide-in-left">
                 <i data-lucide="ticket" class="w-8 h-8 text-red-600"></i>
@@ -285,8 +475,8 @@
         </div>
         
         <!-- Mobile menu -->
-        <div id="mobile-menu" class="md:hidden bg-white border-t border-gray-200 hidden">
-            <div class="container mx-auto px-4 py-4 flex flex-col space-y-4 stagger-animation">
+        <div id="mobile-menu" class="md:hidden bg-white border-t border-gray-200 hidden overflow-fix">
+            <div class="container mx-auto px-4 py-4 flex flex-col space-y-4 stagger-animation text-center-mobile">
                 <a href="#evenements" class="text-gray-600 hover:text-red-600 transition-colors py-2 font-medium">Événements</a>
                 <a href="#billets" class="text-gray-600 hover:text-red-600 transition-colors py-2 font-medium">Billetterie</a>
                 <a href="#contact" class="text-gray-600 hover:text-red-600 transition-colors py-2 font-medium">Contact</a>
@@ -295,31 +485,31 @@
     </nav>
 
     <!-- Hero Section -->
-    <header class="relative bg-cover bg-center bg-fixed min-h-screen flex items-center justify-center pt-16" 
+    <header class="relative bg-cover bg-center bg-fixed min-h-screen flex items-center justify-center pt-16 overflow-fix" 
             style="background-image: url('https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');">
         <div class="absolute inset-0 hero-gradient"></div>
         
         <div class="absolute inset-0 bg-pattern"></div>
 
-        <div class="relative z-10 text-center px-4 space-y-6 max-w-4xl mx-auto fade-in">
-            <div class="inline-block bg-red-600/20 border border-red-500/30 rounded-full px-6 py-2 mb-4">
+        <div class="relative z-10 text-center px-4 space-y-6 max-w-4xl mx-auto fade-in w-full mobile-padding">
+            <div class="inline-block bg-red-600/20 border border-red-500/30 rounded-full px-6 py-2 mb-4 mx-auto-mobile">
                 <span class="text-red-100 text-sm font-medium uppercase tracking-wide">Événements Exclusifs</span>
             </div>
             
-            <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold text-white mb-6">
+            <h1 class="hero-title text-4xl md:text-6xl lg:text-7xl font-extrabold text-white mb-6 text-center-mobile">
                 Vivez des <span class="text-gradient">expériences</span> inoubliables
             </h1>
             
-            <p class="text-xl text-gray-200 mb-8 max-w-2xl mx-auto leading-relaxed">
+            <p class="hero-subtitle text-xl text-gray-200 mb-8 max-w-2xl mx-auto leading-relaxed text-center-mobile">
                 Découvrez les événements les plus excitants de Kinshasa et réservez vos billets en toute simplicité
             </p>
             
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="#evenements" class="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 pulse-animation flex items-center justify-center gap-2">
+            <div class="flex flex-col sm:flex-row gap-4 justify-center mx-auto-mobile">
+                <a href="#evenements" class="bg-red-600 hover:bg-red-700 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 pulse-animation flex items-center justify-center gap-2 text-center-mobile">
                     <i data-lucide="calendar" class="w-5 h-5"></i>
                     Voir les événements
                 </a>
-                <a href="#billets" class="bg-white/20 hover:bg-white/30 text-white backdrop-blur-sm px-8 py-4 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2 border border-white/30">
+                <a href="#billets" class="bg-white/20 hover:bg-white/30 text-white backdrop-blur-sm px-6 sm:px-8 py-3 sm:py-4 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2 border border-white/30 text-center-mobile">
                     <i data-lucide="ticket" class="w-5 h-5"></i>
                     Acheter des billets
                 </a>
@@ -334,11 +524,13 @@
     </header>
 
     <!-- Section Événements -->
-    <section id="evenements" class="py-20 px-4 md:px-12 bg-white">
-        <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold mb-4 slide-in-left">Événements à venir</h2>
-                <p class="text-xl text-gray-600 max-w-2xl mx-auto slide-in-right">
+    <section id="evenements" class="py-16 sm:py-20 px-4 md:px-12 bg-white overflow-fix">
+        <div class="max-w-7xl mx-auto w-full">
+            <div class="text-center mb-12 sm:mb-16 mobile-padding">
+                <h2 class="section-title text-3xl sm:text-4xl font-bold mb-4  text-center-mobile">
+                    Événements à venir
+                </h2>
+                <p class="section-subtitle text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto  text-center-mobile">
                     Découvrez notre sélection d'événements exceptionnels et réservez votre place dès maintenant
                 </p>
             </div>
@@ -351,18 +543,18 @@
                 </div>
                 
                 <div class="filter-section">
-                    <!-- <div class="filter-group">
-                        <label class="filter-label" for="status-filter">Statut</label>
+                    <div class="filter-group">
+                        <label class="filter-label text-center-mobile" for="status-filter">Statut</label>
                         <select id="status-filter" class="filter-select">
                             <option value="all">Tous les statuts</option>
                             <option value="Actif">Actif</option>
                             <option value="À venir">À venir</option>
                             <option value="Complet">Complet</option>
                         </select>
-                    </div> -->
+                    </div>
                     
                     <div class="filter-group">
-                        <label class="filter-label" for="date-filter">Date</label>
+                        <label class="filter-label text-center-mobile" for="date-filter">Date</label>
                         <select id="date-filter" class="filter-select">
                             <option value="all">Toutes les dates</option>
                             <option value="today">Aujourd'hui</option>
@@ -372,18 +564,18 @@
                         </select>
                     </div>
                     
-                    <!-- <div class="filter-group">
-                        <label class="filter-label" for="location-filter">Lieu</label>
+                    <div class="filter-group">
+                        <label class="filter-label text-center-mobile" for="location-filter">Lieu</label>
                         <select id="location-filter" class="filter-select">
                             <option value="all">Tous les lieux</option>
                             <option value="Salle Splendeur">Salle Splendeur</option>
                             <option value="13'Or Room">13'Or Room</option>
                             <option value="IMMEUBLE EXCELENCIA">IMMEUBLE EXCELENCIA</option>
                         </select>
-                    </div> -->
+                    </div>
                     
                     <div class="filter-group">
-                        <label class="filter-label" for="price-filter">Prix</label>
+                        <label class="filter-label text-center-mobile" for="price-filter">Prix</label>
                         <select id="price-filter" class="filter-select">
                             <option value="all">Tous les prix</option>
                             <option value="free">Gratuit</option>
@@ -396,16 +588,16 @@
             </div>
 
             @if(isset($error))
-                <div class="bg-red-50 border border-red-200 rounded-xl p-6 text-center max-w-2xl mx-auto fade-in">
+                <div class="bg-red-50 border border-red-200 rounded-xl p-6 text-center max-w-2xl mx-auto fade-in mobile-padding text-center-mobile">
                     <i data-lucide="alert-circle" class="w-12 h-12 text-red-500 mx-auto mb-4"></i>
                     <p class="text-red-700 text-lg">{{ $error }}</p>
                 </div>
             @endif
 
             @if(!empty($evenements))
-                <div id="events-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 stagger-animation">
+                <div id="events-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 stagger-animation">
                     @foreach($evenements as $evenement)
-                        <div class="event-card bg-white rounded-2xl shadow-lg overflow-hidden group" 
+                        <div class="event-card bg-white rounded-2xl shadow-lg overflow-hidden group mx-auto-mobile" 
                              data-name="{{ strtolower($evenement['nom']) }}"
                              data-status="{{ $evenement['statut'] }}"
                              data-date="{{ $evenement['date_debut'] }}"
@@ -433,15 +625,15 @@
                             </div>
                             
                             <!-- Contenu de la carte -->
-                            <div class="p-6">
-                                <h3 class="text-2xl font-bold mb-3 text-gray-800 group-hover:text-red-600 transition-colors">
+                            <div class="p-4 sm:p-6">
+                                <h3 class="card-title text-xl sm:text-2xl font-bold mb-3 text-gray-800 group-hover:text-red-600 transition-colors text-center-mobile">
                                     {{ $evenement['nom'] }}
                                 </h3>
                                 
-                                <div class="space-y-3 mb-4">
+                                <div class="space-y-2 sm:space-y-3 mb-4">
                                     <div class="flex items-center gap-3 text-gray-600">
-                                        <i data-lucide="calendar" class="w-4 h-4 text-red-500"></i>
-                                        <span class="text-sm">
+                                        <i data-lucide="calendar" class="w-4 h-4 text-red-500 flex-shrink-0"></i>
+                                        <span class="card-text text-sm">
                                             {{ \Carbon\Carbon::parse($evenement['date_debut'])->translatedFormat('d F Y') }}
                                             @if($evenement['date_debut'] !== $evenement['date_fin'])
                                                 - {{ \Carbon\Carbon::parse($evenement['date_fin'])->translatedFormat('d F Y') }}
@@ -450,14 +642,14 @@
                                     </div>
                                     
                                     <div class="flex items-center gap-3 text-gray-600">
-                                        <i data-lucide="map-pin" class="w-4 h-4 text-red-500"></i>
-                                        <span class="text-sm">{{ $evenement['salle'] }}, {{ $evenement['adresse'] }}</span>
+                                        <i data-lucide="map-pin" class="w-4 h-4 text-red-500 flex-shrink-0"></i>
+                                        <span class="card-text text-sm">{{ $evenement['salle'] }}, {{ $evenement['adresse'] }}</span>
                                     </div>
                                     
                                     @if(!empty($evenement['type_billets']))
                                     <div class="flex items-center gap-3 text-gray-600">
-                                        <i data-lucide="ticket" class="w-4 h-4 text-red-500"></i>
-                                        <span class="text-sm">
+                                        <i data-lucide="ticket" class="w-4 h-4 text-red-500 flex-shrink-0"></i>
+                                        <span class="card-text text-sm">
                                             {{ count($evenement['type_billets']) }} type(s) de billet disponible(s)
                                         </span>
                                     </div>
@@ -466,8 +658,8 @@
                                 
                                 <!-- Types de billets -->
                                 @if(!empty($evenement['type_billets']))
-                                    <div class="mb-6">
-                                        <div class="flex flex-wrap gap-2">
+                                    <div class="mb-4 sm:mb-6">
+                                        <div class="flex flex-wrap gap-2 justify-center sm:justify-start">
                                             @foreach(array_slice($evenement['type_billets'], 0, 3) as $billet)
                                                 <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-medium">
                                                     {{ $billet['nom_type'] }} ({{ $billet['pivot']['nombre_billet'] }})
@@ -483,7 +675,7 @@
                                 @endif
                                 
                                 <a href="/evenement/{{ $evenement['id'] ?? '1' }}" 
-                                   class="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2 group-hover:scale-105">
+                                   class="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2 group-hover:scale-105 text-center-mobile">
                                     <i data-lucide="eye" class="w-4 h-4"></i>
                                     Voir détails
                                 </a>
@@ -492,7 +684,7 @@
                     @endforeach
                 </div>
             @else
-                <div class="text-center py-12 fade-in">
+                <div class="text-center py-12 fade-in mobile-padding text-center-mobile">
                     <i data-lucide="calendar-x" class="w-16 h-16 text-gray-400 mx-auto mb-4"></i>
                     <h3 class="text-xl font-semibold text-gray-500 mb-2">Aucun événement trouvé</h3>
                     <p class="text-gray-400">Revenez bientôt pour découvrir nos prochains événements</p>
@@ -502,119 +694,123 @@
     </section>
 
     <!-- Section Infos pratiques -->
-    <section id="infos" class="py-20 bg-gray-50 px-6">
-        <div class="max-w-6xl mx-auto">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold mb-4 slide-in-left">Informations pratiques</h2>
-                <p class="text-xl text-gray-600 max-w-2xl mx-auto slide-in-right">
+    <section id="infos" class="py-16 sm:py-20 bg-gray-50 px-4 sm:px-6 overflow-fix">
+        <div class="max-w-6xl mx-auto w-full">
+            <div class="text-center mb-12 sm:mb-16 mobile-padding">
+                <h2 class="section-title text-3xl sm:text-4xl font-bold mb-4 text-center-mobile">
+                    Informations pratiques
+                </h2>
+                <p class="section-subtitle text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto  text-center-mobile">
                     Tout ce que vous devez savoir pour profiter au maximum de votre expérience
                 </p>
             </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 stagger-animation">
-                <div class="bg-white rounded-2xl shadow-lg p-8 text-center transform hover:scale-105 transition duration-300">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 stagger-animation">
+                <div class="info-card bg-white rounded-2xl shadow-lg p-6 sm:p-8 text-center transform hover:scale-105 transition duration-300">
                     <div class="flex justify-center mb-4">
-                        <div class="bg-red-100 p-4 rounded-2xl">
-                            <i data-lucide="map-pin" class="w-8 h-8 text-red-600"></i>
+                        <div class="bg-red-100 p-3 sm:p-4 rounded-2xl">
+                            <i data-lucide="map-pin" class="w-6 sm:w-8 h-6 sm:h-8 text-red-600"></i>
                         </div>
                     </div>
-                    <h3 class="text-xl font-semibold mb-3">Lieu</h3>
-                    <p class="text-gray-600">Salle Splendeur ex 13'Or Room, IMMEUBLE EXCELENCIA, Saio & Kasa-vubu Ref: Upak</p>
+                    <h3 class="text-lg sm:text-xl font-semibold mb-3 text-center-mobile">Lieu</h3>
+                    <p class="card-text text-gray-600 text-center-mobile">Salle Splendeur ex 13'Or Room, IMMEUBLE EXCELENCIA, Saio & Kasa-vubu Ref: Upak</p>
                 </div>
                 
-                <div class="bg-white rounded-2xl shadow-lg p-8 text-center transform hover:scale-105 transition duration-300">
+                <div class="info-card bg-white rounded-2xl shadow-lg p-6 sm:p-8 text-center transform hover:scale-105 transition duration-300">
                     <div class="flex justify-center mb-4">
-                        <div class="bg-blue-100 p-4 rounded-2xl">
-                            <i data-lucide="calendar-days" class="w-8 h-8 text-blue-600"></i>
+                        <div class="bg-blue-100 p-3 sm:p-4 rounded-2xl">
+                            <i data-lucide="calendar-days" class="w-6 sm:w-8 h-6 sm:h-8 text-blue-600"></i>
                         </div>
                     </div>
-                    <h3 class="text-xl font-semibold mb-3">Date</h3>
-                    <p class="text-gray-600">Dimanche 31 Août 2025</p>
+                    <h3 class="text-lg sm:text-xl font-semibold mb-3 text-center-mobile">Date</h3>
+                    <p class="card-text text-gray-600 text-center-mobile">Dimanche 31 Août 2025</p>
                 </div>
                 
-                <div class="bg-white rounded-2xl shadow-lg p-8 text-center transform hover:scale-105 transition duration-300">
+                <div class="info-card bg-white rounded-2xl shadow-lg p-6 sm:p-8 text-center transform hover:scale-105 transition duration-300">
                     <div class="flex justify-center mb-4">
-                        <div class="bg-green-100 p-4 rounded-2xl">
-                            <i data-lucide="clock" class="w-8 h-8 text-green-600"></i>
+                        <div class="bg-green-100 p-3 sm:p-4 rounded-2xl">
+                            <i data-lucide="clock" class="w-6 sm:w-8 h-6 sm:h-8 text-green-600"></i>
                         </div>
                     </div>
-                    <h3 class="text-xl font-semibold mb-3">Heure</h3>
-                    <p class="text-gray-600">À partir de 16h00</p>
+                    <h3 class="text-lg sm:text-xl font-semibold mb-3 text-center-mobile">Heure</h3>
+                    <p class="card-text text-gray-600 text-center-mobile">À partir de 16h00</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Section Billetterie -->
-    <section id="billets" class="py-20 bg-white px-6">
-        <div class="max-w-6xl mx-auto">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold mb-4 slide-in-left">Réservez vos billets</h2>
-                <p class="text-xl text-gray-600 max-w-2xl mx-auto slide-in-right">
+    <section id="billets" class="py-16 sm:py-20 bg-white px-4 sm:px-6 overflow-fix">
+        <div class="max-w-6xl mx-auto w-full">
+            <div class="text-center mb-12 sm:mb-16 mobile-padding">
+                <h2 class="section-title text-3xl sm:text-4xl font-bold mb-4  text-center-mobile">
+                    Réservez vos billets
+                </h2>
+                <p class="section-subtitle text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto  text-center-mobile">
                     Choisissez la formule qui correspond le mieux à vos attentes
                 </p>
             </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 stagger-animation">
-                <div class="ticket-card p-8 flex flex-col items-center text-center">
-                    <div class="bg-red-100 p-4 rounded-2xl mb-6">
-                        <i data-lucide="ticket" class="w-12 h-12 text-red-600"></i>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 stagger-animation">
+                <div class="ticket-card p-6 sm:p-8 flex flex-col items-center text-center">
+                    <div class="bg-red-100 p-3 sm:p-4 rounded-2xl mb-4 sm:mb-6">
+                        <i data-lucide="ticket" class="w-8 sm:w-12 h-8 sm:h-12 text-red-600"></i>
                     </div>
-                    <h3 class="text-2xl font-semibold mb-3">Place Standard</h3>
-                    <p class="text-gray-600 mb-6">Accès à l'événement avec placement libre</p>
-                    <p class="text-4xl font-bold text-red-600 mb-2">5 000 FC</p>
-                    <p class="text-sm text-gray-500 mb-6">Par personne</p>
+                    <h3 class="card-title text-xl sm:text-2xl font-semibold mb-3 text-center-mobile">Place Standard</h3>
+                    <p class="card-text text-gray-600 mb-4 sm:mb-6 text-center-mobile">Accès à l'événement avec placement libre</p>
+                    <p class="ticket-price text-3xl sm:text-4xl font-bold text-red-600 mb-2 text-center-mobile">5 000 FC</p>
+                    <p class="card-text text-sm text-gray-500 mb-4 sm:mb-6 text-center-mobile">Par personne</p>
                 </div>
                 
-                <div class="ticket-card p-8 flex flex-col items-center text-center transform scale-105 relative">
-                    <div class="absolute top-0 right-0 bg-yellow-400 text-black px-4 py-1 rounded-bl-xl rounded-tr-xl text-sm font-bold">
+                <div class="ticket-card p-6 sm:p-8 flex flex-col items-center text-center md:transform md:scale-105 relative">
+                    <div class="absolute top-0 right-0 bg-yellow-400 text-black px-3 sm:px-4 py-1 rounded-bl-xl rounded-tr-xl text-xs sm:text-sm font-bold">
                         Populaire
                     </div>
-                    <div class="bg-yellow-100 p-4 rounded-2xl mb-6">
-                        <i data-lucide="crown" class="w-12 h-12 text-yellow-600"></i>
+                    <div class="bg-yellow-100 p-3 sm:p-4 rounded-2xl mb-4 sm:mb-6">
+                        <i data-lucide="crown" class="w-8 sm:w-12 h-8 sm:h-12 text-yellow-600"></i>
                     </div>
-                    <h3 class="text-2xl font-semibold mb-3">Place VIP</h3>
-                    <p class="text-gray-600 mb-6">Accès privilégié avec services exclusifs</p>
-                    <p class="text-4xl font-bold text-yellow-600 mb-2">10 $</p>
-                    <p class="text-sm text-gray-500 mb-6">Par personne</p>
+                    <h3 class="card-title text-xl sm:text-2xl font-semibold mb-3 text-center-mobile">Place VIP</h3>
+                    <p class="card-text text-gray-600 mb-4 sm:mb-6 text-center-mobile">Accès privilégié avec services exclusifs</p>
+                    <p class="ticket-price text-3xl sm:text-4xl font-bold text-yellow-600 mb-2 text-center-mobile">10 $</p>
+                    <p class="card-text text-sm text-gray-500 mb-4 sm:mb-6 text-center-mobile">Par personne</p>
                 </div>
                 
-                <div class="ticket-card p-8 flex flex-col items-center text-center">
-                    <div class="bg-purple-100 p-4 rounded-2xl mb-6">
-                        <i data-lucide="star" class="w-12 h-12 text-purple-600"></i>
+                <div class="ticket-card p-6 sm:p-8 flex flex-col items-center text-center">
+                    <div class="bg-purple-100 p-3 sm:p-4 rounded-2xl mb-4 sm:mb-6">
+                        <i data-lucide="star" class="w-8 sm:w-12 h-8 sm:h-12 text-purple-600"></i>
                     </div>
-                    <h3 class="text-2xl font-semibold mb-3">Place Premium</h3>
-                    <p class="text-gray-600 mb-6">Expérience complète avec avantages exclusifs</p>
-                    <p class="text-4xl font-bold text-purple-600 mb-2">15 $</p>
-                    <p class="text-sm text-gray-500 mb-6">Par personne</p>
+                    <h3 class="card-title text-xl sm:text-2xl font-semibold mb-3 text-center-mobile">Place Premium</h3>
+                    <p class="card-text text-gray-600 mb-4 sm:mb-6 text-center-mobile">Expérience complète avec avantages exclusifs</p>
+                    <p class="ticket-price text-3xl sm:text-4xl font-bold text-purple-600 mb-2 text-center-mobile">15 $</p>
+                    <p class="card-text text-sm text-gray-500 mb-4 sm:mb-6 text-center-mobile">Par personne</p>
                 </div>
             </div>
             
             <!-- Information de paiement -->
-            <div class="mt-12 text-center fade-in">
-                <p class="text-gray-600 mb-4">Paiement sécurisé accepté :</p>
-                <div class="flex justify-center gap-6 text-gray-400">
-                    <i data-lucide="credit-card" class="w-8 h-8"></i>
-                    <i data-lucide="smartphone" class="w-8 h-8"></i>
-                    <i data-lucide="shield" class="w-8 h-8"></i>
+            <div class="mt-8 sm:mt-12 text-center fade-in mobile-padding text-center-mobile">
+                <p class="text-gray-600 mb-4 text-center-mobile">Paiement sécurisé accepté :</p>
+                <div class="flex justify-center gap-4 sm:gap-6 text-gray-400">
+                    <i data-lucide="credit-card" class="w-6 sm:w-8 h-6 sm:h-8"></i>
+                    <i data-lucide="smartphone" class="w-6 sm:w-8 h-6 sm:h-8"></i>
+                    <i data-lucide="shield" class="w-6 sm:w-8 h-6 sm:h-8"></i>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer id="contact" class="bg-gray-900 text-white py-12">
-        <div class="max-w-6xl mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8 stagger-animation">
-                <div class="md:col-span-2">
-                    <div class="flex items-center space-x-2 mb-4">
+    <footer id="contact" class="bg-gray-900 text-white py-12 overflow-fix">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 w-full">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 sm:gap-8 mb-8 stagger-animation">
+                <div class="md:col-span-2 text-center-mobile">
+                    <div class="flex items-center space-x-2 mb-4 justify-center md:justify-start">
                         <i data-lucide="ticket" class="w-8 h-8 text-red-500"></i>
                         <span class="text-xl font-bold">Menji<span class="text-red-500">DRC</span></span>
                     </div>
-                    <p class="text-gray-400 mb-6">
+                    <p class="text-gray-400 mb-6 text-center md:text-left">
                         Votre plateforme de billetterie de confiance pour les meilleurs événements en République Démocratique du Congo.
                     </p>
-                    <div class="flex space-x-4">
+                    <div class="flex space-x-4 justify-center md:justify-start">
                         <a href="#" class="social-icon bg-gray-800 p-3 rounded-full text-gray-300 hover:bg-red-600 hover:text-white transition-all duration-300">
                             <i data-lucide="facebook" class="w-5 h-5"></i>
                         </a>
@@ -630,7 +826,7 @@
                     </div>
                 </div>
                 
-                <div>
+                <div class="text-center-mobile">
                     <h4 class="text-lg font-semibold mb-4">Liens rapides</h4>
                     <ul class="space-y-2 text-gray-400">
                         <li><a href="#evenements" class="hover:text-white transition-colors">Événements</a></li>
@@ -639,18 +835,18 @@
                     </ul>
                 </div>
                 
-                <div>
+                <div class="text-center-mobile">
                     <h4 class="text-lg font-semibold mb-4">Contact</h4>
                     <ul class="space-y-2 text-gray-400">
-                        <li class="flex items-center gap-2">
+                        <li class="flex items-center gap-2 justify-center md:justify-start">
                             <i data-lucide="mail" class="w-4 h-4"></i>
                             <span>contact@menjidrc.com</span>
                         </li>
-                        <li class="flex items-center gap-2">
+                        <li class="flex items-center gap-2 justify-center md:justify-start">
                             <i data-lucide="phone" class="w-4 h-4"></i>
                             <span>+243 XX XXX XXX</span>
                         </li>
-                        <li class="flex items-center gap-2">
+                        <li class="flex items-center gap-2 justify-center md:justify-start">
                             <i data-lucide="map-pin" class="w-4 h-4"></i>
                             <span>Kinshasa, RDC</span>
                         </li>
@@ -658,7 +854,7 @@
                 </div>
             </div>
             
-            <div class="pt-8 border-t border-gray-800 text-center text-gray-500 fade-in">
+            <div class="pt-8 border-t border-gray-800 text-center text-gray-500 fade-in text-center-mobile">
                 <p>© {{ date('Y') }} Menji DRC — Tous droits réservés.</p>
             </div>
         </div>
@@ -718,7 +914,7 @@
             });
         });
         
-        // Fonctionnalité de recherche et filtrage
+        // FONCTIONNALITÉ DE FILTRAGE AMÉLIORÉE
         document.addEventListener('DOMContentLoaded', function() {
             const searchInput = document.getElementById('search-input');
             const statusFilter = document.getElementById('status-filter');
@@ -728,14 +924,61 @@
             const eventCards = document.querySelectorAll('.event-card');
             const eventsContainer = document.getElementById('events-container');
             
+            // Fonction pour formater la date
+            function formatDate(dateString) {
+                const date = new Date(dateString);
+                return date.toISOString().split('T')[0]; // Format YYYY-MM-DD
+            }
+            
+            // Fonction pour obtenir le début de la journée
+            function getStartOfDay(date) {
+                const newDate = new Date(date);
+                newDate.setHours(0, 0, 0, 0);
+                return newDate;
+            }
+            
+            // Fonction pour obtenir la fin de la journée
+            function getEndOfDay(date) {
+                const newDate = new Date(date);
+                newDate.setHours(23, 59, 59, 999);
+                return newDate;
+            }
+            
+            // Fonction pour obtenir le début de la semaine
+            function getStartOfWeek(date) {
+                const newDate = new Date(date);
+                const day = newDate.getDay();
+                const diff = newDate.getDate() - day + (day === 0 ? -6 : 1); // Ajuster pour lundi comme premier jour
+                return new Date(newDate.setDate(diff));
+            }
+            
+            // Fonction pour obtenir la fin de la semaine
+            function getEndOfWeek(date) {
+                const startOfWeek = getStartOfWeek(date);
+                const endOfWeek = new Date(startOfWeek);
+                endOfWeek.setDate(startOfWeek.getDate() + 6);
+                return getEndOfDay(endOfWeek);
+            }
+            
+            // Fonction pour obtenir le début du mois
+            function getStartOfMonth(date) {
+                return new Date(date.getFullYear(), date.getMonth(), 1);
+            }
+            
+            // Fonction pour obtenir la fin du mois
+            function getEndOfMonth(date) {
+                return new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59, 999);
+            }
+            
             // Fonction pour filtrer les événements
             function filterEvents() {
-                const searchTerm = searchInput.value.toLowerCase();
+                const searchTerm = searchInput.value.toLowerCase().trim();
                 const statusValue = statusFilter.value;
                 const dateValue = dateFilter.value;
                 const locationValue = locationFilter.value;
                 const priceValue = priceFilter.value;
                 
+                const today = new Date();
                 let visibleCount = 0;
                 
                 eventCards.forEach(card => {
@@ -743,38 +986,32 @@
                     const eventStatus = card.getAttribute('data-status');
                     const eventDate = new Date(card.getAttribute('data-date'));
                     const eventLocation = card.getAttribute('data-location');
-                    const eventPrice = parseFloat(card.getAttribute('data-price'));
+                    const eventPrice = parseFloat(card.getAttribute('data-price')) || 0;
                     
                     // Vérifier la recherche par nom
-                    const nameMatch = eventName.includes(searchTerm);
+                    const nameMatch = !searchTerm || eventName.includes(searchTerm);
                     
                     // Vérifier le statut
-                    const statusMatch = statusValue === 'all' || 
-                        (statusValue === 'Actif' && eventStatus === 'Actif') ||
-                        (statusValue === 'À venir' && eventStatus === 'À venir') ||
-                        (statusValue === 'Complet' && eventStatus === 'Complet');
+                    const statusMatch = statusValue === 'all' || eventStatus === statusValue;
                     
                     // Vérifier la date
-                    const today = new Date();
-                    today.setHours(0, 0, 0, 0);
-                    
-                    const eventDateOnly = new Date(eventDate);
-                    eventDateOnly.setHours(0, 0, 0, 0);
-                    
                     let dateMatch = true;
                     if (dateValue !== 'all') {
+                        const eventDateOnly = getStartOfDay(eventDate);
+                        const todayOnly = getStartOfDay(today);
+                        
                         if (dateValue === 'today') {
-                            dateMatch = eventDateOnly.getTime() === today.getTime();
+                            dateMatch = eventDateOnly.getTime() === todayOnly.getTime();
                         } else if (dateValue === 'week') {
-                            const weekFromNow = new Date(today);
-                            weekFromNow.setDate(today.getDate() + 7);
-                            dateMatch = eventDateOnly >= today && eventDateOnly <= weekFromNow;
+                            const startOfWeek = getStartOfWeek(today);
+                            const endOfWeek = getEndOfWeek(today);
+                            dateMatch = eventDate >= startOfWeek && eventDate <= endOfWeek;
                         } else if (dateValue === 'month') {
-                            const monthFromNow = new Date(today);
-                            monthFromNow.setMonth(today.getMonth() + 1);
-                            dateMatch = eventDateOnly >= today && eventDateOnly <= monthFromNow;
+                            const startOfMonth = getStartOfMonth(today);
+                            const endOfMonth = getEndOfMonth(today);
+                            dateMatch = eventDate >= startOfMonth && eventDate <= endOfMonth;
                         } else if (dateValue === 'future') {
-                            dateMatch = eventDateOnly > today;
+                            dateMatch = eventDate > today;
                         }
                     }
                     
@@ -788,7 +1025,7 @@
                         if (priceValue === 'free') {
                             priceMatch = eventPrice === 0;
                         } else if (priceValue === 'low') {
-                            priceMatch = eventPrice < 10;
+                            priceMatch = eventPrice > 0 && eventPrice < 10;
                         } else if (priceValue === 'medium') {
                             priceMatch = eventPrice >= 10 && eventPrice <= 30;
                         } else if (priceValue === 'high') {
@@ -806,23 +1043,48 @@
                 });
                 
                 // Afficher un message si aucun événement ne correspond
-                const noResults = document.getElementById('no-results');
-                if (visibleCount === 0) {
-                    if (!noResults) {
-                        const noResultsDiv = document.createElement('div');
-                        noResultsDiv.id = 'no-results';
-                        noResultsDiv.className = 'no-results';
-                        noResultsDiv.innerHTML = `
-                            <i data-lucide="search-x" class="w-16 h-16 text-gray-400 mx-auto mb-4"></i>
-                            <h3 class="text-xl font-semibold text-gray-500 mb-2">Aucun événement trouvé</h3>
-                            <p class="text-gray-400">Essayez de modifier vos critères de recherche</p>
-                        `;
-                        eventsContainer.appendChild(noResultsDiv);
-                        lucide.createIcons();
-                    }
-                } else if (noResults) {
+                showNoResultsMessage(visibleCount === 0);
+            }
+            
+            // Fonction pour afficher/masquer le message "Aucun résultat"
+            function showNoResultsMessage(show) {
+                let noResults = document.getElementById('no-results');
+                
+                if (show && !noResults) {
+                    noResults = document.createElement('div');
+                    noResults.id = 'no-results';
+                    noResults.className = 'no-results';
+                    noResults.innerHTML = `
+                        <i data-lucide="search-x" class="w-16 h-16 text-gray-400 mx-auto mb-4"></i>
+                        <h3 class="text-xl font-semibold text-gray-500 mb-2">Aucun événement trouvé</h3>
+                        <p class="text-gray-400">Essayez de modifier vos critères de recherche</p>
+                    `;
+                    eventsContainer.appendChild(noResults);
+                    lucide.createIcons();
+                } else if (!show && noResults) {
                     noResults.remove();
                 }
+            }
+            
+            // Réinitialiser les filtres
+            function resetFilters() {
+                searchInput.value = '';
+                statusFilter.value = 'all';
+                dateFilter.value = 'all';
+                locationFilter.value = 'all';
+                priceFilter.value = 'all';
+                filterEvents();
+            }
+            
+            // Ajouter un bouton de réinitialisation
+            function addResetButton() {
+                const filterSection = document.querySelector('.filter-section');
+                const resetButton = document.createElement('button');
+                resetButton.type = 'button';
+                resetButton.className = 'bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors mt-6';
+                resetButton.textContent = 'Réinitialiser les filtres';
+                resetButton.addEventListener('click', resetFilters);
+                filterSection.appendChild(resetButton);
             }
             
             // Écouter les changements dans les filtres
@@ -831,6 +1093,12 @@
             dateFilter.addEventListener('change', filterEvents);
             locationFilter.addEventListener('change', filterEvents);
             priceFilter.addEventListener('change', filterEvents);
+            
+            // Initialiser les filtres et ajouter le bouton de réinitialisation
+            filterEvents();
+            addResetButton();
+            
+            console.log('Système de filtrage initialisé avec succès');
         });
     </script>
 
