@@ -273,7 +273,8 @@
                             
                             <!-- Image de l'événement -->
                             <div class="event-image" 
-                                 style="background-image: url('{{ $evenement['ressource'][0]['photo_affiche'] ?? 'https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80' }}');">
+                                 style="background-image: url('https://gestionticket.menjidrc.com/storage/app/public/{{
+                $evenement['ressource'][0]['photo_affiche'] ?? 'https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80' }}');">
                             </div>
                             
                             <!-- Contenu de la carte -->

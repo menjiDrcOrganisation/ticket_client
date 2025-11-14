@@ -6,9 +6,8 @@
     <title>{{ $evenement['nom'] ?? 'Événement' }} | Billetterie MenjiDRC</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/scrollreveal"></script>
+      <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -231,6 +230,13 @@
             transform: translateY(-5px);
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
         }
+
+        #qrcode-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 200px;
+        }
     </style>
 </head>
 <body class="bg-gray-900 text-white relative overflow-x-hidden">
@@ -369,7 +375,7 @@
     </section>
 
     
-    <!-- Section billets - VERSION CORRIGÉE -->
+    <!-- Section billets -->
 <section id="tickets" class="py-20 bg-gray-900 px-6 md:px-20">
     <div class="max-w-6xl mx-auto">
         <h2 class="text-4xl font-bold mb-12 text-center">Billets disponibles</h2>
@@ -522,7 +528,7 @@
         </div>
     </div>
 
-    <!-- Modal QR Code -->
+    <!-- Modal QR Code CORRIGÉ -->
     <div id="qr-modal" class="modal">
         <div class="modal-content">
             <button class="close-modal" onclick="closeQRModal()">
@@ -532,16 +538,23 @@
             <h2 class="text-2xl font-bold text-center mb-4">Votre billet</h2>
 
             <div class="flex justify-center mb-6">
-                <canvas id="qrcode-canvas"></canvas>
+                <div id="qrcode-container" class="bg-white p-4 rounded-lg">
+                    <!-- Le QR code sera généré ici -->
+                </div>
             </div>
 
-            <div class="text-center">
-                <button onclick="downloadTicket()" class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-semibold mr-2">
-                    Télécharger PDF
-                </button>
-                <button onclick="closeQRModal()" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg font-semibold">
-                    Fermer
-                </button>
+            <div class="text-center space-y-4">
+                <p class="text-gray-300" id="ticket-info">Billet pour <span id="client-name-display"></span></p>
+                <p class="text-sm text-gray-400" id="ticket-code">Code: <span id="code-display"></span></p>
+                <div class="flex flex-col sm:flex-row gap-2 justify-center">
+                    <button onclick="downloadTicket()" class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-semibold flex items-center justify-center gap-2">
+                        <i data-lucide="download" class="w-4 h-4"></i>
+                        Télécharger PDF
+                    </button>
+                    <button onclick="closeQRModal()" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg font-semibold">
+                        Fermer
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -600,8 +613,15 @@
     </footer>
 @endif
 
+
 <script>
     lucide.createIcons();
+    
+    // Variables globales pour le QR code
+    let currentQRCode = '';
+    let currentClientName = '';
+    let currentTicketPrice = 0;
+    let currentTicketId = '';
     
     // Menu mobile
     const menuToggle = document.getElementById('menu-toggle');
@@ -659,13 +679,9 @@
         setInterval(updateCountdown, 60000);
     }
     
-    // Gestion du modal de paiement - VERSION CORRIGÉE
-    let currentTicketPrice = 0;
-    let currentTicketId = '';
-    let clientName = '';
-    
+    // Gestion du modal de paiement
     function openPaymentModal(ticketType, ticketPrice, ticketId) {
-        console.log('Opening modal for:', ticketType, ticketPrice, ticketId); // Debug
+        console.log('Opening modal for:', ticketType, ticketPrice, ticketId);
         
         currentTicketPrice = parseFloat(ticketPrice) || 0;
         currentTicketId = ticketId;
@@ -691,44 +707,219 @@
         document.getElementById('total-price').textContent = `${total.toLocaleString('fr-FR')} FC`;
     }
     
-    // Modal QR Code
+    // Modal QR Code - VERSION CORRIGÉE
     function closeQRModal() {
         document.getElementById('qr-modal').style.display = 'none';
+        // Nettoyer le QR code précédent
+        const container = document.getElementById('qrcode-container');
+        container.innerHTML = '';
     }
-    
-    function downloadTicket() {
-        const canvas = document.getElementById("qrcode-canvas");
-        if (!canvas) {
-            alert("QR Code non généré !");
+
+    // Fonction pour générer le QR code - VERSION SIMPLIFIÉE ET CORRIGÉE
+    function generateQRCode(text, containerId) {
+        return new Promise((resolve, reject) => {
+            const container = document.getElementById(containerId);
+            container.innerHTML = ''; // Nettoyer le contenu précédent
+            
+            // Créer un canvas élément
+            const canvas = document.createElement('canvas');
+            container.appendChild(canvas);
+            
+            // Options pour le QR code
+            const options = {
+                width: 200,
+                height: 200,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            };
+            
+            try {
+                // Générer le QR code directement sur le canvas
+                QRCode.toCanvas(canvas, text, options, function(error) {
+                    if (error) {
+                        console.error('Erreur génération QR code:', error);
+                        container.innerHTML = '<p class="text-red-500">Erreur génération QR code</p>';
+                        reject(error);
+                        return;
+                    }
+                    
+                    console.log('QR code généré avec succès');
+                    resolve(canvas);
+                });
+            } catch (error) {
+                console.error('Erreur lors de la génération du QR code:', error);
+                container.innerHTML = '<p class="text-red-500">Erreur technique</p>';
+                reject(error);
+            }
+        });
+    }
+
+    // Alternative plus simple pour générer le QR code
+    function generateQRCodeSimple(text, containerId) {
+
+        console.log("erreur ici");
+        console.log(text);
+        console.log(containerId);
+        
+        const container = document.getElementById(containerId);
+        container.innerHTML = '';
+        
+        try {
+            QRCode.toCanvas(text, {
+                width: 200,
+                margin: 1,
+                color: {
+                    dark: '#000000',
+                    light: '#FFFFFF'
+                }
+            }, function(err, canvas) {
+                if (err) {
+                    console.error('Erreur QR code:', err);
+                    container.innerHTML = '<p class="text-red-500 text-center">Erreur de génération du QR code</p>';
+                    return;
+                }
+                
+                if (canvas) {
+                    container.appendChild(canvas);
+                } else {
+                    container.innerHTML = '<p class="text-red-500 text-center">Canvas non généré</p>';
+                }
+            });
+        } catch (error) {
+            console.error('Erreur capturee:', error);
+            container.innerHTML = '<p class="text-red-500 text-center">Erreur technique</p>';
+        }
+    }
+
+    // Téléchargement du ticket - VERSION CORRIGÉE
+   async function downloadTicket() {
+    try {
+        if (!currentQRCode || !currentClientName) {
+            alert("Informations du billet manquantes !");
             return;
         }
 
-        const imgData = canvas.toDataURL("image/png");
         const { jsPDF } = window.jspdf;
-        const pdf = new jsPDF();
-
+        // Format portrait compact type téléphone
+        const pdf = new jsPDF('p', 'mm', [120, 80]);
         const pageWidth = pdf.internal.pageSize.getWidth();
-        const qrWidth = 100;
-        const x = (pageWidth - qrWidth) / 2;
-        const y = 40;
+        const pageHeight = pdf.internal.pageSize.getHeight();
 
-        pdf.setFillColor(230, 240, 255);
-        pdf.roundedRect(x - 10, y - 10, qrWidth + 20, qrWidth + 20, 8, 8, "F");
+        // ----------------------
+        // En-tête "PARTY PASS"
+        // ----------------------
+        const headerHeight = 15;
+        pdf.setFillColor(0, 0, 0); // Fond noir
+        pdf.rect(0, 0, pageWidth, headerHeight, 'F');
 
-        pdf.setFontSize(18);
-        pdf.setTextColor(50, 50, 120);
-        pdf.text("Votre billet - {{ $evenement['nom'] }}", pageWidth / 2, 25, { align: "center" });
+        pdf.setFont('helvetica', 'bold');
+        pdf.setTextColor(255, 255, 255);
+        pdf.setFontSize(16);
+        pdf.text("{{ $evenement['nom'] }}", pageWidth / 2, 30, { align: "center" });
 
-        pdf.addImage(imgData, "PNG", x, y, qrWidth, qrWidth);
+        // ----------------------
+        // Titre événement
+        // ----------------------
+        pdf.setTextColor(0, 0, 0);
+        pdf.setFontSize(14);
+        pdf.text("{{$evenement['nom'] }}", pageWidth / 2, 25, { align: "right" });
 
-        pdf.setFontSize(12);
-        pdf.setTextColor(80, 80, 80);
-        pdf.text("Bienvenue au spectacle " + clientName, pageWidth / 2, y + qrWidth + 25, { align: "center" });
+        pdf.setFontSize(10);
+        pdf.text("Trade Manager OP", pageWidth / 2, 32, { align: "right" });
 
-        pdf.save("billet-" + clientName + ".pdf");
+        // ----------------------
+        // Tableau informations
+        // ----------------------
+        let y = 40;
+
+        // Ligne 1 : Prix / Cilt / Nilt
+        pdf.setFontSize(9);
+        pdf.setFont('helvetica', 'normal');
+        pdf.text("Prix", 10, y);
+        pdf.text("Nombre billet", 40, y);
+        pdf.text("Total", 65, y);
+
+        y += 5;
+        pdf.setFont('helvetica', 'bold');
+        pdf.setFontSize(10);
+        pdf.text("500 fc", 10, y);
+        pdf.text("2", 40, y);
+        pdf.text("1000 fc", 65, y);
+
+        y += 8;
+
+        // Ligne 2 : Hru / Date / Temps
+        pdf.setFont('helvetica', 'normal');
+        pdf.setFontSize(9);
+        pdf.text("Date", 40, y);
+        pdf.text("Heure", 65, y);
+
+        y += 5;
+        pdf.setFont('helvetica', 'bold');
+        pdf.setFontSize(10);
+        pdf.text("{{ \Carbon\Carbon::parse($evenement['date_debut'])->format('d M Y') }}", 40, y);
+        pdf.text("1:20h", 65, y);
+
+        // ----------------------
+        // QR Code CENTRÉ EN BAS
+        // ----------------------
+        const qrCodeDataURL = await new Promise(resolve => {
+            QRCode.toDataURL(currentQRCode, {
+                width: 80,
+                margin: 1,
+                color: { dark: '#000000', light: '#FFFFFF' }
+            }, (err, url) => {
+                if (err) {
+                    console.error('Erreur génération QR code:', err);
+                    resolve(null);
+                } else {
+                    resolve(url);
+                }
+            });
+        });
+
+        if (qrCodeDataURL) {
+            const qrSize = 30; // Taille réduite pour le bas
+            const qrX = (pageWidth - qrSize) / 2; // Centré horizontalement
+            const qrY = pageHeight - qrSize - 15; // Positionné en bas avec marge
+            
+            pdf.addImage(qrCodeDataURL, 'PNG', qrX, qrY, qrSize, qrSize);
+            
+            // Code texte sous le QR code
+            pdf.setFontSize(7);
+            pdf.setTextColor(100);
+            pdf.text("MenjiDRC", pageWidth / 2, qrY + qrSize + 3, { align: "center" });
+            pdf.text("ce code est utilisé pour scanner ", pageWidth / 2, qrY+4 + qrSize + 3, { align: "center" });
+        }
+
+        // ----------------------
+        // Lignes de séparation
+        // ----------------------
+        pdf.setDrawColor(200, 200, 200);
+        pdf.line(5, 38, pageWidth - 5, 38); // Au-dessus du tableau
+        pdf.line(5, 55, pageWidth - 5, 55); // Entre les lignes du tableau
+
+        // ----------------------
+        // Informations supplémentaires
+        // ----------------------
+        pdf.setFontSize(7);
+        pdf.setTextColor(100);
+        pdf.text(`Nom: ${currentClientName}`, 5, 65);
+        
+        // ----------------------
+        // Sauvegarde PDF
+        // ----------------------
+        const fileName = `party-pass-${currentClientName.replace(/\s+/g, '-')}.pdf`;
+        pdf.save(fileName);
+
+    } catch (error) {
+        console.error('Erreur génération PDF:', error);
+        alert('Erreur lors de la génération du PDF: ' + error.message);
     }
-    
-    // Événements - VERSION CORRIGÉE
+}
+
+    // Événements
     document.addEventListener('DOMContentLoaded', function() {
         // Gestion des boutons d'achat
         document.querySelectorAll('.buy-ticket-btn').forEach(button => {
@@ -760,7 +951,7 @@
                 service: this.service.value
             };
             
-            clientName = formData.nom_complet_client;
+            currentClientName = formData.nom_complet_client;
             
             // Validation basique
             if (!formData.nom_complet_client || !formData.numero_client) {
@@ -785,38 +976,34 @@
 
                 const result = await response.json();
                 
+                console.log('Résultat API:', result);
+                
                 // Restaurer le bouton
                 submitBtn.innerHTML = originalText;
                 lucide.createIcons();
                 
                 if (result.status === true) {
+                     
                     closePaymentModal();
                     
-                    const uniqueCode = result.billet.code_bilet;
-                    const canvas = document.getElementById("qrcode-canvas");
+                    currentQRCode = result.billet.code_billet;
+             
 
-                    QRCode.toCanvas(
-                        canvas,
-                        uniqueCode,
-                        {
-                            width: 200,
-                            color: { dark: "#000000", light: "#ffffff" },
-                        },
-                        function (error) {
-                            if (error) {
-                                console.error(error);
-                                alert("Erreur lors de la génération du QR Code");
-                                return;
-                            }
-                            document.getElementById('qr-modal').style.display = 'flex';
-                        }
-                    );
+                    currentClientName = formData.nom_complet_client;
+                    
+                    // Afficher les informations dans le modal
+                    document.getElementById('client-name-display').textContent = currentClientName;
+                    
+                    // Générer le QR code avec la méthode simple
+                    generateQRCodeSimple(currentQRCode, 'qrcode-container');
+                    document.getElementById('qr-modal').style.display = 'flex';
+                    
                 } else {
                     alert(result.message || "Paiement échoué. Vérifiez vos informations.");
                 }
             } catch (error) {
+                console.error('Erreur lors du paiement:', error);
                 alert("Le paiement a échoué. Une erreur inattendue est survenue.");
-                console.error(error);
             }
         });
         
@@ -831,7 +1018,9 @@
         
         // Initialisation
         startCountdown();
-        ScrollReveal().reveal('.fade-in', { delay: 300, duration: 1000 });
+        if (typeof ScrollReveal !== 'undefined') {
+            ScrollReveal().reveal('.fade-in', { delay: 300, duration: 1000 });
+        }
     });
 </script>
 </body>
