@@ -4,13 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>KIMA TICKETS - Party Pass</title>
+
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
     body {
       background: #f0f2f5;
       font-family: 'Poppins', sans-serif;
-      margin: 0; padding: 20px;
+      margin: 0; 
+      padding: 20px;
       display: flex;
       justify-content: center;
       align-items: flex-start;
@@ -49,7 +51,7 @@
 
     .banner {
       position: relative;
-      height: 140px;
+      height: 250px;
       background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80') center/cover no-repeat;
       display: flex;
       justify-content: center;
@@ -62,31 +64,55 @@
       user-select: none;
     }
 
+    /* --- SECTION TICKET INFOS (Infinity War Layout) --- */
+
     .event-info {
-      padding: 20px 28px 28px;
-      font-size: 1rem;
-      color: #33475b;
-      line-height: 1.5;
+      padding: 26px;
       user-select: text;
     }
 
-    .event-info p {
-      margin: 8px 0;
+    .category {
+      font-size: 0.85rem;
+      color: #64707d;
+      margin-bottom: 2px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
-    .event-info p.bold {
+    .title {
+      font-size: 1.5rem;
       font-weight: 600;
+      margin: 0 0 18px;
       color: #096dd9;
     }
 
-    .footer-text {
-      font-size: 0.85rem;
-      color: #64707d;
-      padding: 0 28px 20px;
-      line-height: 1.4;
-      user-select: text;
-      border-top: 1px solid #dee4eb;
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin: 25px 0;
     }
+
+    .label {
+      font-size: 0.75rem;
+      color: #64707d;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .value {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #33475b;
+    }
+
+    .buyer {
+      margin-top: 16px;
+      font-size: 0.95rem;
+      color: #33475b;
+    }
+
+    /* QR */
 
     .qr-container {
       background: #fff;
@@ -95,12 +121,20 @@
       padding: 18px;
       text-align: center;
       user-select: none;
-      max-width: 180px;
+      max-width: 200px;
       margin: 0 auto 28px;
       box-shadow: 0 3px 8px rgb(0 0 0 / 0.1);
     }
 
-    /* Responsive */
+    .footer-text {
+      font-size: 0.85rem;
+      color: #64707d;
+      padding: 0 28px 20px;
+      line-height: 1.4;
+      user-select: text;
+      /* border-top: 1px solid #dee4eb; */
+    }
+
     @media (max-width: 440px) {
       .party-pass {
         max-width: 360px;
@@ -109,61 +143,82 @@
         font-size: 1.5rem;
         height: 120px;
       }
-      .event-info {
-        padding: 16px 20px 24px;
-        font-size: 0.95rem;
-      }
-      .footer-text {
-        padding: 0 20px 16px;
-      }
     }
+
   </style>
 </head>
+
 <body>
 
   <div class="party-pass" role="region" aria-label="Billet Party Pass">
 
-    <div class="header-info">
-      <div><strong>KIMA TICKETS</strong>  |  by Menji DRC</div>
-      <small>"La paix entre vous et vos événements"</small>
+    <div class="banner">PARTY PASS</div>
+
+    <!-- --- INFOS VERSION "INFINITY WAR 2018" --- -->
+    <div class="event-info">
+
+      <p class="category">Party</p>
+      <h2 class="title">Peace Vibes 2025</h2>
+
+      <div class="grid-3">
+        <div>
+          <span class="label">Lieu</span>
+          <span class="value">Stade des Martyrs</span>
+        </div>
+        <div>
+          <span class="label">Catégorie</span>
+          <span class="value">VIP</span>
+        </div>
+        <div>
+          <span class="label">Prix</span>
+          <span class="value">20 USD</span>
+        </div>
+      </div>
+
+      <div class="grid-3" style="border-top: 1px solid #dee4eb;padding-top:25px">
+        <div>
+          <span class="label">Date</span>
+          <span class="value">12 Juillet 2025</span>
+        </div>
+        <div>
+          <span class="label">Heure</span>
+          <span class="value">18h00</span>
+        </div>
+        <div>
+          <span class="label">N° Ticket</span>
+          <span class="value">KMT-2025-00157</span>
+        </div>
+      </div>
+
+      <p class="buyer">Participant : Shekinah Kalala</p>
+
     </div>
 
-    <div class="banner" aria-level="1" role="heading">PARTY PASS</div>
-
-    <div class="event-info" aria-label="Informations de l'événement">
-      <p class="bold">Concert Peace Vibes 2025</p>
-      <p>📍 Stade des Martyrs | Kinshasa</p>
-      <p>📅 12 Juillet 2025 | 🕒 18h00</p>
-      <p>Catégorie : VIP</p>
-      <p>Prix : 20 USD</p>
-      <p>N° Billet : KMT-2025-00157</p>
-      <p>Acheté le : 02 Juillet 2025</p>
-      <p>Participant : Shekinah Kalala</p>
+    <!-- QR CODE -->
+    <div class="qr-container">
+      <canvas id="qr-code"></canvas>
     </div>
 
     <div class="footer-text">
       <p><strong>Billet nominatif – Non transférable</strong></p>
-      <p>Ce billet est vérifié et sécurisé par <strong>Kima Tickets</strong>.</p>
-    </div>
-
-    <div class="qr-container" aria-label="Code QR pour la validation">
-      <canvas id="qr-code"></canvas>
+      <p>Ce billet est vérifié et sécurisé par <strong>Kima Tickets</strong>.</p> à 
     </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+
   <script>
     const qrCanvas = document.getElementById('qr-code');
     const qrOptions = {
       errorCorrectionLevel: 'H',
       margin: 2,
-      color: {
-        dark: '#096dd9', // bleu
-        light: '#f6f9fb' // fond clair
-      },
       width: 140,
+      color: {
+        dark: '#096dd9',
+        light: '#f6f9fb'
+      }
     };
-    // Exemple : lien QR code personnalisé
+
     const qrData = 'https://kima.example.com/ticket/KMT-2025-00157';
 
     QRCode.toCanvas(qrCanvas, qrData, qrOptions, function (error) {
