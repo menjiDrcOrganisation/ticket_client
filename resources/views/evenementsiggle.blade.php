@@ -393,7 +393,8 @@
                     <a  class="w-full buy-ticket-btn  bg-red-600 hover:bg-red-700 text-white py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-105
                     "   data-ticket-type="{{ $billet['nom_type'] }}"
                             data-ticket-price="{{ $billet['pivot']['prix_unitaire'] ?? '0' }}"
-                            data-ticket-id="{{ $billet['id'] }}">
+                            data-ticket-id="{{ $billet['id'] }}"
+                            data-ticket-devise="{{ $billet['pivot']['devise'] }}">
                         Acheter maintenant
                     </a>
                 </div>
@@ -476,13 +477,15 @@
                     
                     <div>
                         <label for="telephone" class="block text-sm font-medium text-gray-300 mb-1">Téléphone</label>
-                        <input type="tel" id="telephone" name="numero_client" placeholder="+243xxxxxxxxx" class="form-input" required>
-                    </div>
+                        <input type="tel" id="telephone" name="numero_client"  placeholder="+243xxxxxxxxx" class="form-input" required  
+                        pattern="^\+243[0-9]{9}$"
+                        title="Le numéro doit être au format +243 suivi de 9 chiffres.">
+                                    </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label for="service" class="block text-sm font-medium text-gray-300 mb-1">Service de paiement</label>
+                        <label for="service" class="block text-sm text-black font-medium mb-1">Service de paiement</label>
                         <select id="service" name="service" class="form-input" required>
                             <option value="MPESA">MPESA</option>
                             <option value="orange">ORANGEMONEY</option>
@@ -492,10 +495,9 @@
                     
                     <div>
                         <label for="devise" class="block text-sm font-medium text-gray-300 mb-1">Devise</label>
-                        <select id="devise" name="devise" class="form-input" required>
-                            <option value="USD">USD</option>
-                            <option value="CDF">CDF</option>
-                        </select>
+                        <div id="devise" class="form-input bg-gray-700 font-semibold">
+                            USD
+                        </div>
                     </div>
                 </div>
 
@@ -550,9 +552,6 @@
                     <button onclick="downloadTicket()" class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-semibold flex items-center justify-center gap-2">
                         <i data-lucide="download" class="w-4 h-4"></i>
                         Télécharger PDF
-                    </button>
-                    <button onclick="closeQRModal()" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg font-semibold">
-                        Fermer
                     </button>
                 </div>
             </div>
@@ -680,7 +679,7 @@
     }
     
     // Gestion du modal de paiement
-    function openPaymentModal(ticketType, ticketPrice, ticketId) {
+    function openPaymentModal(ticketType, ticketPrice, ticketId,ticketDevise) {
         console.log('Opening modal for:', ticketType, ticketPrice, ticketId);
         
         currentTicketPrice = parseFloat(ticketPrice) || 0;
@@ -689,7 +688,7 @@
         document.getElementById('modal-title').textContent = `Acheter un billet ${ticketType}`;
         document.getElementById('selected-ticket-type').value = ticketId;
         document.getElementById('unit-price').textContent = `${currentTicketPrice.toLocaleString('fr-FR')} FC`;
-        
+        document.getElementById('devise').textContent = ticketDevise;
         updateTotalPrice();
         document.getElementById('payment-modal').style.display = 'flex';
         
@@ -929,8 +928,10 @@
                 const ticketType = this.getAttribute('data-ticket-type');
                 const ticketPrice = this.getAttribute('data-ticket-price');
                 const ticketId = this.getAttribute('data-ticket-id');
+                const ticketDevise=this.getAttribute('data-ticket-devise');
+
                 
-                openPaymentModal(ticketType, ticketPrice, ticketId);
+                openPaymentModal(ticketType, ticketPrice, ticketId,ticketDevise);
             });
         });
         
@@ -966,7 +967,7 @@
                 submitBtn.innerHTML = '<i data-lucide="loader" class="w-5 h-5 animate-spin"></i> Traitement...';
                 lucide.createIcons();
                 
-                const response = await fetch("https://gestionticket.menjidrc.com/api/billet/achatBillet", {
+                const response = await fetch("http://127.0.0.1:8000/api/billet/achatBillet", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
