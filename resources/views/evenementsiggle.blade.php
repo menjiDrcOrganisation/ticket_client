@@ -317,10 +317,10 @@
             </div>
 
             <!-- Compte à rebours -->
-            <div class="py-6">
-                <h3 class="text-xl font-semibold mb-4 text-gray-300">L'événement commence dans:</h3>
-                <div id="countdown" class="flex justify-center gap-4">
-                    <div class="countdown-item flex flex-col items-center">
+            <div class="py-6 text-fade-in-up">
+                <h3 id="hk" class="text-xl font-semibold mb-4 text-gray-300">L'événement commence dans:</h3>
+                <div id="countdown" class="flex justify-center gap-4 stagger-animation">
+                    <div class="countdown-item flex flex-col items-center text-scale">
                         <span id="days" class="text-3xl font-bold text-white">00</span>
                         <span class="text-sm text-gray-400">Jours</span>
                     </div>
@@ -368,17 +368,66 @@
         </div>
     </section>
 
-    
-    <!-- Section billets - VERSION CORRIGÉE -->
-<section id="tickets" class="py-20 bg-gray-900 px-6 md:px-20">
-    <div class="max-w-6xl mx-auto">
-        <h2 class="text-4xl font-bold mb-12 text-center">Billets disponibles</h2>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            @foreach($evenement['type_billets'] as $index => $billet)
-                <div class="ticket-card shadow-2xl hover-lift rounded-2xl p-8 flex flex-col items-center text-center">
-                    <div class="bg-red-100 p-4 rounded-2xl mb-6">
-                        <i data-lucide="ticket" class="w-12 h-12 text-red-600"></i>
+    <!-- Section billets -->
+    <section id="tickets" class="py-20 bg-gray-900 px-6 md:px-20">
+        <div class="max-w-6xl mx-auto">
+            <h2 id="disponible" class="text-4xl font-bold mb-12 text-center text-glitch">Billets disponibles</h2>
+            
+            <div id="billet" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 stagger-animation">
+                @foreach($evenement['type_billets'] as $index => $billet)
+                    <div class="ticket-shape bg-gradient-to-br from-gray-800 to-gray-900 text-white shadow-2xl hover-lift transform transition-all duration-500"
+                         style="animation-delay: {{ $index * 100 }}ms">
+                        <!-- Coins décoratifs -->
+                        <div class="ticket-corner ticket-corner-top-left"></div>
+                        <div class="ticket-corner ticket-corner-top-right"></div>
+                        <div class="ticket-corner ticket-corner-bottom-left"></div>
+                        <div class="ticket-corner ticket-corner-bottom-right"></div>
+                        
+                        <!-- En-tête du billet -->
+                        <div class="ticket-header text-fade-in-up">
+                            <h3 class="text-2xl font-bold text-scale">{{ $billet['nom_type'] }}</h3>
+                            <p class="text-gray-200 mt-1">Billet d'entrée</p>
+                        </div>
+                        
+                        <!-- Corps du billet -->
+                        <div class="p-6 stagger-animation">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="text-fade-in-up">
+                                    <p class="text-4xl font-extrabold text-red-500 mb-1 text-gradient-animate">{{ $billet['pivot']['prix_unitaire'] ?? '—' }}$</p>
+                                    <p class="text-gray-400 text-sm">par personne</p>
+                                </div>
+                                <span class="bg-red-600 text-white text-sm font-bold px-3 py-1 rounded-full text-bounce">
+                                    {{ $billet['pivot']['nombre_billet'] }} disponibles
+                                </span>
+                            </div>
+                            
+                            <ul class="space-y-3 mb-6">
+                                <li class="flex items-center gap-2 text-gray-300 text-fade-in-up">
+                                    <i data-lucide="check" class="w-4 h-4 text-green-500"></i>
+                                    <span>Accès à l'événement</span>
+                                </li>
+                                <li class="flex items-center gap-2 text-gray-300 text-fade-in-up">
+                                    <i data-lucide="check" class="w-4 h-4 text-green-500"></i>
+                                    <span>Support client 24/7</span>
+                                </li>
+                                @if($billet['nom_type'] == 'VIP')
+                                <li class="flex items-center gap-2 text-gray-300 text-fade-in-up">
+                                    <i data-lucide="check" class="w-4 h-4 text-green-500"></i>
+                                    <span>Accès zone VIP</span>
+                                </li>
+                                <li class="flex items-center gap-2 text-gray-300 text-fade-in-up">
+                                    <i data-lucide="check" class="w-4 h-4 text-green-500"></i>
+                                    <span>Rencontre avec les artistes</span>
+                                </li>
+                                @endif
+                            </ul>
+                            
+                            <button class="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2 text-fade-in-up hover:text-shake"
+                                    onclick="openModal('{{ $billet['nom_type'] }}', '{{ $billet['prix'] ?? '0' }}')">
+                                <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                                Acheter maintenant
+                            </button>
+                        </div>
                     </div>
                     <h3 class="text-2xl font-semibold mb-3">Billet {{ $billet['nom_type'] }}</h3>
                     <p class="text-gray-600 mb-6">Accès à l'événement avec placement libre</p>
@@ -585,9 +634,9 @@
                             <i data-lucide="mail" class="w-4 h-4"></i>
                             <span>contact@menjidrc.com</span>
                         </li>
-                        <li class="flex items-center gap-2">
-                            <i data-lucide="phone" class="w-4 h-4"></i>
-                            <span>+243 XX XXX XXX</span>
+                        <li class="flex items-center gap-2 text-fade-in-up">
+                            <i data-lucide="phone" class="w-4 h-4 text-bounce"></i>
+                            <span>+243 973439644</span>
                         </li>
                     </ul>
                 </div>
@@ -641,11 +690,18 @@
             const timeDiff = eventDate.getTime() - now.getTime();
             
             if (timeDiff <= 0) {
+                
+                document.getElementById('disponible').innerHTML ="Les Billets ne sont plus disponibles "
+                document.getElementById('billet').style.display="none"
+                document.getElementById('hk').style.display="none"
                 document.getElementById('countdown').innerHTML = 
                     '<div class="text-2xl font-bold text-green-400">L\'événement a commencé! 🎉</div>';
                 return;
             }
-            
+            if (timeDiff <= 0 ) {
+                
+            }
+            // Calculer jours, heures, minutes
             const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
             const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
@@ -653,6 +709,8 @@
             document.getElementById('days').textContent = days.toString().padStart(2, '0');
             document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
             document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            console.log(days, hours, minutes);
+            
         }
         
         updateCountdown();
