@@ -446,7 +446,7 @@
 
             <!-- Compte à rebours -->
             <div class="py-6 text-fade-in-up">
-                <h3 class="text-xl font-semibold mb-4 text-gray-300">L'événement commence dans:</h3>
+                <h3 id="hk" class="text-xl font-semibold mb-4 text-gray-300">L'événement commence dans:</h3>
                 <div id="countdown" class="flex justify-center gap-4 stagger-animation">
                     <div class="countdown-item flex flex-col items-center text-scale">
                         <span id="days" class="text-3xl font-bold text-white">00</span>
@@ -504,9 +504,9 @@
     <!-- Section billets -->
     <section id="tickets" class="py-20 bg-gray-900 px-6 md:px-20">
         <div class="max-w-6xl mx-auto">
-            <h2 class="text-4xl font-bold mb-12 text-center text-glitch">Billets disponibles</h2>
+            <h2 id="disponible" class="text-4xl font-bold mb-12 text-center text-glitch">Billets disponibles</h2>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 stagger-animation">
+            <div id="billet" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 stagger-animation">
                 @foreach($evenement['type_billets'] as $index => $billet)
                     <div class="ticket-shape bg-gradient-to-br from-gray-800 to-gray-900 text-white shadow-2xl hover-lift transform transition-all duration-500"
                          style="animation-delay: {{ $index * 100 }}ms">
@@ -717,7 +717,7 @@
                         </li>
                         <li class="flex items-center gap-2 text-fade-in-up">
                             <i data-lucide="phone" class="w-4 h-4 text-bounce"></i>
-                            <span>+243 XX XXX XXX</span>
+                            <span>+243 973439644</span>
                         </li>
                         <li class="flex items-center gap-2 text-fade-in-up">
                             <i data-lucide="map-pin" class="w-4 h-4 text-bounce"></i>
@@ -814,11 +814,17 @@
             console.log("Différence de temps:", timeDiff);
             
             if (timeDiff <= 0) {
+                
+                document.getElementById('disponible').innerHTML ="Les Billets ne sont plus disponibles "
+                document.getElementById('billet').style.display="none"
+                document.getElementById('hk').style.display="none"
                 document.getElementById('countdown').innerHTML = 
                     '<div class="text-2xl font-bold text-green-400 text-glitch">L\'événement a commencé! 🎉</div>';
                 return;
             }
-            
+            if (timeDiff <= 0 ) {
+                
+            }
             // Calculer jours, heures, minutes
             const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
             const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -830,6 +836,8 @@
             document.getElementById('days').textContent = days.toString().padStart(2, '0');
             document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
             document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            console.log(days, hours, minutes);
+            
         }
         
         // Démarrer le compte à rebours
