@@ -317,9 +317,9 @@
             </div>
 
             <!-- Compte à rebours -->
-            <div class="py-6 text-fade-in-up">
+            <div class="py-6 text-fade-in-up" id="countdown">
                 <h3 id="hk" class="text-xl font-semibold mb-4 text-gray-300">L'événement commence dans:</h3>
-                <div id="countdown" class="flex justify-center gap-4 stagger-animation">
+                <div  class="flex justify-center gap-4 stagger-animation">
                     <div class="countdown-item flex flex-col items-center text-scale">
                         <span id="days" class="text-3xl font-bold text-white">00</span>
                         <span class="text-sm text-gray-400">Jours</span>
@@ -370,11 +370,14 @@
 
     <!-- Section billets -->
     <section id="tickets" class="py-20 bg-gray-900 px-6 md:px-20">
-        <div class="max-w-6xl mx-auto">
-            <h2 id="disponible" class="text-4xl font-bold mb-12 text-center text-glitch">Billets disponibles</h2>
-            
-            <div id="billet" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 stagger-animation">
-                @foreach($evenement['type_billets'] as $index => $billet)
+        <div class="max-w-6xl mx-auto" id="disponible">
+            <h2  class="text-4xl font-bold mb-12 text-center text-glitch">Billets disponibles</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            @foreach($evenement['type_billets'] as $index => $billet)
+                <div class="ticket-card shadow-2xl hover-lift rounded-2xl p-8 flex flex-col items-center text-center">
+                    <div class="bg-red-100 p-4 rounded-2xl mb-6">
+                        <i data-lucide="ticket" class="w-12 h-12 text-red-600"></i>
+                    </div>
                     <h3 class="text-2xl font-semibold mb-3">Billet {{ $billet['nom_type'] }}</h3>
                     <p class="text-gray-600 mb-6">Accès à l'événement avec placement libre</p>
                     <p class="text-4xl font-bold text-red-600 mb-2">{{ number_format($billet['pivot']['prix_unitaire'] ?? 0, 0, ',', ' ') }} {{ $billet['pivot']['devise'] ?? 'FC' }}</p>
@@ -382,11 +385,14 @@
                     <a  class="w-full buy-ticket-btn  bg-red-600 hover:bg-red-700 text-white py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-105
                     "   data-ticket-type="{{ $billet['nom_type'] }}"
                             data-ticket-price="{{ $billet['pivot']['prix_unitaire'] ?? '0' }}"
-                            data-ticket-id="{{ $billet['id'] }}">
+                            data-ticket-id="{{ $billet['id'] }}"
+                            data-ticket-devise="{{ $billet['pivot']['devise'] }}">
                         Acheter maintenant
                     </a>
                 </div>
             @endforeach
+        </div>
+           
         </div>
     </div>
 </section>
@@ -481,10 +487,9 @@
                     
                     <div>
                         <label for="devise" class="block text-sm font-medium text-gray-300 mb-1">Devise</label>
-                        <select id="devise" name="devise" class="form-input" required>
-                            <option value="USD">USD</option>
-                            <option value="CDF">CDF</option>
-                        </select>
+                        <div class="form-input bg-gray-700">
+                            <span id="devise" class="text-white font-semibold">0 FC</span>
+                        </div>
                     </div>
                 </div>
 
@@ -634,19 +639,17 @@
         function updateCountdown() {
             const now = new Date();
             const timeDiff = eventDate.getTime() - now.getTime();
+
+            //correction
             
-            if (timeDiff <= 0) {
-                
+            if (false) {
                 document.getElementById('disponible').innerHTML ="Les Billets ne sont plus disponibles "
-                document.getElementById('billet').style.display="none"
-                document.getElementById('hk').style.display="none"
+              
                 document.getElementById('countdown').innerHTML = 
-                    '<div class="text-2xl font-bold text-green-400">L\'événement a commencé! 🎉</div>';
+                    '<div class="text-2xl font-bold text-green-400">L\'événement a commencé! </div>';
                 return;
             }
-            if (timeDiff <= 0 ) {
-                
-            }
+           
             // Calculer jours, heures, minutes
             const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
             const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -654,9 +657,7 @@
             
             document.getElementById('days').textContent = days.toString().padStart(2, '0');
             document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
-            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
-            console.log(days, hours, minutes);
-            
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');  
         }
         
         updateCountdown();
@@ -668,7 +669,7 @@
     let currentTicketId = '';
     let clientName = '';
     
-    function openPaymentModal(ticketType, ticketPrice, ticketId) {
+    function openPaymentModal(ticketType, ticketPrice, ticketId,ticketDevise) {
         console.log('Opening modal for:', ticketType, ticketPrice, ticketId); // Debug
         
         currentTicketPrice = parseFloat(ticketPrice) || 0;
@@ -677,7 +678,7 @@
         document.getElementById('modal-title').textContent = `Acheter un billet ${ticketType}`;
         document.getElementById('selected-ticket-type').value = ticketId;
         document.getElementById('unit-price').textContent = `${currentTicketPrice.toLocaleString('fr-FR')} FC`;
-        
+        document.getElementById('devise').textContent = ticketDevise;
         updateTotalPrice();
         document.getElementById('payment-modal').style.display = 'flex';
         
@@ -742,8 +743,12 @@
                 const ticketType = this.getAttribute('data-ticket-type');
                 const ticketPrice = this.getAttribute('data-ticket-price');
                 const ticketId = this.getAttribute('data-ticket-id');
+                const ticketDevise = this.getAttribute('data-ticket-devise');
+
+                console.log(ticketDevise);
                 
-                openPaymentModal(ticketType, ticketPrice, ticketId);
+
+                openPaymentModal(ticketType, ticketPrice, ticketId,ticketDevise);
             });
         });
         
@@ -760,7 +765,6 @@
                 numero_client: this.numero_client.value,
                 nombre_reel: this.nombre_reel.value,
                 type_billet: this.type_billet.value,
-                devise: this.devise.value,
                 service: this.service.value
             };
             

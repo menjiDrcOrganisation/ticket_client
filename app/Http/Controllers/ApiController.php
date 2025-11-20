@@ -1,9 +1,8 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+
 
 class ApiController extends Controller
 {
@@ -31,7 +30,9 @@ class ApiController extends Controller
             $data = $response->json();
 
             if ($data['success']) {
+                
                 $evenement = $data['data'];
+              
                 return view('evenementsiggle', compact('evenement'));
             } else {
                 return view('evenementsiggle', ['error' => 'Événement non trouvé']);
