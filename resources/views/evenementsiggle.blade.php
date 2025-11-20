@@ -640,7 +640,7 @@
             const now = new Date();
             const timeDiff = eventDate.getTime() - now.getTime();
             
-            if (false) {
+            if (timeDiff<=0) {
                 
                 document.getElementById('hk').textContent = "L'événement a commencé!";
                 document.getElementById('countdown').innerHTML = '<div class="text-2xl font-bold text-green-400">L\'événement a commencé! 🎉</div>';
