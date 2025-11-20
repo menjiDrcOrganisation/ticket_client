@@ -375,60 +375,6 @@
             
             <div id="billet" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 stagger-animation">
                 @foreach($evenement['type_billets'] as $index => $billet)
-                    <div class="ticket-shape bg-gradient-to-br from-gray-800 to-gray-900 text-white shadow-2xl hover-lift transform transition-all duration-500"
-                         style="animation-delay: {{ $index * 100 }}ms">
-                        <!-- Coins décoratifs -->
-                        <div class="ticket-corner ticket-corner-top-left"></div>
-                        <div class="ticket-corner ticket-corner-top-right"></div>
-                        <div class="ticket-corner ticket-corner-bottom-left"></div>
-                        <div class="ticket-corner ticket-corner-bottom-right"></div>
-                        
-                        <!-- En-tête du billet -->
-                        <div class="ticket-header text-fade-in-up">
-                            <h3 class="text-2xl font-bold text-scale">{{ $billet['nom_type'] }}</h3>
-                            <p class="text-gray-200 mt-1">Billet d'entrée</p>
-                        </div>
-                        
-                        <!-- Corps du billet -->
-                        <div class="p-6 stagger-animation">
-                            <div class="flex justify-between items-start mb-4">
-                                <div class="text-fade-in-up">
-                                    <p class="text-4xl font-extrabold text-red-500 mb-1 text-gradient-animate">{{ $billet['pivot']['prix_unitaire'] ?? '—' }}$</p>
-                                    <p class="text-gray-400 text-sm">par personne</p>
-                                </div>
-                                <span class="bg-red-600 text-white text-sm font-bold px-3 py-1 rounded-full text-bounce">
-                                    {{ $billet['pivot']['nombre_billet'] }} disponibles
-                                </span>
-                            </div>
-                            
-                            <ul class="space-y-3 mb-6">
-                                <li class="flex items-center gap-2 text-gray-300 text-fade-in-up">
-                                    <i data-lucide="check" class="w-4 h-4 text-green-500"></i>
-                                    <span>Accès à l'événement</span>
-                                </li>
-                                <li class="flex items-center gap-2 text-gray-300 text-fade-in-up">
-                                    <i data-lucide="check" class="w-4 h-4 text-green-500"></i>
-                                    <span>Support client 24/7</span>
-                                </li>
-                                @if($billet['nom_type'] == 'VIP')
-                                <li class="flex items-center gap-2 text-gray-300 text-fade-in-up">
-                                    <i data-lucide="check" class="w-4 h-4 text-green-500"></i>
-                                    <span>Accès zone VIP</span>
-                                </li>
-                                <li class="flex items-center gap-2 text-gray-300 text-fade-in-up">
-                                    <i data-lucide="check" class="w-4 h-4 text-green-500"></i>
-                                    <span>Rencontre avec les artistes</span>
-                                </li>
-                                @endif
-                            </ul>
-                            
-                            <button class="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2 text-fade-in-up hover:text-shake"
-                                    onclick="openModal('{{ $billet['nom_type'] }}', '{{ $billet['prix'] ?? '0' }}')">
-                                <i data-lucide="shopping-cart" class="w-5 h-5"></i>
-                                Acheter maintenant
-                            </button>
-                        </div>
-                    </div>
                     <h3 class="text-2xl font-semibold mb-3">Billet {{ $billet['nom_type'] }}</h3>
                     <p class="text-gray-600 mb-6">Accès à l'événement avec placement libre</p>
                     <p class="text-4xl font-bold text-red-600 mb-2">{{ number_format($billet['pivot']['prix_unitaire'] ?? 0, 0, ',', ' ') }} {{ $billet['pivot']['devise'] ?? 'FC' }}</p>
