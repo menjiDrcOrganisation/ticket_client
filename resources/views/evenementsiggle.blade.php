@@ -317,9 +317,9 @@
             </div>
 
             <!-- Compte à rebours -->
-            <div class="py-6 text-fade-in-up">
+            <div class="py-6 text-fade-in-up" id="countdown">
                 <h3 id="hk" class="text-xl font-semibold mb-4 text-gray-300">L'événement commence dans:</h3>
-                <div id="countdown" class="flex justify-center gap-4 stagger-animation">
+                <div  class="flex justify-center gap-4 stagger-animation">
                     <div class="countdown-item flex flex-col items-center text-scale">
                         <span id="days" class="text-3xl font-bold text-white">00</span>
                         <span class="text-sm text-gray-400">Jours</span>
@@ -384,13 +384,13 @@
                     <p class="text-gray-600 mb-6">Accès à l'événement avec placement libre</p>
                     <p class="text-4xl font-bold text-red-600 mb-2">{{ number_format($billet['pivot']['prix_unitaire'] ?? 0, 0, ',', ' ') }} {{ $billet['pivot']['devise'] ?? 'FC' }}</p>
                     <p class="text-sm text-gray-500 mb-6">Disponible</p>
-                    <a  class="w-full buy-ticket-btn  bg-red-600 hover:bg-red-700 text-white py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-105
-                    "   data-ticket-type="{{ $billet['nom_type'] }}"
+                    <button class="w-full buy-ticket-btn bg-red-600 hover:bg-red-700 text-white py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-105"
+                            data-ticket-type="{{ $billet['nom_type'] }}"
                             data-ticket-price="{{ $billet['pivot']['prix_unitaire'] ?? '0' }}"
                             data-ticket-id="{{ $billet['id'] }}"
-                            data-ticket-devise="{{ $billet['pivot']['devise'] }}">
+                            data-ticket-devise="{{ $billet['pivot']['devise'] ?? 'FC' }}">
                         Acheter maintenant
-                    </a>
+                    </button>
                 </div>
             @endforeach
         </div>
@@ -490,7 +490,7 @@
                     <div>
                         <label for="devise" class="block text-sm font-medium text-gray-300 mb-1">Devise</label>
                         <div class="form-input bg-gray-700">
-                            <span id="devise"  class="text-white font-semibold">CDF</span>
+                            <span id="devise-display" class="text-white font-semibold">FC</span>
                         </div>
                         
                     </div>
@@ -542,7 +542,6 @@
                 <button onclick="downloadTicket()" class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-semibold mr-2">
                     Télécharger PDF
                 </button>
-               
             </div>
         </div>
     </div>
@@ -641,13 +640,11 @@
             const now = new Date();
             const timeDiff = eventDate.getTime() - now.getTime();
             
-            if (timeDiff <= 0) {
+            if (false) {
                 
-                document.getElementById('disponible').innerHTML ="Les Billets ne sont plus disponibles "
-                document.getElementById('billet').style.display="none"
-                document.getElementById('hk').style.display="none"
-                document.getElementById('countdown').innerHTML = 
-                    '<div class="text-2xl font-bold text-green-400">L\'événement a commencé! 🎉</div>';
+                document.getElementById('hk').textContent = "L'événement a commencé!";
+                document.getElementById('countdown').innerHTML = '<div class="text-2xl font-bold text-green-400">L\'événement a commencé! 🎉</div>';
+                document.getElementById('tickets').innerHTML= '<div class="text-2xl text-center font-bold text-red-500">Billet non disponible</div>';
                 return;
             }
             
@@ -658,8 +655,6 @@
             document.getElementById('days').textContent = days.toString().padStart(2, '0');
             document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
             document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
-            console.log(days, hours, minutes);
-            
         }
         
         updateCountdown();
@@ -670,17 +665,19 @@
     let currentTicketPrice = 0;
     let currentTicketId = '';
     let clientName = '';
+    let currentTicketDevise = 'FC';
     
-    function openPaymentModal(ticketType, ticketPrice, ticketId,ticketDevise) {
-        console.log('Opening modal for:', ticketType, ticketPrice, ticketId); // Debug
+    function openPaymentModal(ticketType, ticketPrice, ticketId, ticketDevise) {
+        console.log('Opening modal for:', ticketType, ticketPrice, ticketId, ticketDevise); // Debug
         
         currentTicketPrice = parseFloat(ticketPrice) || 0;
         currentTicketId = ticketId;
+        currentTicketDevise = ticketDevise || 'FC';
         
         document.getElementById('modal-title').textContent = `Acheter un billet ${ticketType}`;
         document.getElementById('selected-ticket-type').value = ticketId;
-        document.getElementById('unit-price').textContent = `${currentTicketPrice.toLocaleString('fr-FR')} FC`;
-        document.getElementById('devise').value = ticketDevise;
+        document.getElementById('unit-price').textContent = `${currentTicketPrice.toLocaleString('fr-FR')} ${currentTicketDevise}`;
+        document.getElementById('devise-display').textContent = currentTicketDevise;
         updateTotalPrice();
         document.getElementById('payment-modal').style.display = 'flex';
         
@@ -695,7 +692,7 @@
     function updateTotalPrice() {
         const quantity = parseInt(document.getElementById('quantity').value) || 1;
         const total = currentTicketPrice * quantity;
-        document.getElementById('total-price').textContent = `${total.toLocaleString('fr-FR')} FC`;
+        document.getElementById('total-price').textContent = `${total.toLocaleString('fr-FR')} ${currentTicketDevise}`;
     }
     
     // Modal QR Code
@@ -735,20 +732,19 @@
         pdf.save("billet-" + clientName + ".pdf");
     }
     
-    // Événements - VERSION CORRIGÉE
+    
     document.addEventListener('DOMContentLoaded', function() {
         // Gestion des boutons d'achat
         document.querySelectorAll('.buy-ticket-btn').forEach(button => {
             button.addEventListener('click', function(e) {
-                e.stopPropagation(); // Empêche la propagation de l'événement
+                e.preventDefault(); // Empêche le comportement par défaut
                 
                 const ticketType = this.getAttribute('data-ticket-type');
                 const ticketPrice = this.getAttribute('data-ticket-price');
                 const ticketId = this.getAttribute('data-ticket-id');
-                const ticketDevise=this.getAttribute('data-ticket-devise');
+                const ticketDevise = this.getAttribute('data-ticket-devise');
                 
-                
-                openPaymentModal(ticketType, ticketPrice, ticketId,ticketDevise);
+                openPaymentModal(ticketType, ticketPrice, ticketId, ticketDevise);
             });
         });
         
@@ -765,7 +761,6 @@
                 numero_client: this.numero_client.value,
                 nombre_reel: this.nombre_reel.value,
                 type_billet: this.type_billet.value,
-                devise: this.devise.value,
                 service: this.service.value
             };
             
@@ -784,7 +779,7 @@
                 submitBtn.innerHTML = '<i data-lucide="loader" class="w-5 h-5 animate-spin"></i> Traitement...';
                 lucide.createIcons();
                 
-                const response = await fetch("https://gestionticket.menjidrc.com/api/billet/achatBillet", {
+                const response = await fetch("http://127.0.0.1:8000/api/billet/achatBillet", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -793,6 +788,8 @@
                 });
 
                 const result = await response.json();
+
+                console.log(result);
                 
                 // Restaurer le bouton
                 submitBtn.innerHTML = originalText;
@@ -801,7 +798,7 @@
                 if (result.status === true) {
                     closePaymentModal();
                     
-                    const uniqueCode = result.billet.code_bilet;
+                    const uniqueCode = result.billet.code_billet;
                     const canvas = document.getElementById("qrcode-canvas");
 
                     QRCode.toCanvas(
@@ -821,7 +818,7 @@
                         }
                     );
                 } else {
-                    alert(result.message || "Paiement échoué. Vérifiez vos informations.");
+                    alert(result.error || "Paiement échoué. Vérifiez vos informations.");
                 }
             } catch (error) {
                 alert("Le paiement a échoué. Une erreur inattendue est survenue.");
@@ -840,7 +837,9 @@
         
         // Initialisation
         startCountdown();
-        ScrollReveal().reveal('.fade-in', { delay: 300, duration: 1000 });
+        if (typeof ScrollReveal !== 'undefined') {
+            ScrollReveal().reveal('.fade-in', { delay: 300, duration: 1000 });
+        }
     });
 </script>
 </body>
