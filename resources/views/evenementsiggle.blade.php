@@ -700,37 +700,258 @@
         document.getElementById('qr-modal').style.display = 'none';
     }
     
-    function downloadTicket() {
-        const canvas = document.getElementById("qrcode-canvas");
-        if (!canvas) {
-            alert("QR Code non généré !");
-            return;
-        }
-
-        const imgData = canvas.toDataURL("image/png");
-        const { jsPDF } = window.jspdf;
-        const pdf = new jsPDF();
-
-        const pageWidth = pdf.internal.pageSize.getWidth();
-        const qrWidth = 100;
-        const x = (pageWidth - qrWidth) / 2;
-        const y = 40;
-
-        pdf.setFillColor(230, 240, 255);
-        pdf.roundedRect(x - 10, y - 10, qrWidth + 20, qrWidth + 20, 8, 8, "F");
-
-        pdf.setFontSize(18);
-        pdf.setTextColor(50, 50, 120);
-        pdf.text("Votre billet - {{ $evenement['nom'] }}", pageWidth / 2, 25, { align: "center" });
-
-        pdf.addImage(imgData, "PNG", x, y, qrWidth, qrWidth);
-
-        pdf.setFontSize(12);
-        pdf.setTextColor(80, 80, 80);
-        pdf.text("Bienvenue au spectacle " + clientName, pageWidth / 2, y + qrWidth + 25, { align: "center" });
-
-        pdf.save("billet-" + clientName + ".pdf");
+  function downloadTicket() {
+    const canvas = document.getElementById("qrcode-canvas");
+    if (!canvas) {
+        alert("QR Code non généré !");
+        return;
     }
+
+    const imgData = canvas.toDataURL("image/png");
+    const { jsPDF } = window.jspdf;
+    
+    // Utiliser l'orientation portrait pour mobile
+    const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: [80, 160] // Légèrement plus long pour accommoder les nouvelles infos
+    });
+    
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+    const margin = 5;
+
+    // Couleurs du thème KIMA
+    const primaryColor = '#096dd9';
+    const textColor = '#212b47';
+    const secondaryTextColor = '#64707d';
+
+    // Fond principal
+    pdf.setFillColor(255, 255, 255);
+    pdf.rect(0, 0, pageWidth, pageHeight, 'F');
+
+    let yPosition = margin;
+
+    // === EN-TÊTE AVEC IMAGE DE FOND ===
+    try {
+        // Ajouter une image de fond pour la bannière (remplacer par votre URL d'image)
+        const bannerImage = new Image();
+        bannerImage.crossOrigin = "Anonymous";
+        bannerImage.src = 'https://gestionticket.menjidrc.com/storage/public/' + 
+                         ('{{ $evenement['ressource'][0]['photo_affiche'] }}' || 'img/concert.jpg');
+        
+        // Dessiner l'image de fond pour la bannière
+        pdf.addImage(bannerImage, 'JPEG', 0, yPosition, pageWidth, 25, undefined, 'FAST');
+        
+        // Overlay semi-transparent pour améliorer la lisibilité
+        pdf.setFillColor(9, 109, 217, 0.7); // Bleu semi-transparent
+        pdf.rect(0, yPosition, pageWidth, 25, 'F');
+        
+    } catch (error) {
+        // Fallback si l'image ne charge pas
+        pdf.setFillColor(parseInt(primaryColor.slice(1, 3), 16), parseInt(primaryColor.slice(3, 5), 16), parseInt(primaryColor.slice(5, 7), 16));
+        pdf.rect(0, yPosition, pageWidth, 25, 'F');
+    }
+    
+    // Texte PARTY PASS sur l'image
+    pdf.setFontSize(11);
+    pdf.setTextColor(255, 255, 255);
+    pdf.setFont(undefined, 'bold');
+    pdf.text("{{ $evenement['nom'] }}", pageWidth / 2, yPosition + 14, { align: "center" });
+
+    // Sous-titre avec nom de l'événement
+    pdf.setFontSize(6);
+    pdf.setTextColor(255, 255, 255, 0.9);
+    pdf.setFont(undefined, 'normal');
+    const eventNameShort = "Bienvenu(e)"
+    pdf.text(eventNameShort, pageWidth / 2, yPosition + 20, { align: "center" });
+
+    yPosition += 28;
+
+    // === INFORMATIONS GÉNÉRALES ===
+    pdf.setFontSize(6);
+    pdf.setTextColor(parseInt(secondaryTextColor.slice(1, 3), 16), parseInt(secondaryTextColor.slice(3, 5), 16), parseInt(secondaryTextColor.slice(5, 7), 16));
+    pdf.setFont(undefined, 'normal');
+    pdf.text("INFORMATIONS DU BILLET", pageWidth / 2, yPosition, { align: "center" });
+
+    yPosition += 5;
+
+    
+    
+    // Ligne 1: Lieu, Catégorie, Quantité
+    const colWidth = pageWidth / 3;
+    
+    // Colonne 1: Lieu
+    pdf.setFontSize(5);
+    pdf.setTextColor(parseInt(secondaryTextColor.slice(1, 3), 16), parseInt(secondaryTextColor.slice(3, 5), 16), parseInt(secondaryTextColor.slice(5, 7), 16));
+    pdf.text("LIEU", margin, yPosition);
+    pdf.setFontSize(6.5);
+    pdf.setTextColor(parseInt(textColor.slice(1, 3), 16), parseInt(textColor.slice(3, 5), 16), parseInt(textColor.slice(5, 7), 16));
+    pdf.setFont(undefined, 'bold');
+    const venue = "{{ $evenement['salle'] }}";
+    const displayVenue = venue.length > 15 ? venue.substring(0, 15) + '...' : venue;
+    pdf.text(displayVenue, margin, yPosition + 3);
+
+    // Colonne 2: Catégorie
+    pdf.setFontSize(5);
+    pdf.setTextColor(parseInt(secondaryTextColor.slice(1, 3), 16), parseInt(secondaryTextColor.slice(3, 5), 16), parseInt(secondaryTextColor.slice(5, 7), 16));
+    pdf.text("CATÉGORIE", colWidth, yPosition);
+    pdf.setFontSize(6.5);
+    pdf.setTextColor(parseInt(textColor.slice(1, 3), 16), parseInt(textColor.slice(3, 5), 16), parseInt(textColor.slice(5, 7), 16));
+    pdf.setFont(undefined, 'bold');
+    const ticketType = document.getElementById('selected-ticket-type')?.value || 'STANDARD';
+    pdf.text(ticketType, colWidth, yPosition + 3);
+
+    // Colonne 3: Quantité
+    pdf.setFontSize(5);
+    pdf.setTextColor(parseInt(secondaryTextColor.slice(1, 3), 16), parseInt(secondaryTextColor.slice(3, 5), 16), parseInt(secondaryTextColor.slice(5, 7), 16));
+    pdf.text("QUANTITÉ", colWidth * 2, yPosition);
+    pdf.setFontSize(6.5);
+    pdf.setTextColor(parseInt(textColor.slice(1, 3), 16), parseInt(textColor.slice(3, 5), 16), parseInt(textColor.slice(5, 7), 16));
+    pdf.setFont(undefined, 'bold');
+    const quantity = document.getElementById('quantity')?.value || '1';
+    pdf.text(quantity + ' billet(s)', colWidth * 2, yPosition + 3);
+
+    yPosition += 8;
+
+    // Ligne 2: Date, Heure, Prix
+    // Colonne 1: Date
+    pdf.setFontSize(5);
+    pdf.setTextColor(parseInt(secondaryTextColor.slice(1, 3), 16), parseInt(secondaryTextColor.slice(3, 5), 16), parseInt(secondaryTextColor.slice(5, 7), 16));
+    pdf.text("DATE", margin, yPosition);
+    pdf.setFontSize(6.5);
+    pdf.setTextColor(parseInt(textColor.slice(1, 3), 16), parseInt(textColor.slice(3, 5), 16), parseInt(textColor.slice(5, 7), 16));
+    pdf.setFont(undefined, 'bold');
+    const eventDate = "{{ \Carbon\Carbon::parse($evenement['date_debut'])->translatedFormat('d M Y') }}";
+    pdf.text(eventDate, margin, yPosition + 3);
+
+    // Colonne 2: Heure
+    pdf.setFontSize(5);
+    pdf.setTextColor(parseInt(secondaryTextColor.slice(1, 3), 16), parseInt(secondaryTextColor.slice(3, 5), 16), parseInt(secondaryTextColor.slice(5, 7), 16));
+    pdf.text("HEURE", colWidth, yPosition);
+    pdf.setFontSize(6.5);
+    pdf.setTextColor(parseInt(textColor.slice(1, 3), 16), parseInt(textColor.slice(3, 5), 16), parseInt(textColor.slice(5, 7), 16));
+    pdf.setFont(undefined, 'bold');
+    const eventTime = "{{ \Carbon\Carbon::parse($evenement['heure_debut'])->format('H:i') }}";
+    pdf.text(eventTime, colWidth, yPosition + 3);
+
+    // Colonne 3: Prix Total
+    pdf.setFontSize(5);
+    pdf.setTextColor(parseInt(secondaryTextColor.slice(1, 3), 16), parseInt(secondaryTextColor.slice(3, 5), 16), parseInt(secondaryTextColor.slice(5, 7), 16));
+    pdf.text("PRIX TOTAL", colWidth * 2, yPosition);
+    pdf.setFontSize(6.5);
+    pdf.setTextColor(parseInt(textColor.slice(1, 3), 16), parseInt(textColor.slice(3, 5), 16), parseInt(textColor.slice(5, 7), 16));
+    pdf.setFont(undefined, 'bold');
+    const totalPrice = document.getElementById('total-price')?.textContent || '0 FC';
+    pdf.text(totalPrice, colWidth * 2, yPosition + 3);
+
+    yPosition += 10;
+
+    // === SÉPARATEUR ===
+    pdf.setDrawColor(222, 228, 235);
+    pdf.setLineWidth(0.3);
+    pdf.line(margin, yPosition, pageWidth - margin, yPosition);
+
+    yPosition += 6;
+
+    // === INFORMATIONS PARTICIPANT ===
+    
+    // Numéro de ticket
+    pdf.setFontSize(5);
+    pdf.setTextColor(parseInt(secondaryTextColor.slice(1, 3), 16), parseInt(secondaryTextColor.slice(3, 5), 16), parseInt(secondaryTextColor.slice(5, 7), 16));
+    pdf.text("NUMÉRO TICKET", margin, yPosition);
+    pdf.setFontSize(6);
+    pdf.setTextColor(parseInt(textColor.slice(1, 3), 16), parseInt(textColor.slice(3, 5), 16), parseInt(textColor.slice(5, 7), 16));
+    pdf.setFont(undefined, 'bold');
+    const ticketNumber = 'KMT-' + new Date().getFullYear() + '-' + Math.random().toString(36).substr(2, 8).toUpperCase();
+    pdf.text(ticketNumber, margin, yPosition + 3);
+
+    yPosition += 7;
+
+    // Nom du participant
+    pdf.setFontSize(5);
+    pdf.setTextColor(parseInt(secondaryTextColor.slice(1, 3), 16), parseInt(secondaryTextColor.slice(3, 5), 16), parseInt(secondaryTextColor.slice(5, 7), 16));
+    pdf.text("PARTICIPANT", margin, yPosition);
+    pdf.setFontSize(7);
+    pdf.setTextColor(parseInt(textColor.slice(1, 3), 16), parseInt(textColor.slice(3, 5), 16), parseInt(textColor.slice(5, 7), 16));
+    pdf.setFont(undefined, 'bold');
+    const displayName = clientName.length > 25 ? clientName.substring(0, 25) + '...' : clientName;
+    pdf.text(displayName, margin, yPosition + 4);
+
+    yPosition += 9;
+
+    
+
+    // === QR CODE CENTRÉ ===
+    const qrSize = 38;
+    const qrX = (pageWidth - qrSize) / 2;
+    const qrY = yPosition;
+
+    // Conteneur QR Code avec bordure pointillée
+    pdf.setFillColor(255, 255, 255);
+    pdf.roundedRect(qrX - 3, qrY - 3, qrSize + 6, qrSize + 6, 3, 3, 'F');
+    
+    pdf.setDrawColor(150, 168, 182);
+    pdf.setLineWidth(0.3);
+    const dashPattern = [1.5, 1.5];
+    pdf.setLineDashPattern(dashPattern, 0);
+    pdf.roundedRect(qrX - 3, qrY - 3, qrSize + 6, qrSize + 6, 3, 3);
+    pdf.setLineDashPattern([], 0);
+
+    // QR Code centré
+    pdf.addImage(imgData, "PNG", qrX, qrY, qrSize, qrSize);
+
+    yPosition += qrSize + 10;
+
+    // === INFORMATIONS DE SÉCURITÉ ===
+    pdf.setFontSize(4);
+    pdf.setTextColor(parseInt(secondaryTextColor.slice(1, 3), 16), parseInt(secondaryTextColor.slice(3, 5), 16), parseInt(secondaryTextColor.slice(5, 7), 16));
+    
+    // Ligne 1: Billet nominatif
+    pdf.setFont(undefined, 'bold');
+    pdf.text("BILLET NOMINATIF - NON TRANSFÉRABLE", pageWidth / 2, yPosition, { align: "center" });
+    
+    yPosition += 3;
+    
+    // Ligne 2: Sécurisé par
+    pdf.setFont(undefined, 'normal');
+    pdf.text("SÉCURISÉ ET VÉRIFIÉ PAR", pageWidth / 2, yPosition, { align: "center" });
+    
+    yPosition += 3;
+    
+    // Ligne 3: KIMA TICKETS
+    pdf.setFont(undefined, 'bold');
+    pdf.setTextColor(parseInt(primaryColor.slice(1, 3), 16), parseInt(primaryColor.slice(3, 5), 16), parseInt(primaryColor.slice(5, 7), 16));
+    pdf.text("KIMA TICKETS", pageWidth / 2, yPosition, { align: "center" });
+
+    yPosition += 6;
+
+    // === CODE-BARRES SIMPLE ===
+    pdf.setDrawColor(0, 0, 0);
+    pdf.setLineWidth(0.2);
+    
+    // Code-barres centré
+    const barcodeWidth = pageWidth - (margin * 2);
+    const barcodeX = margin;
+    const barcodeY = yPosition;
+    
+    for (let i = 0; i < 30; i++) {
+        const barHeight = 5;
+        const barWidth = Math.random() * 1 + 0.2;
+        const x = barcodeX + (i * (barcodeWidth / 30));
+        pdf.line(x, barcodeY, x, barcodeY + barHeight);
+    }
+
+    // Numéro de ticket sous le code-barres
+    pdf.setFontSize(3.5);
+    pdf.setTextColor(parseInt(secondaryTextColor.slice(1, 3), 16), parseInt(secondaryTextColor.slice(3, 5), 16), parseInt(secondaryTextColor.slice(5, 7), 16));
+    pdf.setFont(undefined, 'normal');
+    pdf.text(ticketNumber, pageWidth / 2, barcodeY + 7, { align: "center" });
+
+    // Sauvegarder le PDF
+    const fileName = "billet-" + clientName.replace(/\s+/g, '-').substring(0, 10) + ".pdf";
+    pdf.save(fileName);
+}
     
     
     document.addEventListener('DOMContentLoaded', function() {
