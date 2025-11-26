@@ -316,8 +316,8 @@
                 </p>
             </div>
 
-            <!-- Compte à rebours -->
-            <div class="py-6 text-fade-in-up" id="countdown">
+            <!-- Compte à rebours masqué -->
+            <!-- <div class="py-6 text-fade-in-up" id="countdown">
                 <h3 id="hk" class="text-xl font-semibold mb-4 text-gray-300">L'événement commence dans:</h3>
                 <div  class="flex justify-center gap-4 stagger-animation">
                     <div class="countdown-item flex flex-col items-center text-scale">
@@ -333,7 +333,7 @@
                         <span class="text-sm text-gray-400">Minutes</span>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             <!-- Phrase d'accroche -->
             @if(isset($evenement['ressource'][0]['phrase_accroche']))
