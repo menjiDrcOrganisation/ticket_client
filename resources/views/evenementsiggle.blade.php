@@ -86,16 +86,21 @@
             z-index: 1000;
             align-items: center;
             justify-content: center;
+            padding: 1rem;
+            box-sizing: border-box;
+            overflow-y: auto;
         }
         
         .modal-content {
             background: var(--secondary);
             border-radius: 15px;
             max-width: 500px;
-            width: 90%;
-            padding: 2rem;
+            width: 100%;
+            padding: 1.5rem;
             position: relative;
             animation: modalFadeIn 0.3s ease-out;
+            max-height: 90vh;
+            overflow-y: auto;
         }
         
         @keyframes modalFadeIn {
@@ -112,6 +117,7 @@
             color: white;
             font-size: 1.5rem;
             cursor: pointer;
+            z-index: 10;
         }
         
         .text-typing {
@@ -203,7 +209,7 @@
         /* Styles pour le modal de paiement amélioré */
         .payment-modal {
             max-width: 600px;
-            width: 95%;
+            width: 100%;
         }
 
         .form-input {
@@ -214,6 +220,7 @@
             color: white;
             width: 100%;
             transition: all 0.3s ease;
+            box-sizing: border-box;
         }
 
         .form-input:focus {
@@ -231,13 +238,128 @@
             transform: translateY(-5px);
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
         }
+        
+        /* Responsive améliorations */
+        @media (max-width: 768px) {
+            .modal-content {
+                padding: 1.25rem;
+                margin: 1rem;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem !important;
+                line-height: 1.2;
+            }
+            
+            .section-padding {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            
+            .ticket-grid {
+                grid-template-columns: 1fr !important;
+                gap: 1.5rem;
+            }
+            
+            .countdown-item {
+                min-width: 80px;
+                padding: 10px 15px;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr !important;
+                gap: 1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .modal-content {
+                padding: 1rem;
+                margin: 0.5rem;
+            }
+            
+            .hero-title {
+                font-size: 2rem !important;
+            }
+            
+            .countdown-item {
+                min-width: 70px;
+                padding: 8px 12px;
+            }
+            
+            .section-title {
+                font-size: 2rem !important;
+            }
+        }
+        
+        /* Améliorations pour très petits écrans */
+        @media (max-width: 360px) {
+            .hero-title {
+                font-size: 1.75rem !important;
+            }
+            
+            .modal-content {
+                padding: 0.75rem;
+            }
+            
+            .form-input {
+                padding: 10px 12px;
+            }
+        }
+        
+        /* Améliorations pour les grands écrans */
+        @media (min-width: 1440px) {
+            .container-wide {
+                max-width: 1200px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+        
+        /* Scrollbar personnalisée pour les modals */
+        .modal-content::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .modal-content::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        
+        .modal-content::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+        
+        /* Amélioration de la lisibilité sur mobile */
+        .text-responsive {
+            font-size: clamp(1rem, 4vw, 1.25rem);
+        }
+        
+        .title-responsive {
+            font-size: clamp(1.5rem, 8vw, 3.5rem);
+        }
+        
+        /* Optimisation des images de fond */
+        .hero-bg {
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: scroll;
+        }
+        
+        @media (max-width: 768px) {
+            .hero-bg {
+                background-attachment: scroll;
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-900 text-white relative overflow-x-hidden">
 
 @if(isset($error))
-    <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800">
-        <div class="text-center p-8 bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full fade-in">
+    <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800 px-4">
+        <div class="text-center p-6 bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full fade-in">
             <i data-lucide="alert-circle" class="w-16 h-16 text-red-500 mx-auto mb-4"></i>
             <h2 class="text-2xl font-bold text-white mb-2">Erreur</h2>
             <p class="text-red-400 mb-6">{{ $error }}</p>
@@ -252,7 +374,7 @@
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center space-x-2">
                 <i data-lucide="ticket" class="w-8 h-8 text-red-500"></i>
-                <span class="text-xl font-bold"> {{ $evenement['nom'] }}</span>
+                <span class="text-xl font-bold truncate max-w-[150px] md:max-w-none">{{ $evenement['nom'] }}</span>
             </div>
             
             <div class="hidden md:flex space-x-8">
@@ -279,31 +401,31 @@
     </nav>
 
     <!-- Section Hero -->
-    <header class="relative min-h-screen bg-cover bg-center bg-fixed flex items-center justify-center pt-16"
+    <header class="relative min-h-screen hero-bg flex items-center justify-center pt-16 px-4"
         style="background-image: url('https://gestionticket.menjidrc.com/storage/public/{{
                 $evenement['ressource'][0]['photo_affiche'] ?? 'img/concert.jpg'
-            }}'); background-size: cover; ">
+            }}');">
         <div class="absolute inset-0 hero-gradient"></div>
         
         <div class="absolute inset-0 bg-pattern"></div>
 
-        <div class="relative z-10 text-center px-4 space-y-8 max-w-6xl mx-auto">
+        <div class="relative z-10 text-center w-full max-w-6xl mx-auto space-y-8">
             <div class="inline-block bg-red-600/20 border border-red-500/30 rounded-full px-4 py-2 mb-4">
                 <span class="text-red-300 text-sm font-medium">Événement à venir</span>
             </div>
             
-            <h1 class="text-5xl md:text-7xl lg:text-8xl font-extrabold uppercase tracking-tight">
+            <h1 class="title-responsive font-extrabold uppercase tracking-tight">
                 <span class="bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent text-typing">
                     {{ $evenement['nom'] }}
                 </span>
             </h1>
             
-            <div class="text-lg md:text-xl font-medium space-y-3 max-w-2xl mx-auto">
-                <p class="flex items-center justify-center gap-2 text-float">
-                    <i data-lucide="map-pin" class="w-5 h-5 text-red-500"></i> 
-                    <span>{{ $evenement['salle'] }} - {{ $evenement['adresse'] }}</span>
+            <div class="text-responsive font-medium space-y-3 max-w-2xl mx-auto">
+                <p class="flex items-center justify-center gap-2 text-float flex-wrap">
+                    <i data-lucide="map-pin" class="w-5 h-5 text-red-500 flex-shrink-0"></i> 
+                    <span class="text-center">{{ $evenement['salle'] }} - {{ $evenement['adresse'] }}</span>
                 </p>
-                <p class="flex items-center justify-center gap-2 flex-wrap">
+                <p class="flex items-center justify-center gap-2 flex-wrap justify-center">
                     <span class="font-bold text-yellow-400 flex items-center gap-1 text-bounce">
                         <i data-lucide="calendar" class="w-5 h-5"></i>
                         {{ \Carbon\Carbon::parse($evenement['date_debut'])->translatedFormat('d F Y') }} à {{ \Carbon\Carbon::parse($evenement['heure_debut'])->format('H:i') }}
@@ -316,35 +438,14 @@
                 </p>
             </div>
 
-            <!-- Compte à rebours masqué -->
-            <!-- <div class="py-6 text-fade-in-up" id="countdown">
-                <h3 id="hk" class="text-xl font-semibold mb-4 text-gray-300">L'événement commence dans:</h3>
-                <div  class="flex justify-center gap-4 stagger-animation">
-                    <div class="countdown-item flex flex-col items-center text-scale">
-                        <span id="days" class="text-3xl font-bold text-white">00</span>
-                        <span class="text-sm text-gray-400">Jours</span>
-                    </div>
-                    <div class="countdown-item flex flex-col items-center">
-                        <span id="hours" class="text-3xl font-bold text-white">00</span>
-                        <span class="text-sm text-gray-400">Heures</span>
-                    </div>
-                    <div class="countdown-item flex flex-col items-center">
-                        <span id="minutes" class="text-3xl font-bold text-white">00</span>
-                        <span class="text-sm text-gray-400">Minutes</span>
-                    </div>
-                </div>
-            </div> -->
-
             <!-- Phrase d'accroche -->
             @if(isset($evenement['ressource'][0]['phrase_accroche']))
-            <div class="bg-white/10 backdrop-blur-md rounded-2xl p-8 max-w-3xl mx-auto border border-white/20">
-                <p class="text-xl md:text-2xl text-center italic text-gray-200 text-gradient-animate">
+            <div class="bg-white/10 backdrop-blur-md rounded-2xl p-6 md:p-8 max-w-3xl mx-auto border border-white/20">
+                <p class="text-lg md:text-2xl text-center italic text-gray-200 text-gradient-animate">
                     "{{ $evenement['ressource'][0]['phrase_accroche'] }}"
                 </p>
             </div>
             @endif
-
-          
         </div>
         
         <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-bounce">
@@ -355,12 +456,12 @@
     </header>
 
     <!-- Section description -->
-    <section id="about" class="py-20 bg-gray-800 px-6 md:px-20 relative overflow-hidden">
+    <section id="about" class="py-16 md:py-20 bg-gray-800 section-padding relative overflow-hidden">
         <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-red-500 to-transparent"></div>
         
         <div class="max-w-6xl mx-auto">
-            <h2 class="text-4xl font-bold mb-6 text-center">À propos de l'événement</h2>
-            <div class="bg-gray-900/50 rounded-2xl p-8 md:p-12 shadow-2xl">
+            <h2 class="section-title text-3xl md:text-4xl font-bold mb-6 text-center">À propos de l'événement</h2>
+            <div class="bg-gray-900/50 rounded-2xl p-6 md:p-12 shadow-2xl">
                 <p class="text-lg leading-relaxed text-gray-300 text-center md:text-left">
                     {{ $evenement['ressource'][0]['a_propos'] ?? 'Aucune description disponible pour cet événement.' }}
                 </p>
@@ -370,19 +471,19 @@
 
     
     <!-- Section billets - VERSION CORRIGÉE -->
-<section id="tickets" class="py-20 bg-gray-900 px-6 md:px-20">
+<section id="tickets" class="py-16 md:py-20 bg-gray-900 section-padding">
     <div class="max-w-6xl mx-auto">
-        <h2 class="text-4xl font-bold mb-12 text-center">Billets disponibles</h2>
+        <h2 class="section-title text-3xl md:text-4xl font-bold mb-8 md:mb-12 text-center">Billets disponibles</h2>
         
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="ticket-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             @foreach($evenement['type_billets'] as $index => $billet)
-                <div class="ticket-card shadow-2xl hover-lift rounded-2xl p-8 flex flex-col items-center text-center">
+                <div class="ticket-card bg-white shadow-2xl hover-lift rounded-2xl p-6 md:p-8 flex flex-col items-center text-center">
                     <div class="bg-red-100 p-4 rounded-2xl mb-6">
-                        <i data-lucide="ticket" class="w-12 h-12 text-red-600"></i>
+                        <i data-lucide="ticket" class="w-10 h-10 md:w-12 md:h-12 text-red-600"></i>
                     </div>
-                    <h3 class="text-2xl font-semibold mb-3">Billet {{ $billet['nom_type'] }}</h3>
+                    <h3 class="text-xl md:text-2xl font-semibold mb-3 text-gray-800">Billet {{ $billet['nom_type'] }}</h3>
                     <p class="text-gray-600 mb-6">Accès à l'événement avec placement libre</p>
-                    <p class="text-4xl font-bold text-red-600 mb-2">{{ number_format($billet['pivot']['prix_unitaire'] ?? 0, 0, ',', ' ') }} {{ $billet['pivot']['devise'] ?? 'FC' }}</p>
+                    <p class="text-3xl md:text-4xl font-bold text-red-600 mb-2">{{ number_format($billet['pivot']['prix_unitaire'] ?? 0, 0, ',', ' ') }} {{ $billet['pivot']['devise'] ?? 'FC' }}</p>
                     <p class="text-sm text-gray-500 mb-6">Disponible</p>
                     <button class="w-full buy-ticket-btn bg-red-600 hover:bg-red-700 text-white py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-105"
                             data-ticket-type="{{ $billet['nom_type'] }}"
@@ -398,51 +499,47 @@
 </section>
 
     <!-- Section lieu -->
-    <section id="location" class="py-20 bg-gray-800 px-6 md:px-20">
+    <section id="location" class="py-16 md:py-20 bg-gray-800 section-padding">
         <div class="max-w-6xl mx-auto">
-            <h2 class="text-4xl font-bold mb-12 text-center">Lieu de l'événement</h2>
+            <h2 class="section-title text-3xl md:text-4xl font-bold mb-8 md:mb-12 text-center">Lieu de l'événement</h2>
             
             <div class="bg-gray-900 rounded-2xl overflow-hidden shadow-2xl">
-                <div class="md:flex">
-                    <div class="w-full p-8 md:p-12">
-                      
-                        <div class="space-y-4">
-
-                            <div class="flex items-start gap-3">
-                                <i data-lucide="map-pin" class="w-5 h-5 text-red-500 mt-1"></i>
-                                <div>
-                                    <p class="font-medium">Salle</p>
-                                    <p class="text-gray-400">{{ $evenement['salle'] }}</p>
-                                </div>
+                <div class="w-full p-6 md:p-12">
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-3">
+                            <i data-lucide="map-pin" class="w-5 h-5 text-red-500 mt-1 flex-shrink-0"></i>
+                            <div>
+                                <p class="font-medium">Salle</p>
+                                <p class="text-gray-400">{{ $evenement['salle'] }}</p>
                             </div>
-                            <div class="flex items-start gap-3">
-                                <i data-lucide="map-pin" class="w-5 h-5 text-red-500 mt-1"></i>
-                                <div>
-                                    <p class="font-medium">Adresse</p>
-                                    <p class="text-gray-400">{{ $evenement['adresse'] }}</p>
-                                </div>
-                            </div>
-                            
-                            <div class="flex items-start gap-3">
-                                <i data-lucide="calendar" class="w-5 h-5 text-red-500 mt-1"></i>
-                                <div>
-                                    <p class="font-medium">Date et heure</p>
-                                    <p class="text-gray-400">
-                                        {{ \Carbon\Carbon::parse($evenement['date_debut'])->translatedFormat('d F Y') }} à {{ \Carbon\Carbon::parse($evenement['heure_debut'])->format('H:i') }} - 
-                                        {{ \Carbon\Carbon::parse($evenement['date_fin'])->translatedFormat('d F Y') }} à {{ \Carbon\Carbon::parse($evenement['heure_fin'])->format('H:i') }}
-                                    </p>
-                                </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <i data-lucide="map-pin" class="w-5 h-5 text-red-500 mt-1 flex-shrink-0"></i>
+                            <div>
+                                <p class="font-medium">Adresse</p>
+                                <p class="text-gray-400">{{ $evenement['adresse'] }}</p>
                             </div>
                         </div>
                         
-                        <div class="mt-8">
-                            <a href="https://maps.google.com/?q={{ urlencode($evenement['adresse']) }}" 
-                               target="_blank" 
-                               class="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg transition-all duration-300">
-                                <i data-lucide="navigation" class="w-5 h-5"></i>
-                                Voir sur Google Maps
-                            </a>
+                        <div class="flex items-start gap-3">
+                            <i data-lucide="calendar" class="w-5 h-5 text-red-500 mt-1 flex-shrink-0"></i>
+                            <div>
+                                <p class="font-medium">Date et heure</p>
+                                <p class="text-gray-400">
+                                    {{ \Carbon\Carbon::parse($evenement['date_debut'])->translatedFormat('d F Y') }} à {{ \Carbon\Carbon::parse($evenement['heure_debut'])->format('H:i') }} - 
+                                    {{ \Carbon\Carbon::parse($evenement['date_fin'])->translatedFormat('d F Y') }} à {{ \Carbon\Carbon::parse($evenement['heure_fin'])->format('H:i') }}
+                                </p>
+                            </div>
                         </div>
+                    </div>
+                    
+                    <div class="mt-6 md:mt-8">
+                        <a href="https://maps.google.com/?q={{ urlencode($evenement['adresse']) }}" 
+                           target="_blank" 
+                           class="inline-flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg transition-all duration-300 w-full md:w-auto">
+                            <i data-lucide="navigation" class="w-5 h-5"></i>
+                            Voir sur Google Maps
+                        </a>
                     </div>
                 </div>
             </div>
@@ -456,14 +553,14 @@
                 <i data-lucide="x"></i>
             </button>
             
-            <h3 class="text-2xl font-bold mb-2" id="modal-title">Finalisez votre achat</h3>
-            <p class="text-gray-400 mb-6" id="modal-subtitle">Remplissez vos informations pour compléter votre achat</p>
+            <h3 class="text-xl md:text-2xl font-bold mb-2" id="modal-title">Finalisez votre achat</h3>
+            <p class="text-gray-400 mb-4 md:mb-6 text-sm md:text-base" id="modal-subtitle">Remplissez vos informations pour compléter votre achat</p>
             
             <form id="payment-form" class="space-y-4">
                 <input type="hidden" value="{{ $evenement['id'] }}" name="id_evenement" />
                 <input type="hidden" id="selected-ticket-type" name="type_billet" />
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="form-grid grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label for="fullname" class="block text-sm font-medium text-gray-300 mb-1">Nom complet</label>
                         <input type="text" id="fullname" name="nom_complet_client" class="form-input" required>
@@ -471,13 +568,13 @@
                     
                     <div>
                         <label for="telephone" class="block text-sm font-medium text-gray-300 mb-1">Téléphone</label>
-                        <input type="tel" id="telephone" name="numero_client" placeholder="+243xxxxxxxxx" class="form-input" required
+                        <input type="tel" id="telephone"  name="numero_client" placeholder="+243xxxxxxxxx" class="form-input" required
                         pattern="^\+243[0-9]{9}$"
     title="Entrez un numéro congolais valide au format +243 suivi de 9 chiffres">
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="form-grid grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label for="service" class="block text-sm font-medium text-gray-300 mb-1">Service de paiement</label>
                         <select id="service" name="service" class="form-input" required>
@@ -496,7 +593,7 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="form-grid grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label for="quantity" class="block text-sm font-medium text-gray-300 mb-1">Nombre de billets</label>
                         <input type="number" id="quantity" name="nombre_reel" min="1" value="1" class="form-input" required>
@@ -513,7 +610,7 @@
                 <div class="pt-4 border-t border-gray-700">
                     <div class="flex justify-between items-center mb-4">
                         <span class="text-gray-400 text-lg">Total:</span>
-                        <span id="total-price" class="text-2xl font-bold text-white">0 FC</span>
+                        <span id="total-price" class="text-xl md:text-2xl font-bold text-white">0 FC</span>
                     </div>
                     
                     <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2">
@@ -532,15 +629,18 @@
                 <i data-lucide="x"></i>
             </button>
 
-            <h2 class="text-2xl font-bold text-center mb-4">Votre billet</h2>
+            <h2 class="text-xl md:text-2xl font-bold text-center mb-4">Votre billet</h2>
 
             <div class="flex justify-center mb-6">
-                <canvas id="qrcode-canvas"></canvas>
+                <canvas id="qrcode-canvas" class="max-w-full"></canvas>
             </div>
 
             <div class="text-center">
-                <button onclick="downloadTicket()" class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-semibold mr-2">
+                <button onclick="downloadTicket()" class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-semibold mr-2 w-full md:w-auto mb-2 md:mb-0">
                     Télécharger PDF
+                </button>
+                <button onclick="closeQRModal()" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg font-semibold w-full md:w-auto">
+                    Fermer
                 </button>
             </div>
         </div>
@@ -620,47 +720,6 @@
         });
     }
     
-    // Compte à rebours
-    function startCountdown() {
-        const dateDebut = "{{ $evenement['date_debut'] }}";
-        const heureDebut = "{{ $evenement['heure_debut'] }}";
-        
-        const [year, month, day] = dateDebut.split('-');
-        const [hours, minutes] = heureDebut.split(':');
-        
-        const eventDate = new Date(
-            parseInt(year),
-            parseInt(month) - 1,
-            parseInt(day),
-            parseInt(hours),
-            parseInt(minutes)
-        );
-        
-        function updateCountdown() {
-            const now = new Date();
-            const timeDiff = eventDate.getTime() - now.getTime();
-            
-            if (false) {
-                
-                document.getElementById('hk').textContent = "L'événement a commencé!";
-                document.getElementById('countdown').innerHTML = '<div class="text-2xl font-bold text-green-400">L\'événement a commencé! 🎉</div>';
-                document.getElementById('tickets').innerHTML= '<div class="text-2xl text-center font-bold text-red-500">Billet non disponible</div>';
-                return;
-            }
-            
-            const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-            
-            document.getElementById('days').textContent = days.toString().padStart(2, '0');
-            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
-            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
-        }
-        
-        updateCountdown();
-        setInterval(updateCountdown, 60000);
-    }
-    
     // Gestion du modal de paiement - VERSION CORRIGÉE
     let currentTicketPrice = 0;
     let currentTicketId = '';
@@ -680,6 +739,7 @@
         document.getElementById('devise-display').textContent = currentTicketDevise;
         updateTotalPrice();
         document.getElementById('payment-modal').style.display = 'flex';
+        document.body.style.overflow = 'hidden'; // Empêcher le défilement du body
         
         // Réinitialiser le formulaire
         document.getElementById('payment-form').reset();
@@ -687,6 +747,12 @@
     
     function closePaymentModal() {
         document.getElementById('payment-modal').style.display = 'none';
+        document.body.style.overflow = 'auto'; // Rétablir le défilement
+    }
+    
+    function closeQRModal() {
+        document.getElementById('qr-modal').style.display = 'none';
+        document.body.style.overflow = 'auto'; // Rétablir le défilement
     }
     
     function updateTotalPrice() {
@@ -1036,6 +1102,7 @@
                                 return;
                             }
                             document.getElementById('qr-modal').style.display = 'flex';
+                            document.body.style.overflow = 'hidden'; // Empêcher le défilement du body
                         }
                     );
                 } else {
@@ -1056,8 +1123,15 @@
             if (e.target === qrModal) closeQRModal();
         });
         
+        // Fermer les modals avec la touche Échap
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closePaymentModal();
+                closeQRModal();
+            }
+        });
+        
         // Initialisation
-        startCountdown();
         if (typeof ScrollReveal !== 'undefined') {
             ScrollReveal().reveal('.fade-in', { delay: 300, duration: 1000 });
         }
