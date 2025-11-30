@@ -14,7 +14,8 @@
 /auth.json
 /node_modules
 /public/build
-/public/hot
+/app/Http/Controller/ApiClontroller.php
+/public/hots
 /public/storage
 /storage/*.key
 /storage/pail
