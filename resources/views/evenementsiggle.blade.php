@@ -1066,7 +1066,7 @@
                 submitBtn.innerHTML = '<i data-lucide="loader" class="w-5 h-5 animate-spin"></i> Traitement...';
                 lucide.createIcons();
                 
-                const response = await fetch("http://127.0.0.1:8000/api/billet/achatBillet", {
+                const response = await fetch("https://gestionticket.menjidrc.com/api/billet/achatBillet", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
