@@ -3,7 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Événements | MenjiDRC</title>
+    
+    <title>Kimiaticket Menjidrc</title>
+    
+<!-- Favicon : logo dans l'onglet -->
+<link rel="icon" href="{{ asset('icons/Icone_Kimia.png') }}" type="image/png" />
+
+<!-- Optionnel : favicon pour Apple touch (iPhone/iPad) -->
+<link rel="apple-touch-icon" href="{{ asset('icons/Icone_Kimia.png') }}" />
+
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/scrollreveal"></script>
@@ -733,11 +742,11 @@
                     <ul class="space-y-2 text-gray-400">
                         <li class="flex items-center gap-2 justify-center md:justify-start">
                             <i data-lucide="mail" class="w-4 h-4"></i>
-                            <span>contact@menjidrc.com</span>
+                            <span>kimia@formation.menjidrc.com</span>
                         </li>
                         <li class="flex items-center gap-2 justify-center md:justify-start">
                             <i data-lucide="phone" class="w-4 h-4"></i>
-                            <span>+243 XX XXX XXX</span>
+                            <span>+243 847 473 745</span>
                         </li>
                         <li class="flex items-center gap-2 justify-center md:justify-start">
                             <i data-lucide="map-pin" class="w-4 h-4"></i>
