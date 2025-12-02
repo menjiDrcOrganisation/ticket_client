@@ -3,7 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $evenement['nom'] ?? 'Événement' }} | Billetterie MenjiDRC</title>
+    <title>{{ $evenement['nom'] ?? 'Événement' }} | Billetterie Kimiaticket</title>
+    <!-- Favicon : logo dans l'onglet -->
+<link rel="icon" href="{{ asset('icons/Icone_Kimia.png') }}" type="image/png" />
+
+<!-- Optionnel : favicon pour Apple touch (iPhone/iPad) -->
+<link rel="apple-touch-icon" href="{{ asset('icons/Icone_Kimia.png') }}" />
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
@@ -373,7 +379,7 @@
     <nav class="fixed top-0 left-0 w-full z-50 bg-gray-900/80 backdrop-blur-md border-b border-gray-800">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center space-x-2">
-                <i data-lucide="ticket" class="w-8 h-8 text-red-500"></i>
+                <img src="{{ asset('icons/Icone_Kimia.png') }}" alt="KimiaTicket" class="h-8 md:h-10 lg:h-12">
                 <span class="text-xl font-bold truncate max-w-[150px] md:max-w-none">{{ $evenement['nom'] }}</span>
             </div>
             
@@ -402,7 +408,7 @@
 
     <!-- Section Hero -->
     <header class="relative min-h-screen hero-bg flex items-center justify-center pt-16 px-4"
-        style="background-image: url('https://gestionticket.menjidrc.com/storage/app/public/{{
+        style="background-image: url('https://{{ env('ENV_POINT_URL') }}/storage/app/public/{{
                 $evenement['ressource'][0]['photo_affiche'] ?? 'img/concert.jpg'
             }}');">
         <div class="absolute inset-0 hero-gradient"></div>
