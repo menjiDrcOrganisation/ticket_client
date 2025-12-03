@@ -809,8 +809,8 @@
         // Ajouter une image de fond pour la bannière (remplacer par votre URL d'image)
         const bannerImage = new Image();
         bannerImage.crossOrigin = "Anonymous";
-        bannerImage.src = 'https://gestionticket.menjidrc.com/storage/public/' + 
-                         ('{{ $evenement['ressource'][0]['photo_affiche'] }}' || 'img/concert.jpg');
+        bannerImage.src = "https://{{ env('ENV_POINT_URL') }}/storage/public/" + 
+                         ({{ $evenement['ressource'][0]['photo_affiche'] }});
         
         // Dessiner l'image de fond pour la bannière
         pdf.addImage(bannerImage, 'JPEG', 0, yPosition, pageWidth, 25, undefined, 'FAST');
@@ -1072,7 +1072,7 @@
                 submitBtn.innerHTML = '<i data-lucide="loader" class="w-5 h-5 animate-spin"></i> Traitement...';
                 lucide.createIcons();
                 
-                const response = await fetch("https://gestionticket.menjidrc.com/api/billet/achatBillet", {
+                const response = await fetch("https://{{ env('ENV_POINT_URL') }}/api/billet/achatBillet", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
