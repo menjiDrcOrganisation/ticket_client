@@ -1075,8 +1075,6 @@ bannerImage.src = "https://{{ env('ENV_POINT_URL') }}/storage/public/{{ $eveneme
                 
                 const response = await fetch("https://{{ env('ENV_POINT_URL') }}/api/billet/achatBillet", {
     method: "POST",
-
-
                     headers: {
                         "Content-Type": "application/json",
                     },
