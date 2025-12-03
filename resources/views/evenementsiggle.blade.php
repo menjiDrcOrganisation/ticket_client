@@ -807,10 +807,11 @@
     // === EN-TÊTE AVEC IMAGE DE FOND ===
     try {
         // Ajouter une image de fond pour la bannière (remplacer par votre URL d'image)
-        const bannerImage = new Image();
-        bannerImage.crossOrigin = "Anonymous";
-        bannerImage.src = "https://{{ env('ENV_POINT_URL') }}/storage/public/" + 
-                         ({{ $evenement['ressource'][0]['photo_affiche'] }});
+       const bannerImage = new Image();
+bannerImage.crossOrigin = "Anonymous";
+
+bannerImage.src = "https://{{ env('ENV_POINT_URL') }}/storage/public/{{ $evenement['ressource'][0]['photo_affiche'] }}";
+
         
         // Dessiner l'image de fond pour la bannière
         pdf.addImage(bannerImage, 'JPEG', 0, yPosition, pageWidth, 25, undefined, 'FAST');
@@ -1073,7 +1074,9 @@
                 lucide.createIcons();
                 
                 const response = await fetch("https://{{ env('ENV_POINT_URL') }}/api/billet/achatBillet", {
-                    method: "POST",
+    method: "POST",
+
+
                     headers: {
                         "Content-Type": "application/json",
                     },
