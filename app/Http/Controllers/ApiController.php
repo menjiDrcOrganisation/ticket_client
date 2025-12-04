@@ -9,7 +9,7 @@ class ApiController extends Controller
     // Récupérer tous les événements
     public function getEvenements()
     {
-        $response = Http::get('http://127.0.0.1:8000/api/evenements');
+        $response = Http::get(env('ENV_POINT_URL') . "/evenements");
 
         if ($response->successful()) {
             $data = $response->json();
@@ -22,10 +22,8 @@ class ApiController extends Controller
     // Récupérer un événement spécifique via short_url
     public function getEvenement($short_url)
     {
-        $response = Http::get("http://127.0.0.1:8000/api/evenements/{$short_url}");
+        $response = Http::get(env('ENV_POINT_URL') . "/evenements/{$short_url}");
 
-
-            // dd($response->json());
         if ($response->successful()) {
             $data = $response->json();
 

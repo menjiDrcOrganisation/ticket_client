@@ -3,7 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Événements | MenjiDRC</title>
+    
+    <title>Kimiaticket Menjidrc</title>
+    
+<!-- Favicon : logo dans l'onglet -->
+<link rel="icon" href="{{ asset('icons/Icone_Kimia.png') }}" type="image/png" />
+
+<!-- Optionnel : favicon pour Apple touch (iPhone/iPad) -->
+<link rel="apple-touch-icon" href="{{ asset('icons/Icone_Kimia.png') }}" />
+
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/scrollreveal"></script>
@@ -456,33 +465,51 @@
 <body class="bg-gray-50 text-gray-800 overflow-x-hidden">
 
     <!-- Navigation -->
-    <nav class="fixed top-0 left-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-gray-200 overflow-fix">
-        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-            <div class="flex items-center space-x-2 slide-in-left">
-                <i data-lucide="ticket" class="w-8 h-8 text-red-600"></i>
-                <span class="text-xl font-bold">Menji<span class="text-red-600">DRC</span></span>
-            </div>
-            
-            <div class="hidden md:flex space-x-8 stagger-animation">
-                <a href="#evenements" class="text-gray-600 hover:text-red-600 transition-colors font-medium">Événements</a>
-                <a href="#billets" class="text-gray-600 hover:text-red-600 transition-colors font-medium">Billetterie</a>
-                <a href="#contact" class="text-gray-600 hover:text-red-600 transition-colors font-medium">Contact</a>
-            </div>
-            
-            <button id="menu-toggle" class="md:hidden text-gray-600">
-                <i data-lucide="menu" class="w-6 h-6"></i>
-            </button>
+<nav class="fixed top-0 left-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-gray-200">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+        {{-- Logo --}}
+        <div class="flex items-center space-x-2 slide-in-left">
+            {{-- Option 1 : garder icône + ajouter image --}}
+            {{-- <i data-lucide="ticket" class="w-8 h-8 text-red-600"></i>
+            <img src="{{ asset('images/logo.png') }}" alt="KimiaTicket" class="h-8 md:h-10 lg:h-12"> --}}
+
+            {{-- Option 2 : remplacer totalement texte et icône par image --}}
+            <img src="{{ asset('icons/Icone_Kimia.png') }}" alt="KimiaTicket" class="h-10">
         </div>
         
-        <!-- Mobile menu -->
-        <div id="mobile-menu" class="md:hidden bg-white border-t border-gray-200 hidden overflow-fix">
-            <div class="container mx-auto px-4 py-4 flex flex-col space-y-4 stagger-animation text-center-mobile">
-                <a href="#evenements" class="text-gray-600 hover:text-red-600 transition-colors py-2 font-medium">Événements</a>
-                <a href="#billets" class="text-gray-600 hover:text-red-600 transition-colors py-2 font-medium">Billetterie</a>
-                <a href="#contact" class="text-gray-600 hover:text-red-600 transition-colors py-2 font-medium">Contact</a>
-            </div>
+        {{-- Menu desktop --}}
+        <div class="hidden md:flex space-x-8">
+            <a href="#evenements" class="text-gray-600 hover:text-red-600 transition-colors font-medium">Événements</a>
+            <a href="#billets" class="text-gray-600 hover:text-red-600 transition-colors font-medium">Billetterie</a>
+            <a href="#contact" class="text-gray-600 hover:text-red-600 transition-colors font-medium">Contact</a>
         </div>
-    </nav>
+        
+        {{-- Bouton menu mobile --}}
+        <button id="menu-toggle" class="md:hidden text-gray-600 focus:outline-none">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+    </div>
+    
+    {{-- Menu mobile --}}
+    <div id="mobile-menu" class="md:hidden bg-white border-t border-gray-200 hidden">
+        <div class="container mx-auto px-4 py-4 flex flex-col space-y-4 text-center">
+            <a href="#evenements" class="text-gray-600 hover:text-red-600 transition-colors py-2 font-medium">Événements</a>
+            <a href="#billets" class="text-gray-600 hover:text-red-600 transition-colors py-2 font-medium">Billetterie</a>
+            <a href="#contact" class="text-gray-600 hover:text-red-600 transition-colors py-2 font-medium">Contact</a>
+        </div>
+    </div>
+</nav>
+
+{{-- Script toggle menu --}}
+<script>
+    const menuToggle = document.getElementById('menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    menuToggle.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+    });
+</script>
+
 
     <!-- Hero Section -->
     <header class="relative bg-cover bg-center bg-fixed min-h-screen flex items-center justify-center pt-16 overflow-fix" 
@@ -615,10 +642,14 @@
                             </div>
                             
                             <!-- Image de l'événement -->
-                            <div class="event-image" 
-                                 style="background-image: url('https://gestionticket.menjidrc.com/storage/app/public/{{
-                $evenement['ressource'][0]['photo_affiche'] ?? 'https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80' }}');">
-                            </div>
+                   <div class="event-image" 
+     style="background-image: url('{{ 
+         isset($evenement['ressource'][0]['photo_affiche']) 
+             ? 'https://' . env('ENV_POINT_URL') . '/storage/app/public/' . $evenement['ressource'][0]['photo_affiche'] 
+             : 'https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80' 
+     }}');">
+</div>
+
                             
                             <!-- Contenu de la carte -->
                             <div class="p-4 sm:p-6">
@@ -733,11 +764,11 @@
                     <ul class="space-y-2 text-gray-400">
                         <li class="flex items-center gap-2 justify-center md:justify-start">
                             <i data-lucide="mail" class="w-4 h-4"></i>
-                            <span>contact@menjidrc.com</span>
+                            <span>kimia@formation.menjidrc.com</span>
                         </li>
                         <li class="flex items-center gap-2 justify-center md:justify-start">
                             <i data-lucide="phone" class="w-4 h-4"></i>
-                            <span>+243 XX XXX XXX</span>
+                            <span>+243 847 473 745</span>
                         </li>
                         <li class="flex items-center gap-2 justify-center md:justify-start">
                             <i data-lucide="map-pin" class="w-4 h-4"></i>
