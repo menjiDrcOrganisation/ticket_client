@@ -49,7 +49,7 @@
             right: 0;
             bottom: 0;
             @if(!empty($ticket['photo_affiche']))
-            background: url('{{ env('ENV_IMG_URL') }}/storage/app/public{{ $ticket['photo_affiche'] }}') center/cover;
+            background: url('{{ env('ENV_POINT_URL') }}/storage/app/public{{ $ticket['photo_affiche'] }}') center/cover;
             @endif
             opacity: 0.3;
         }

@@ -832,47 +832,58 @@
                 
                 try {
                     // Afficher un indicateur de chargement
-                    const submitBtn = this.querySelector('button[type="submit"]');
-                    const originalText = submitBtn.innerHTML;
-                    submitBtn.innerHTML = '<i data-lucide="loader" class="w-5 h-5 animate-spin"></i> Traitement...';
+                 // ⏳ 1. Loader du bouton
+                const submitBtn = this.querySelector('button[type="submit"]');
+                const originalText = submitBtn.innerHTML;
+                 submitBtn.innerHTML = '<i data-lucide="loader" class="w-5 h-5 animate-spin"></i> Traitement...';
                     lucide.createIcons();
-                    
-                    const response = await fetch("{{ env('ENV_POINT_URL') }}/api/billet/achatBillet", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify(formData),
-                    });
-                    
-                    const result = await response.json();
 
-                    console.log(result["billet"]);
-                    
-                    // Restaurer le bouton
-                    submitBtn.innerHTML = originalText;
-                    lucide.createIcons();
+         // 🌍 2. Envoi de la requête API
+                const response = await fetch("{{ env('ENV_POINT_URL') }}/api/billet/achatBillet", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+    });
+        
+    const evenement = @json($evenement);
+     // si tu as 
+
+    const result = await response.json();
+    console.log(result);
+
+    // 🔄 3. Restaurer le bouton
+    submitBtn.innerHTML = originalText;
+    lucide.createIcons();
+
+    // 🚨 Vérification
+    if (result.status !== true) {
+        alert(result.message || "Paiement échoué.");
+        return;
+    }
+
+    
+    
                     
                     if (result.status === true) {
-                        closePaymentModal();
                         
-                        const uniqueCode = result.billet.code_billet;
+                        const billet = result.billet; 
+                        const uniqueCode = billet.code_billet;
                         const canvas = document.getElementById("qrcode-canvas");
                         const download=document.getElementById('download');
-                
+                console.log(evenement);
                             const data_info_billet = {
-                                name_user: result.billet.nom_auteur,
-                                name_event: result.billet["evenements"][0].nom,
-                                location: result.billet["evenements"][0].adresse,
-                                type: result.billet["type_billet"][0].nom_type,
-                                quantity: result.billet["type_billet"][0].pivot.quantite,
-                                price: result.billet["type_billet"][0].evenements[0].pivot.prix_unitaire,
-                                devise: result.billet["type_billet"][0].evenements[0].pivot.devise,
-                                photo_affiche: result.billet["evenements"][0].ressource[0].photo_affiche,
-                                qrcode: result.billet.code_billet,
-                                date_achat: result.billet.date_achat,
-                                debut: result.billet["evenements"][0].date_debut,
-                                heure: result.billet["evenements"][0].heure_debut
+                                name_user: billet.nom_auteur,
+                                name_event: evenement.nom,
+                                location: evenement.adresse,
+                                type : formData.type_billet,// evenement.type_billet[0].nom_type,
+                                quantity: fromData.nombre_reel,
+                                price: billet["type_billet"][0].pivot.prix_unitaire,
+                                devise: billet["type_billet"][0].pivot.devise,
+                                photo_affiche: evenement.ressource[0].photo_affiche,
+                                qrcode: billet.code_billet,
+                                date_achat: billet.date_achat,
+                                debut: evenement.date_debut,
+                                heure: evenement.heure_debut
                             };
 
                             // Assurez-vous que 'download' est bien votre bouton
@@ -941,6 +952,7 @@
                             }
                         );
                     } else {
+                        console.error(result.error);
                         alert(result.error || "Paiement échoué. Vérifiez vos informations.");
                     }
                 } catch (error) {

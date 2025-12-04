@@ -10,7 +10,7 @@ class ApiController extends Controller
     public function getEvenements()
     {
         $response = http::withOptions([
-    'verify' => true,
+    'verify' => false,
 ])->get(env('ENV_POINT_URL') . "/api/evenements");
 
         if ($response->successful()) {
@@ -25,7 +25,7 @@ class ApiController extends Controller
     public function getEvenement($short_url)
     {
         $response = Http::withOptions   ([
-    'verify' => true,
+    'verify' => false,
 ])->get(env('ENV_POINT_URL') . "/api/evenements/{$short_url}");
 
         if ($response->successful()) {
