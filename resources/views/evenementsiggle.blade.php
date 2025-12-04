@@ -841,11 +841,7 @@
                     body: JSON.stringify(formData),
                 });
         
-   
-
                 const result = await response.json();
-            
-
             
                 submitBtn.innerHTML = originalText;
                 lucide.createIcons();
