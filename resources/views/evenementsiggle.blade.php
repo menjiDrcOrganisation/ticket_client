@@ -829,35 +829,31 @@
                 }
                 
                 try {
-                    // Afficher un indicateur de chargement
-                 // ⏳ 1. Loader du bouton
+                  
                 const submitBtn = this.querySelector('button[type="submit"]');
                 const originalText = submitBtn.innerHTML;
-                 submitBtn.innerHTML = '<i data-lucide="loader" class="w-5 h-5 animate-spin"></i> Traitement...';
-                    lucide.createIcons();
+                submitBtn.innerHTML = '<i data-lucide="loader" class="w-5 h-5 animate-spin"></i> Traitement...';
+                lucide.createIcons();
 
-         // 🌍 2. Envoi de la requête API
                 const response = await fetch("{{ env('ENV_POINT_URL') }}/api/billet/achatBillet", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-    });
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(formData),
+                });
         
-    const evenement = @json($evenement);
-     // si tu as 
+   
 
-    const result = await response.json();
-    console.log(result);
+                const result = await response.json();
+            
 
-    // 🔄 3. Restaurer le bouton
-    submitBtn.innerHTML = originalText;
-    lucide.createIcons();
+            
+                submitBtn.innerHTML = originalText;
+                lucide.createIcons();
 
-    // 🚨 Vérification
-    if (result.status !== true) {
-        alert(result.message || "Paiement échoué.");
-        return;
-    }
+                    if (result.status !== true) {
+                        alert(result.message || "Paiement échoué.");
+                        return;
+                    }
 
                     if (result.status === true) {
                         
@@ -865,7 +861,7 @@
                         const uniqueCode = billet.code_billet;
                         const canvas = document.getElementById("qrcode-canvas");
                         const download=document.getElementById('download');
-                console.log(evenement);
+                
                             const data_info_billet = {
                                 name_user: result.billet.nom_auteur,
                                 name_event: result.billet["evenements"][0].nom,
@@ -906,7 +902,7 @@
                                 .then(blob => {
                                     // Créer un URL pour le blob
                                     const url = window.URL.createObjectURL(blob);
-                                    
+                            
                                     // Créer un lien de téléchargement
                                     const a = document.createElement('a');
                                     a.href = url;
@@ -925,10 +921,6 @@
                                     alert('Erreur lors du téléchargement: ' + error.message);
                                 });
                             });
-
-                                 
-                                console.log(data_info_billet);
-                                
                         QRCode.toCanvas(
                             canvas,
                             uniqueCode,
