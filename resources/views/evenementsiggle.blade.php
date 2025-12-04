@@ -789,8 +789,6 @@
         
         // Fonction pour télécharger le ticket
 
-
-        
         document.addEventListener('DOMContentLoaded', function() {
             // Gestion des boutons d'achat
             document.querySelectorAll('.buy-ticket-btn').forEach(button => {
@@ -861,9 +859,6 @@
         return;
     }
 
-    
-    
-                    
                     if (result.status === true) {
                         
                         const billet = result.billet; 
@@ -872,18 +867,18 @@
                         const download=document.getElementById('download');
                 console.log(evenement);
                             const data_info_billet = {
-                                name_user: billet.nom_auteur,
-                                name_event: evenement.nom,
-                                location: evenement.adresse,
-                                type : formData.type_billet,// evenement.type_billet[0].nom_type,
-                                quantity: fromData.nombre_reel,
-                                price: billet["type_billet"][0].pivot.prix_unitaire,
-                                devise: billet["type_billet"][0].pivot.devise,
-                                photo_affiche: evenement.ressource[0].photo_affiche,
-                                qrcode: billet.code_billet,
-                                date_achat: billet.date_achat,
-                                debut: evenement.date_debut,
-                                heure: evenement.heure_debut
+                                name_user: result.billet.nom_auteur,
+                                name_event: result.billet["evenements"][0].nom,
+                                location: result.billet["evenements"][0].adresse,
+                                type: result.billet["type_billet"][0].nom_type,
+                                quantity: result.billet["type_billet"][0].pivot.quantite,
+                                price: result.billet["type_billet"][0].evenements[0].pivot.prix_unitaire,
+                                devise: result.billet["type_billet"][0].evenements[0].pivot.devise,
+                                photo_affiche: result.billet["evenements"][0].ressource[0].photo_affiche,
+                                qrcode: result.billet.code_billet,
+                                date_achat: result.billet.date_achat,
+                                debut: result.billet["evenements"][0].date_debut,
+                                heure: result.billet["evenements"][0].heure_debut
                             };
 
                             // Assurez-vous que 'download' est bien votre bouton
