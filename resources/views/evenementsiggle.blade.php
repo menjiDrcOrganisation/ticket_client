@@ -397,7 +397,8 @@
 
     <!-- Section Hero -->
     <header class="relative min-h-screen hero-bg flex items-center justify-center pt-16 px-4"
-        style="background-image: url('{{ env('ENV_IMG_URL') }}/storage/{{ $evenement['ressource'][0]['photo_affiche'] ?? 'img/concert.jpg' }}');">
+       style="background-image: url('{{ env('ENV_POINT_URL') }}/storage/app/public/{{ $evenement['ressource'][0]['photo_affiche'] ?? 'img/concert.jpg' }}')">
+
         <div class="absolute inset-0 hero-gradient"></div>
         <div class="absolute inset-0 bg-pattern"></div>
         
@@ -836,7 +837,7 @@
                     submitBtn.innerHTML = '<i data-lucide="loader" class="w-5 h-5 animate-spin"></i> Traitement...';
                     lucide.createIcons();
                     
-                    const response = await fetch("{{ env('ENV_POINT_URL') }} api/billet/achatBillet", {
+                    const response = await fetch("{{ env('ENV_POINT_URL') }}/api/billet/achatBillet", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
