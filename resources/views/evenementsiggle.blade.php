@@ -836,7 +836,7 @@
                     submitBtn.innerHTML = '<i data-lucide="loader" class="w-5 h-5 animate-spin"></i> Traitement...';
                     lucide.createIcons();
                     
-                    const response = await fetch("{{ env('ENV_POINT_URL') }}/billet/achatBillet", {
+                    const response = await fetch("{{ env('ENV_POINT_URL') }} api/billet/achatBillet", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
