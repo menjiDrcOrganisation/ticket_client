@@ -645,7 +645,7 @@
                    <div class="event-image" 
      style="background-image: url('{{ 
          isset($evenement['ressource'][0]['photo_affiche']) 
-             ? 'https://' . env('ENV_POINT_URL') . '/storage/app/public/' . $evenement['ressource'][0]['photo_affiche'] 
+             ?   env('ENV_POINT_URL') . '/storage/app/public/' . $evenement['ressource'][0]['photo_affiche'] 
              : 'https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80' 
      }}');">
 </div>
