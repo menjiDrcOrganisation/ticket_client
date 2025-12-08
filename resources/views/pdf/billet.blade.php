@@ -30,7 +30,7 @@
         }
         
         .ticket-header {
-            background: #e11d48;
+           
             color: white;
             padding: 15px 10px;
             text-align: center;
@@ -49,9 +49,9 @@
             right: 0;
             bottom: 0;
             @if(!empty($ticket['photo_affiche']))
-            background: url('{{ env('ENV_POINT_URL') }}/storage/app/public{{ $ticket['photo_affiche'] }}') center/cover;
+            background: url('{{ env('ENV_POINT_URL')}}/storage/app/public/{{ $ticket['photo_affiche'] }}') center/cover;
             @endif
-            opacity: 0.3;
+            opacity: 0.7;
         }
         
         .event-title {
@@ -346,5 +346,7 @@
         </div>
     </div>
     <!-- SUPPRIMEZ TOUT LE JAVASCRIPT - il n'est pas utilisé pour les PDF -->
+   
 </body>
+
 </html>

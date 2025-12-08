@@ -10,7 +10,7 @@ class PdfController extends Controller
   public function generateTicket(Request $request)
 {
     // Texte pour le QR code (utilisez un ID unique)
-    $qrText = $request->qrcode ?: "TICKET_" . uniqid() . "_" . $request->name_user . "_" . $request->name_event;
+    $qrText = $request->qrcode;
     
     // Générer l'URL du QR code via une API
     $qrCodeUrl = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&format=png&data=" . urlencode($qrText);
@@ -33,6 +33,7 @@ class PdfController extends Controller
             'ticket_id' => strtoupper(substr(md5($qrText), 0, 8)),
         ]
     ];
+  
     
     $pdf = PDF::loadView('pdf.billet', $data);
     
@@ -41,7 +42,7 @@ class PdfController extends Controller
         'isRemoteEnabled' => true,
         'isPhpEnabled' => true,
         'defaultFont' => 'sans-serif',
-        'chroot' => public_path(), // Important pour dompdf
+        'chroot' => public_path(), 
     ]);
     
     return $pdf->download('ticket.pdf');
@@ -62,7 +63,7 @@ class PdfController extends Controller
                     'price' => "gg",
                     'devise' => "gg",
                     'total' => "gg",
-                    'qrcode' => "gg",
+                    'qrcode_url' => "gg",
                     'purchase_date' => "gg",
                     'event_date' => "gg",
                     'event_time' => "gg",
