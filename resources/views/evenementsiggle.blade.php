@@ -842,6 +842,7 @@
                 });
         
                 const result = await response.json();
+                console.log(result);
             
                 submitBtn.innerHTML = originalText;
                 lucide.createIcons();
@@ -857,20 +858,23 @@
                         const uniqueCode = billet.code_billet;
                         const canvas = document.getElementById("qrcode-canvas");
                         const download=document.getElementById('download');
+
+                        
+                        
                 
                             const data_info_billet = {
                                 name_user: result.billet.nom_auteur,
-                                name_event: result.billet["evenements"][0].nom,
-                                location: result.billet["evenements"][0].adresse,
-                                type: result.billet["type_billet"][0].nom_type,
-                                quantity: result.billet["type_billet"][0].pivot.quantite,
-                                price: result.billet["type_billet"][0].evenements[0].pivot.prix_unitaire,
-                                devise: result.billet["type_billet"][0].evenements[0].pivot.devise,
-                                photo_affiche: result.billet["evenements"][0].ressource[0].photo_affiche,
+                                name_event: result.billet.evenement.nom,
+                                location: result.billet.evenement.adresse,
+                                type: result.billet.evenement.nom_type,
+                                quantity: result.billet.evenement.quantite,
+                                price: result.data_sup.prix_unitaire,
+                                devise: result.data_sup.devise,
+                                photo_affiche: result.billet.evenement.photo_affiche,
                                 qrcode: result.billet.code_billet,
                                 date_achat: result.billet.date_achat,
-                                debut: result.billet["evenements"][0].date_debut,
-                                heure: result.billet["evenements"][0].heure_debut
+                                debut: result.billet.evenement.date_debut,
+                                heure: result.billet.evenement.heure_debut
                             };
 
                             // Assurez-vous que 'download' est bien votre bouton
