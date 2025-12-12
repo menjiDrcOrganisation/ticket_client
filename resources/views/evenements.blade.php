@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
     <title>Kimiaticket Menjidrc</title>
     
 <!-- Favicon : logo dans l'onglet -->
@@ -11,8 +10,6 @@
 
 <!-- Optionnel : favicon pour Apple touch (iPhone/iPad) -->
 <link rel="apple-touch-icon" href="{{ asset('icons/Icone_Kimia.png') }}" />
-
-
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/scrollreveal"></script>
@@ -461,19 +458,19 @@
             }
         }
     </style>
+
+
 </head>
 <body class="bg-gray-50 text-gray-800 overflow-x-hidden">
 
     <!-- Navigation -->
-<nav class="fixed top-0 left-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-gray-200">
-    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-        {{-- Logo --}}
-        <div class="flex items-center space-x-2 slide-in-left">
-            {{-- Option 1 : garder icône + ajouter image --}}
+<nav class="fixed top-0 left-0 w-full z-50 bg-white/80 backdrop-blur-md border border-red-200">
+    <div " class=" border-blue-200  mx-12 py-3 flex justify-between items-center">
+      
+        <div class="flex items-center  slide-in-left">
+           
             {{-- <i data-lucide="ticket" class="w-8 h-8 text-red-600"></i>
             <img src="{{ asset('images/logo.png') }}" alt="KimiaTicket" class="h-8 md:h-10 lg:h-12"> --}}
-
-            {{-- Option 2 : remplacer totalement texte et icône par image --}}
             <img src="{{ asset('icons/Icone_Kimia.png') }}" alt="KimiaTicket" class="h-10">
         </div>
         
@@ -531,14 +528,14 @@
                 Découvrez les événements les plus excitants de Kinshasa et réservez vos billets en toute simplicité
             </p>
             
-            <div class="flex flex-col sm:flex-row gap-4 justify-center mx-auto-mobile">
-                <a href="#evenements" class="bg-red-600 hover:bg-red-700 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 pulse-animation flex items-center justify-center gap-2 text-center-mobile">
-                    <i data-lucide="calendar" class="w-5 h-5"></i>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center  mx-auto-mobile">
+                <a href="#evenements" class="bg-red-600 hover:bg-red-700 text-white  sm:px-8 py-3 sm:py-4 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 pulse-animation flex items-center justify-center  text-center-mobile">
+                    
                     Voir les événements
                 </a>
-                <a href="#billets" class="bg-white/20 hover:bg-white/30 text-white backdrop-blur-sm px-6 sm:px-8 py-3 sm:py-4 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2 border border-white/30 text-center-mobile">
-                    <i data-lucide="ticket" class="w-5 h-5"></i>
-                    Acheter des billets
+                <a href="#billets" class="bg-white/20 hover:bg-white/30 text-white backdrop-blur-sm px-6 sm:px-8 py-3 sm:py-4 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 flex items-center justify-center  border border-white/30 text-center-mobile">
+                   
+                    Demander un evenement
                 </a>
             </div>
         </div>
@@ -570,16 +567,7 @@
                 </div>
                 
                 <div class="filter-section">
-                    <!-- <div class="filter-group">
-                        <label class="filter-label text-center-mobile" for="status-filter">Statut</label>
-                        <select id="status-filter" class="filter-select">
-                            <option value="all">Tous les statuts</option>
-                            <option value="Actif">Actif</option>
-                            <option value="À venir">À venir</option>
-                            <option value="Complet">Complet</option>
-                        </select>
-                    </div> -->
-                    
+            
                     <div class="filter-group">
                         <label class="filter-label text-center-mobile" for="date-filter">Date</label>
                         <select id="date-filter" class="filter-select">
@@ -591,20 +579,10 @@
                         </select>
                     </div>
                     
-                    <!-- <div class="filter-group">
-                        <label class="filter-label text-center-mobile" for="location-filter">Lieu</label>
-                        <select id="location-filter" class="filter-select">
-                            <option value="all">Tous les lieux</option>
-                            <option value="Salle Splendeur">Salle Splendeur</option>
-                            <option value="13'Or Room">13'Or Room</option>
-                            <option value="IMMEUBLE EXCELENCIA">IMMEUBLE EXCELENCIA</option>
-                        </select>
-                    </div> -->
-                    
                     <div class="filter-group">
-                        <label class="filter-label text-center-mobile" for="price-filter">Prix</label>
+                        <label class="filter-label text-center-mobile" for="price-filter">Categories</label>
                         <select id="price-filter" class="filter-select">
-                            <option value="all">Tous les prix</option>
+                            <option value="all">Tous les categories</option>
                             <option value="free">Gratuit</option>
                             <option value="low">Moins de 10$</option>
                             <option value="medium">10$ - 30$</option>
@@ -637,7 +615,7 @@
                                     $statusText = 'Complet';
                                 }
                             @endphp
-                            <div class="status-badge {{ $statusClass }}">
+                            <div class="status-badge {{ $statusClass }} text-red-500 bg-white">
                                 {{ $statusText }}
                             </div>
                             
@@ -649,17 +627,15 @@
              : 'https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80' 
      }}');">
 </div>
-
                             
                             <!-- Contenu de la carte -->
                             <div class="p-4 sm:p-6">
                                 <h3 class="card-title text-xl sm:text-2xl font-bold mb-3 text-gray-800 group-hover:text-red-600 transition-colors text-center-mobile">
-                                    {{ $evenement['nom'] }}
+                                    {{ ucfirst($evenement['nom']) }}
                                 </h3>
                                 
-                                <div class="space-y-2 sm:space-y-3 mb-4">
+                                <div class="sm:space-y-3 mb-4">
                                     <div class="flex items-center gap-3 text-gray-600">
-                                        <i data-lucide="calendar" class="w-4 h-4 text-red-500 flex-shrink-0"></i>
                                         <span class="card-text text-sm">
                                             {{ \Carbon\Carbon::parse($evenement['date_debut'])->translatedFormat('d F Y') }}
                                             @if($evenement['date_debut'] !== $evenement['date_fin'])
@@ -669,13 +645,11 @@
                                     </div>
                                     
                                     <div class="flex items-center gap-3 text-gray-600">
-                                        <i data-lucide="map-pin" class="w-4 h-4 text-red-500 flex-shrink-0"></i>
                                         <span class="card-text text-sm">{{ $evenement['salle'] }}, {{ $evenement['adresse'] }}</span>
                                     </div>
                                     
                                     @if(!empty($evenement['type_billets']))
                                     <div class="flex items-center gap-3 text-gray-600">
-                                        <i data-lucide="ticket" class="w-4 h-4 text-red-500 flex-shrink-0"></i>
                                         <span class="card-text text-sm">
                                             {{ count($evenement['type_billets']) }} type(s) de billet disponible(s)
                                         </span>
@@ -684,26 +658,10 @@
                                 </div>
                                 
                                 <!-- Types de billets -->
-                                @if(!empty($evenement['type_billets']))
-                                    <div class="mb-4 sm:mb-6">
-                                        <div class="flex flex-wrap gap-2 justify-center sm:justify-start">
-                                            @foreach(array_slice($evenement['type_billets'], 0, 3) as $billet)
-                                                <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-medium">
-                                                    {{ $billet['nom_type'] }} ({{ $billet['pivot']['nombre_billet'] }})
-                                                </span>
-                                            @endforeach
-                                            @if(count($evenement['type_billets']) > 3)
-                                                <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-medium">
-                                                    +{{ count($evenement['type_billets']) - 3 }} autres
-                                                </span>
-                                            @endif
-                                        </div>
-                                    </div>
-                                @endif
+                                
                                 
                                 <a href="/{{ $evenement['url_evenement'] ?? '1' }}" 
                                    class="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2 group-hover:scale-105">
-                                    <i data-lucide="eye" class="w-4 h-4"></i>
                                     Acheter
                                 </a>
                             </div>
@@ -725,57 +683,57 @@
 
     <footer id="contact" class="bg-gray-900 text-white py-12">
         <div class="max-w-6xl mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8 stagger-animation">
+            <div class="grid grid-cols-1 md:grid-cols-4  mb-8 stagger-animation">
                 <div class="md:col-span-2">
                     <div class="flex items-center space-x-2 mb-4">
-                        <i data-lucide="ticket" class="w-8 h-8 text-red-500"></i>
-                        <span class="text-xl font-bold">Menji<span class="text-red-500">DRC</span></span>
+                        <span class="text-xl font-bold">Kimia<span class="text-red-500">Ticket</span></span>
                     </div>
                     <p class="text-gray-400 mb-6 text-center md:text-left">
                         Votre plateforme de billetterie de confiance pour les meilleurs événements en République Démocratique du Congo.
                     </p>
-                    <div class="flex space-x-4 justify-center md:justify-start">
-                        <a href="#" class="social-icon bg-gray-800 p-3 rounded-full text-gray-300 hover:bg-red-600 hover:text-white transition-all duration-300">
+                    <div class="flex space-x-4 justify-center md:justify-start ">
+                        <a href="https://www.facebook.com/share/1BfdJ6i7mD/" class="social-icon bg-gray-800 p-3 rounded-full text-gray-300 hover:bg-red-600 transition-all ">
                             <i data-lucide="facebook" class="w-5 h-5"></i>
+                            <svg class="w-6 h-6 text-gray-800 cursor-pointer dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+                            <path fill-rule="evenodd" d="M13.135 6H15V3h-1.865a4.147 4.147 0 0 0-4.142 
+                            4.142V9H7v3h2v9.938h3V12h2.021l.592-3H12V6.591A.6.6 0 0 1 12.592 6h.543Z" clip-rule="evenodd"/>
+                            </svg>
                         </a>
-                        <a href="#" class="social-icon bg-gray-800 p-3 rounded-full text-gray-300 hover:bg-red-600 hover:text-white transition-all duration-300">
-                            <i data-lucide="twitter" class="w-5 h-5"></i>
+                        <a href="https://www.instagram.com/menjidrc?igsh=NDg1dm56dDZ5OHQx" class="social-icon cursor-pointer bg-gray-800 p-3 rounded-full text-gray-300 hover:bg-red-600 transition-all ">
+                            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24">
+                            <path fill="currentColor" fill-rule="evenodd" d="M3 8a5 5 0 0 1 5-5h8a5 5 0 0 1 5 5v8a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5V8Zm5-3a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3V8a3 3 0 0 0-3-3H8Zm7.597 2.214a1 1 0 0 1 1-1h.01a1 1 0 1 1 0 2h-.01a1 1 0 0 1-1-1ZM12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm-5 3a5 5 0 1 1 10 0 5 5 0 0 1-10 0Z" clip-rule="evenodd"/>
+                            </svg>
+
                         </a>
-                        <a href="#" class="social-icon bg-gray-800 p-3 rounded-full text-gray-300 hover:bg-red-600 hover:text-white transition-all duration-300">
-                            <i data-lucide="instagram" class="w-5 h-5"></i>
+                        <a href="https://wa.me/message/3J22RREHQMZ4B1" class="social-icon cursor-pointer bg-gray-800 p-3 rounded-full text-gray-300 hover:bg-red-600 transition-all ">
+                            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24">
+                            <path fill="currentColor" fill-rule="evenodd" d="M12 4a8 8 0 0 0-6.895 12.06l.569.718-.697 2.359 2.32-.648.379.243A8 8 0 1 0 12 4ZM2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10a9.96 9.96 0 0 1-5.016-1.347l-4.948 1.382 1.426-4.829-.006-.007-.033-.055A9.958 9.958 0 0 1 2 12Z" clip-rule="evenodd"/>
+                            <path fill="currentColor" d="M16.735 13.492c-.038-.018-1.497-.736-1.756-.83a1.008 1.008 0 0 0-.34-.075c-.196 0-.362.098-.49.291-.146.217-.587.732-.723.886-.018.02-.042.045-.057.045-.013 0-.239-.093-.307-.123-1.564-.68-2.751-2.313-2.914-2.589-.023-.04-.024-.057-.024-.057.005-.021.058-.074.085-.101.08-.079.166-.182.249-.283l.117-.14c.121-.14.175-.25.237-.375l.033-.066a.68.68 0 0 0-.02-.64c-.034-.069-.65-1.555-.715-1.711-.158-.377-.366-.552-.655-.552-.027 0 0 0-.112.005-.137.005-.883.104-1.213.311-.35.22-.94.924-.94 2.16 0 1.112.705 2.162 1.008 2.561l.041.06c1.161 1.695 2.608 2.951 4.074 3.537 1.412.564 2.081.63 2.461.63.16 0 .288-.013.4-.024l.072-.007c.488-.043 1.56-.599 1.804-1.276.192-.534.243-1.117.115-1.329-.088-.144-.239-.216-.43-.308Z"/>
+                            </svg>
                         </a>
-                        <a href="#" class="social-icon bg-gray-800 p-3 rounded-full text-gray-300 hover:bg-red-600 hover:text-white transition-all duration-300">
-                            <i data-lucide="youtube" class="w-5 h-5"></i>
-                        </a>
+                      
                     </div>
                 </div>
                 
                 <div class="text-center-mobile">
                     <h4 class="text-lg font-semibold mb-4">Liens rapides</h4>
                     <ul class="space-y-2 text-gray-400">
-                        <li><a href="#evenements" class="hover:text-white transition-colors">Événements</a></li>
-                        <li><a href="#billets" class="hover:text-white transition-colors">Billetterie</a></li>
-                        <li><a href="#contact" class="hover:text-white transition-colors">Contact</a></li>
+                        <li><a href="#evenements" class="hover:text-white transition-colors">Accueil</a></li>
+                        <li><a href="#billets" class="hover:text-white transition-colors">Evenement</a></li>
+                        <li><a href="#contact" class="hover:text-white transition-colors">Demande de billeterie</a></li>
+                    </ul>
+                </div>
+
+                <div class="text-center-mobile">
+                    <h4 class="text-lg font-semibold mb-4">Politique</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#evenements" class="hover:text-white transition-colors">FAQ</a></li>
+                        <li><a href="#billets" class="hover:text-white transition-colors">Politique de confidentialité</a></li>
+                        <li><a href="#contact" class="hover:text-white transition-colors">Politique d'utilisation</a></li>
                     </ul>
                 </div>
                 
-                <div class="text-center-mobile">
-                    <h4 class="text-lg font-semibold mb-4">Contact</h4>
-                    <ul class="space-y-2 text-gray-400">
-                        <li class="flex items-center gap-2 justify-center md:justify-start">
-                            <i data-lucide="mail" class="w-4 h-4"></i>
-                            <span>kimia@formation.menjidrc.com</span>
-                        </li>
-                        <li class="flex items-center gap-2 justify-center md:justify-start">
-                            <i data-lucide="phone" class="w-4 h-4"></i>
-                            <span>+243 847 473 745</span>
-                        </li>
-                        <li class="flex items-center gap-2 justify-center md:justify-start">
-                            <i data-lucide="map-pin" class="w-4 h-4"></i>
-                            <span>Kinshasa, RDC</span>
-                        </li>
-                    </ul>
-                </div>
+               
             </div>
             
             <div class="pt-8 border-t border-gray-800 text-center text-gray-500 fade-in text-center-mobile">

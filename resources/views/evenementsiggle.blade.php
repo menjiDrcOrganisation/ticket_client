@@ -365,18 +365,18 @@
     </div>
     @else
     <!-- Navigation -->
-    <nav class="fixed top-0 left-0 w-full z-50 bg-gray-900/80 backdrop-blur-md border-b border-gray-800">
-        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+    <nav class="fixed top-0 left-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-gray-800">
+        <div class=" px-12 py-3 flex justify-between items-center">
             <div class="flex items-center space-x-2">
                 <img src="{{ asset('icons/Icone_Kimia.png') }}" alt="KimiaTicket" class="h-8 md:h-10 lg:h-12">
                 <span class="text-xl font-bold truncate max-w-[150px] md:max-w-none">{{ $evenement['nom'] }}</span>
             </div>
             
             <div class="hidden md:flex space-x-8">
-                <a href="#about" class="text-gray-300 hover:text-white transition-colors">À propos</a>
-                <a href="#tickets" class="text-gray-300 hover:text-white transition-colors">Billets</a>
-                <a href="#location" class="text-gray-300 hover:text-white transition-colors">Lieu</a>
-                <a href="#contact" class="text-gray-300 hover:text-white transition-colors">Contact</a>
+                <a href="#about" class="text-gray-600 hover:text-white transition-colors">À propos</a>
+                <a href="#tickets" class="text-gray-600 hover:text-white transition-colors">Billets</a>
+                <a href="#location" class="text-gray-600 hover:text-white transition-colors">Lieu</a>
+                <a href="#contact" class="text-gray-600 hover:text-white transition-colors">Contact</a>
             </div>
             
             <button id="menu-toggle" class="md:hidden text-white">
@@ -387,10 +387,10 @@
         <!-- Mobile menu -->
         <div id="mobile-menu" class="md:hidden bg-gray-900 border-t border-gray-800 hidden">
             <div class="container mx-auto px-4 py-4 flex flex-col space-y-4">
-                <a href="#about" class="text-gray-300 hover:text-white transition-colors py-2">À propos</a>
-                <a href="#tickets" class="text-gray-300 hover:text-white transition-colors py-2">Billets</a>
-                <a href="#location" class="text-gray-300 hover:text-white transition-colors py-2">Lieu</a>
-                <a href="#contact" class="text-gray-300 hover:text-white transition-colors py-2">Contact</a>
+                <a href="#about" class="text-gray-600 hover:text-white transition-colors">À propos</a>
+                <a href="#tickets" class="text-gray-600 hover:text-white transition-colors">Billets</a>
+                <a href="#location" class="text-gray-600 hover:text-white transition-colors">Lieu</a>
+                <a href="#contact" class="text-gray-600 hover:text-white transition-colors">Contact</a>
             </div>
         </div>
     </nav>
@@ -403,9 +403,7 @@
         <div class="absolute inset-0 bg-pattern"></div>
         
         <div class="relative z-10 text-center w-full max-w-6xl mx-auto space-y-8">
-            <div class="inline-block bg-red-600/20 border border-red-500/30 rounded-full px-4 py-2 mb-4">
-                <span class="text-red-300 text-sm font-medium">Événement à venir</span>
-            </div>
+            
             
             <h1 class="title-responsive font-extrabold uppercase tracking-tight">
                 <span class="bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent text-typing">
@@ -458,7 +456,7 @@
         <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-red-500 to-transparent"></div>
         
         <div class="max-w-6xl mx-auto">
-            <h2 class="section-title text-3xl md:text-4xl font-bold mb-6 text-center">
+            <h2 class="section-title text-white text-3xl md:text-4xl font-bold mb-6 text-center">
                 À propos de l'événement
             </h2>
             <div class="bg-gray-900/50 rounded-2xl p-6 md:p-12 shadow-2xl">
@@ -472,7 +470,7 @@
     <!-- Section billets -->
     <section id="tickets" class="py-16 md:py-20 bg-gray-900 section-padding">
         <div class="max-w-6xl mx-auto">
-            <h2 class="section-title text-3xl md:text-4xl font-bold mb-8 md:mb-12 text-center">
+            <h2 class="section-title text-3xl text-white md:text-4xl font-bold mb-8 md:mb-12 text-center">
                 Billets disponibles
             </h2>
             
@@ -508,11 +506,11 @@
     <!-- Section lieu -->
     <section id="location" class="py-16 md:py-20 bg-gray-800 section-padding">
         <div class="max-w-6xl mx-auto">
-            <h2 class="section-title text-3xl md:text-4xl font-bold mb-8 md:mb-12 text-center">
+            <h2 class="section-title text-white text-3xl md:text-4xl font-bold mb-8 md:mb-12 text-center">
                 Lieu de l'événement
             </h2>
             
-            <div class="bg-gray-900 rounded-2xl overflow-hidden shadow-2xl">
+            <div class="bg-gray-900 text-white rounded-2xl overflow-hidden shadow-2xl">
                 <div class="w-full p-6 md:p-12">
                     <div class="space-y-4">
                         <div class="flex items-start gap-3">
@@ -567,7 +565,7 @@
                 <i data-lucide="x"></i>
             </button>
             
-            <h3 class="text-xl md:text-2xl font-bold mb-2" id="modal-title">
+            <h3 class="text-xl md:text-2xl text-white font-bold mb-2" id="modal-title">
                 Finalisez votre achat
             </h3>
             <p class="text-gray-400 mb-4 md:mb-6 text-sm md:text-base" id="modal-subtitle">
@@ -664,13 +662,13 @@
     </div>
 
     <!-- Footer -->
-    <footer id="contact" class="bg-gray-900 py-12 px-6 border-t border-gray-800">
+    <footer id="contact" class="bg-gray-900 text-white py-12 px-6 border-t border-gray-800">
         <div class="max-w-6xl mx-auto">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
                 <div class="md:col-span-2">
                     <div class="flex items-center space-x-2 mb-4">
                         <i data-lucide="ticket" class="w-8 h-8 text-red-500"></i>
-                        <span class="text-xl font-bold">Menji<span class="text-red-500">DRC</span></span>
+                        <span class="text-xl font-bold">Kimia<span class="text-red-500">Ticket</span></span>
                     </div>
                     <p class="text-gray-400 mb-4">
                         Votre plateforme de billetterie de confiance pour les meilleurs événements en République Démocratique du Congo.
