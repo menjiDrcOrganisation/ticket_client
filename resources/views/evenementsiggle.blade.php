@@ -591,10 +591,10 @@
                 <div class="form-grid grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label for="service" class="block text-sm font-medium text-gray-300 mb-1">Service de paiement</label>
-                        <select id="service" name="service" class="form-input" required>
-                            <option value="MPESA">MPESA</option>
-                            <option value="orange">ORANGEMONEY</option>
-                            <option value="airtel">AIRTELMONEY</option>
+                        <select id="service" name="service" class="form-input bg-black" required>
+                            <option value="MPESA" class=" hover:bg-red-500">M-Pesa</option>
+                            <option value="orange" class=" hover:bg-red-500">Orange Money</option>
+                            <option value="airtel" class=" hover:bg-red-500">Airtel Money</option>
                         </select>
                     </div>
                     

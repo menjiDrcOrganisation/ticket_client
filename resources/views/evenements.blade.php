@@ -718,18 +718,18 @@
                 <div class="text-center-mobile">
                     <h4 class="text-lg font-semibold mb-4">Liens rapides</h4>
                     <ul class="space-y-2 text-gray-400">
-                        <li><a href="#evenements" class="hover:text-white transition-colors">Accueil</a></li>
-                        <li><a href="#billets" class="hover:text-white transition-colors">Evenement</a></li>
-                        <li><a href="#contact" class="hover:text-white transition-colors">Demande de billeterie</a></li>
+                        <li><a href="#evenements" class="hover:text-red-500 transition-colors">Accueil</a></li>
+                        <li><a href="#billets" class="hover:text-shadow-red-500 transition-colors">Evenement</a></li>
+                        <li><a href="#contact" class="hover:text-red-500 transition-colors">Demande de billeterie</a></li>
                     </ul>
                 </div>
 
                 <div class="text-center-mobile">
                     <h4 class="text-lg font-semibold mb-4">Politique</h4>
                     <ul class="space-y-2 text-gray-400">
-                        <li><a href="#evenements" class="hover:text-white transition-colors">FAQ</a></li>
-                        <li><a href="#billets" class="hover:text-white transition-colors">Politique de confidentialité</a></li>
-                        <li><a href="#contact" class="hover:text-white transition-colors">Politique d'utilisation</a></li>
+                        <li><a href="#evenements" class="hover:text-red-500 transition-colors">FAQ</a></li>
+                        <li><a href="#billets" class="hover:text-red-500 transition-colors">Politique de confidentialité</a></li>
+                        <li><a href="#contact" class="hover:text-red-500 transition-colors">Politique d'utilisation</a></li>
                     </ul>
                 </div>
                 
