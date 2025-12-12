@@ -583,10 +583,10 @@
                         <label class="filter-label text-center-mobile" for="price-filter">Categories</label>
                         <select id="price-filter" class="filter-select">
                             <option value="all">Tous les categories</option>
-                            <option value="free">Gratuit</option>
-                            <option value="low">Moins de 10$</option>
-                            <option value="medium">10$ - 30$</option>
-                            <option value="high">Plus de 30$</option>
+                            <option value="Conference">Conference</option>
+                            <option value="Spectacle">Spectacle</option>
+                            <option value="Formation">Formation</option>
+                            <option value="Autre">Autre</option>
                         </select>
                     </div>
                 </div>
