@@ -533,8 +533,7 @@
                     
                     Voir les événements
                 </a>
-                <a href="#billets" class="bg-white/20 hover:bg-white/30 text-white backdrop-blur-sm px-6 sm:px-8 py-3 sm:py-4 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 flex items-center justify-center  border border-white/30 text-center-mobile">
-                   
+                <a href="{{ route('demandeEvenement.create') }}" class="bg-white/20 hover:bg-white/30 text-white backdrop-blur-sm px-6 sm:px-8 py-3 sm:py-4 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 flex items-center justify-center  border border-white/30 text-center-mobile">
                     Demander un evenement
                 </a>
             </div>

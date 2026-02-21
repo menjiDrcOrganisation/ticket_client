@@ -18,4 +18,6 @@ Route::post('/ticket/generate-pdf', [PdfController::class, 'generateTicket'])
     ->name('ticket.generate.pdf');
 
 Route::get('/ticket/test', [PdfController::class, 'testTicket']);
-    
+
+Route::get('/demandeEvenement/create', [ApiController::class, 'createDemandeEvenement'])->name('demandeEvenement.create');
+Route::post('/demandeEvenement/send', [ApiController::class, 'sendDemandeEvenement'])->name('demandeEvenement.send');

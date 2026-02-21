@@ -41,5 +41,48 @@ class ApiController extends Controller
             return view('evenementsiggle', ['error' => 'Erreur lors de la récupération des données']);
         }
     }
+
+public function sendDemandeEvenement(Request $request)
+{
+    // Validation
+    $validated = $request->validate([
+        'nom_evenement' => 'required|string|max:255',
+        'contact_organisateur' => 'required|string|max:255',
+        'description' => 'required|string',
+        'type_evenement' => 'required|string|max:255',
+        'affiche' => 'nullable|image', 
+        'statut' => 'required',
+    ]);
+
+    try {
+        $response = Http::withOptions([
+            'verify' => false,
+        ])->attach(
+            'affiche',
+            $request->file('affiche') ? file_get_contents($request->file('affiche')->getRealPath()) : null,
+            $request->file('affiche') ? $request->file('affiche')->getClientOriginalName() : null
+        )->post(env('ENV_POINT_URL') . "/api/demande-evenement", [
+            'nom_evenement' => $validated['nom_evenement'],
+            'contact_organisateur' => $validated['contact_organisateur'],
+            'description' => $validated['description'],
+            'type_evenement' => $validated['type_evenement'],
+            'statut' => $validated['statut'],
+        ]);
+
+        if ($response->successful()) {
+            return redirect()->back()->with('success', 'Demande envoyée avec succès, vous serez contacté dans les plus brefs délais');
+        } else {
+            return redirect()->back()->with('error', 'Erreur lors de l\'envoi : ');
+        }
+
+    } catch (\Exception $e) {
+        return redirect()->back()->with('error', 'Exception rencontrée : ');
+    }
+}
+    public function createDemandeEvenement(Request $request)
+    {
+        return view('demandeEvenement.create');
+    }
+
     }
 
