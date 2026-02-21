@@ -91,7 +91,7 @@
             @enderror
         </div>
 
-        <div>
+        <div style="display: none;">
             <label class="block font-semibold text-gray-700 mb-1">Statut</label>
             <select name="statut" class="w-full border border-gray-300 rounded p-2">
                 <option value="en_attente" {{ old('statut') == 'en_attente' ? 'selected' : '' }}>En attente</option>
@@ -103,7 +103,7 @@
         </div>
 
         <div class="text-center">
-            <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+            <button type="submit" class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700">
                 Envoyer la demande
             </button>
         </div>
