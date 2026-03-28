@@ -607,7 +607,7 @@
                     <div>
                         <label for="devise" class="block text-sm font-medium text-gray-300 mb-1">Devise</label>
                         
-                        <select id="devise-display" name="devise-display" class="form-input bg-black">
+                        <select id="devise-display" name="devise_display" class="form-input bg-black">
                             <option value="CDF">CDF</option>
                             <option value="USD">USD</option>
                         </select>
@@ -785,12 +785,12 @@
             document.getElementById('unit-price').textContent = `${currentTicketPrice.toLocaleString('fr-FR')} ${currentTicketDevise}`;
             let deviseNormale = (currentTicketDevise === 'CDF') ? 'CDF' : 'USD';
             document.getElementById('devise-display').value = deviseNormale;
+
             updateTotalPrice();
             document.getElementById('payment-modal').style.display = 'flex';
             document.body.style.overflow = 'hidden';
             
-            // Réinitialiser le formulaire
-            document.getElementById('payment-form').reset();
+            
         }
         
         function closePaymentModal() {
@@ -854,7 +854,8 @@
                     numero_client: this.numero_client.value,
                     nombre_reel: this.nombre_reel.value,
                     type_billet: this.type_billet.value,
-                    service: this.service.value
+                    service: this.service.value,
+                    devise:this.devise_display.value
                 };
                 
                 clientName = formData.nom_complet_client;
