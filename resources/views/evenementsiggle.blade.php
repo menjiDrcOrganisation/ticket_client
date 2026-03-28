@@ -486,6 +486,12 @@
                     <p class="text-gray-600 mb-6">
                         Accès à l'événement avec placement libre
                     </p>
+                   
+                    <a href="http://">
+                         {{$billet["pivot"]["devise"]}}
+
+                    </a>
+                    
                     <p class="text-3xl md:text-4xl font-bold text-red-600 mb-2">
                         {{ number_format($billet["pivot"]["prix_unitaire"] ?? 0, 0, ",", " ") }} {{ $billet["pivot"]["devise"] ?? "FC" }}
                     </p>
@@ -600,8 +606,13 @@
                     
                     <div>
                         <label for="devise" class="block text-sm font-medium text-gray-300 mb-1">Devise</label>
-                        <div class="form-input bg-gray-700">
-                            <span id="devise-display" class="text-white font-semibold">FC</span>
+                        
+                        <select id="devise-display" name="devise-display" class="form-input bg-black">
+                            <option value="CDF">CDF</option>
+                            <option value="USD">USD</option>
+                        </select>
+                        <div class="text-sm text-yellow-400 mt-1" id="taux-info">
+                            Taux: chargement...
                         </div>
                     </div>
                 </div>
@@ -729,6 +740,18 @@
         // Menu mobile
         const menuToggle = document.getElementById('menu-toggle');
         const mobileMenu = document.getElementById('mobile-menu');
+
+        let tauxUSD_CDF =chargerTaux() ; 
+
+        async function chargerTaux() {
+            const taux = await getTaux();
+            if (taux) {
+                tauxUSD_CDF = taux;
+                document.getElementById('taux-info').textContent =
+            `1 USD = ${taux.toLocaleString('fr-FR')} CDF`;
+            }
+
+        }
         
         if (menuToggle && mobileMenu) {
             menuToggle.addEventListener('click', () => {
@@ -747,7 +770,7 @@
         let currentTicketPrice = 0;
         let currentTicketId = '';
         let clientName = '';
-        let currentTicketDevise = 'FC';
+        let currentTicketDevise = 'CDF';
         let currentTicketData = null;
         
         function openPaymentModal(ticketType, ticketPrice, ticketId, ticketDevise) {
@@ -755,12 +778,13 @@
             
             currentTicketPrice = parseFloat(ticketPrice) || 0;
             currentTicketId = ticketId;
-            currentTicketDevise = ticketDevise || 'FC';
+            currentTicketDevise = ticketDevise || 'CDF';
             
             document.getElementById('modal-title').textContent = `Acheter un billet ${ticketType}`;
             document.getElementById('selected-ticket-type').value = ticketId;
             document.getElementById('unit-price').textContent = `${currentTicketPrice.toLocaleString('fr-FR')} ${currentTicketDevise}`;
-            document.getElementById('devise-display').textContent = currentTicketDevise;
+            let deviseNormale = (currentTicketDevise === 'CDF') ? 'CDF' : 'USD';
+            document.getElementById('devise-display').value = deviseNormale;
             updateTotalPrice();
             document.getElementById('payment-modal').style.display = 'flex';
             document.body.style.overflow = 'hidden';
@@ -784,6 +808,21 @@
             const total = currentTicketPrice * quantity;
             document.getElementById('total-price').textContent = `${total.toLocaleString('fr-FR')} ${currentTicketDevise}`;
         }
+
+        async function getTaux() {
+            try {
+                    const response = await fetch("https://api.exchangerate-api.com/v4/latest/USD");
+                    const data = await response.json();
+
+                    const tauxCDF = data.rates.CDF;
+                    console.log("Taux USD → CDF :", tauxCDF);
+
+                    return tauxCDF;
+                } catch (error) {
+                    console.error("Erreur récupération taux:", error);
+                    return null;
+                }
+            }
         
         // Fonction pour télécharger le ticket
 
@@ -967,6 +1006,25 @@
             if (typeof ScrollReveal !== 'undefined') {
                 ScrollReveal().reveal('.fade-in', { delay: 300, duration: 1000 });
             }
+
+            document.getElementById('devise-display').addEventListener('change', function () {
+                const deviseChoisie = this.value;
+
+                if (deviseChoisie === 'USD' && currentTicketDevise === 'CDF') {
+                    currentTicketPrice = currentTicketPrice / tauxUSD_CDF;
+                    currentTicketDevise = 'USD';
+                }
+
+                if (deviseChoisie === 'CDF' && currentTicketDevise === 'USD') {
+                    currentTicketPrice = currentTicketPrice * tauxUSD_CDF;
+                    currentTicketDevise = 'CDF';
+                }
+
+                document.getElementById('unit-price').textContent =
+                    `${currentTicketPrice.toLocaleString('fr-FR')} ${currentTicketDevise}`;
+
+                updateTotalPrice();
+            });
         });
     </script>
 </body>
