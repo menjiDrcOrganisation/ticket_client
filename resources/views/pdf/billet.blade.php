@@ -334,7 +334,7 @@
     <!-- Section inspiration "aéroport" -->
     <div class="journey-section">
         <div class="location">
-            <div class="location-code">{{ strtoupper(substr($ticket['location'] ?? 'LIEU', 0, 3)) }}</div>
+            <div class="location-code">Adresse</div>
             <div class="location-city">{{ $ticket['location'] ?? 'Lieu principal' }}</div>
         </div>
         <div class="journey-icon">
