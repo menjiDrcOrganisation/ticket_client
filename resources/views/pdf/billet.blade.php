@@ -5,20 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ticket d'Événement</title>
     <style>
-        /* CSS inchangé */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
             font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 20px;
             background-color: #f5f5f5;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            padding: 10px;
         }
         
         .ticket-container {
-            width: 80mm;
+            width: 100%;
+            max-width: 80mm;
             height: auto;
             min-height: 160mm;
             background: white;
@@ -27,66 +32,72 @@
             position: relative;
             overflow: hidden;
             margin: 0 auto;
+            display: flex;
+            flex-direction: column;
         }
         
         .ticket-header {
-           
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             color: white;
-            padding: 15px 10px;
+            padding: 20px 15px;
             text-align: center;
-            height: 26mm;
+            min-height: 80px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             position: relative;
+            flex-shrink: 0;
         }
         
-        .ticket-header::after {
+        .ticket-header::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            @if(!empty($ticket['photo_affiche']))
-            background: url('{{ env('ENV_POINT_URL')}}/storage/app/public/{{ $ticket['photo_affiche'] }}') center/cover;
-            @endif
-            opacity: 0.7;
+            background: rgba(0,0,0,0.5);
+            z-index: 1;
         }
         
         .event-title {
-            font-size: 14px;
+            font-size: 16px;
             font-weight: bold;
             margin: 0;
-            line-height: 1.2;
+            line-height: 1.3;
             position: relative;
             z-index: 2;
+            word-wrap: break-word;
         }
         
         .ticket-subtitle {
-            font-size: 8px;
+            font-size: 10px;
             opacity: 0.9;
-            margin: 3px 0 0 0;
+            margin: 5px 0 0 0;
             position: relative;
             z-index: 2;
         }
         
         .ticket-content {
-            padding: 10px;
+            padding: 15px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
         
         .section-title {
-            font-size: 8px;
+            font-size: 10px;
             color: #64707d;
             text-align: center;
-            margin: 15px 0 10px 0;
+            margin: 0 0 12px 0;
             letter-spacing: 1px;
+            font-weight: bold;
         }
         
         .info-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
+            gap: 12px;
             margin-bottom: 15px;
         }
         
@@ -96,15 +107,17 @@
         }
         
         .info-label {
-            font-size: 7px;
+            font-size: 8px;
             color: #64707d;
-            margin-bottom: 2px;
+            margin-bottom: 4px;
+            text-transform: uppercase;
         }
         
         .info-value {
-            font-size: 9px;
+            font-size: 11px;
             color: #212b47;
             font-weight: bold;
+            word-wrap: break-word;
         }
         
         .divider {
@@ -114,24 +127,29 @@
         }
         
         .participant-section {
-            margin: 15px 0;
+            margin: 10px 0;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
         }
         
         .participant-label {
-            font-size: 7px;
+            font-size: 8px;
             color: #64707d;
             margin-bottom: 5px;
+            text-transform: uppercase;
         }
         
         .participant-name {
-            font-size: 11px;
+            font-size: 14px;
             color: #212b47;
             font-weight: bold;
         }
         
         .qr-section {
             text-align: center;
-            margin: 20px 0;
+            margin: 15px 0;
+            flex-shrink: 0;
         }
         
         .qr-container {
@@ -143,27 +161,33 @@
         }
         
         .qr-image {
-            width: 35mm !important;
-            height: 35mm !important;
+            width: 100%;
+            max-width: 35mm;
+            height: auto;
             object-fit: contain;
             display: block;
+            margin: 0 auto;
         }
         
         .qr-text {
-            font-size: 7px;
+            font-size: 8px;
             color: #64707d;
             margin-top: 8px;
             text-align: center;
+            font-weight: bold;
         }
         
         .security-section {
             text-align: center;
-            margin-top: 20px;
-            padding: 0 10px;
+            margin-top: 15px;
+            padding: 10px;
+            background: #f0f1f3;
+            border-radius: 5px;
+            flex-shrink: 0;
         }
         
         .security-title {
-            font-size: 5px;
+            font-size: 7px;
             color: #64707d;
             font-weight: bold;
             margin: 3px 0;
@@ -171,16 +195,16 @@
         }
         
         .security-subtitle {
-            font-size: 4px;
+            font-size: 6px;
             color: #64707d;
             margin: 2px 0;
         }
         
         .brand-name {
-            font-size: 5px;
+            font-size: 8px;
             color: #e11d48;
             font-weight: bold;
-            margin-top: 3px;
+            margin-top: 5px;
         }
         
         .transaction-details {
@@ -188,13 +212,14 @@
             padding: 10px;
             background: #f8f9fa;
             border-radius: 5px;
+            flex-shrink: 0;
         }
         
         .transaction-row {
             display: flex;
             justify-content: space-between;
-            margin: 5px 0;
-            font-size: 8px;
+            margin: 8px 0;
+            font-size: 9px;
         }
         
         .transaction-label {
@@ -206,26 +231,7 @@
             font-weight: bold;
         }
         
-        .ticket-container::before,
-        .ticket-container::after {
-            content: '';
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background: #f5f5f5;
-            border-radius: 50%;
-            z-index: 2;
-        }
-        
-        .ticket-container::before {
-            top: -10px;
-            left: -10px;
-        }
-        
-        .ticket-container::after {
-            top: -10px;
-            right: -10px;
-        }
+        /* Suppression des pseudo-éléments problématiques */
         
         .event-poster {
             text-align: center;
@@ -239,64 +245,105 @@
             border-radius: 5px;
         }
         
+        /* Style pour l'impression - prend toute la page */
         @media print {
             body {
                 background: white;
                 padding: 0;
                 margin: 0;
+                height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
             }
             
             .ticket-container {
                 box-shadow: none;
                 margin: 0;
                 page-break-inside: avoid;
-                width: 80mm;
-                height: auto;
+                page-break-after: avoid;
+                page-break-before: avoid;
+                width: 100%;
+                height: 100%;
+                max-width: none;
+                border-radius: 0;
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .ticket-content {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+            }
+            
+            .qr-section {
+                margin: 20px 0;
+            }
+            
+            @page {
+                size: 80mm auto;
+                margin: 0mm;
+            }
+        }
+        
+        /* Responsive pour petits écrans */
+        @media (max-width: 80mm) {
+            body {
+                padding: 0;
+            }
+            
+            .ticket-container {
+                border-radius: 0;
+                box-shadow: none;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Ticket -->
+    <!-- Ticket qui prend tout l'espace -->
     <div class="ticket-container">
         <!-- En-tête -->
         <div class="ticket-header">
-            <h2 class="event-title">{{ $ticket['event_name'] }}</h2>
-            <p class="ticket-subtitle">Billet d'entrée #{{ $ticket['ticket_id'] }}</p>
+            <h2 class="event-title">{{ $ticket['event_name'] ?? 'Événement' }}</h2>
+            <p class="ticket-subtitle">Billet d'entrée #{{ $ticket['ticket_id'] ?? '000000' }}</p>
         </div>
         
-        <!-- Contenu -->
+        <!-- Contenu principal qui s'étend -->
         <div class="ticket-content">
             <!-- Informations du billet -->
-            <h3 class="section-title">INFORMATIONS DU BILLET</h3>
-            
-            <div class="info-grid">
-                <div class="info-item">
-                    <span class="info-label">LIEU</span>
-                    <span class="info-value">{{ $ticket['location'] }}</span>
+            <div>
+                <h3 class="section-title">INFORMATIONS DU BILLET</h3>
+                
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">LIEU</span>
+                        <span class="info-value">{{ $ticket['location'] ?? 'Non spécifié' }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">CATÉGORIE</span>
+                        <span class="info-value">{{ $ticket['type'] ?? 'Standard' }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">QUANTITÉ</span>
+                        <span class="info-value">{{ $ticket['quantity'] ?? '1' }} billet(s)</span>
+                    </div>
                 </div>
-                <div class="info-item">
-                    <span class="info-label">CATÉGORIE</span>
-                    <span class="info-value">{{ $ticket['type'] }}</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">QUANTITÉ</span>
-                    <span class="info-value">{{ $ticket['quantity'] }} billet(s)</span>
-                </div>
-            </div>
-            
-            <div class="info-grid">
-                <div class="info-item">
-                    <span class="info-label">DATE ÉVÉNEMENT</span>
-                    <span class="info-value">{{ $ticket['event_date'] }}</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">HEURE</span>
-                    <span class="info-value">{{ $ticket['event_time'] }}</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">TOTAL A PAYER</span>
-                    <span class="info-value">{{ $ticket['total'] }} {{ $ticket['devise'] }}</span>
+                
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">DATE ÉVÉNEMENT</span>
+                        <span class="info-value">{{ $ticket['event_date'] ?? 'Date non définie' }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">HEURE</span>
+                        <span class="info-value">{{ $ticket['event_time'] ?? 'Horaire non défini' }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">TOTAL A PAYER</span>
+                        <span class="info-value">{{ $ticket['total'] ?? '0' }} {{ $ticket['devise'] ?? 'FCFA' }}</span>
+                    </div>
                 </div>
             </div>
             
@@ -306,21 +353,20 @@
             <!-- Participant -->
             <div class="participant-section">
                 <div class="participant-label">PARTICIPANT</div>
-                <div class="participant-name">{{ $ticket['user_name'] }}</div>
+                <div class="participant-name">{{ $ticket['user_name'] ?? 'Participant' }}</div>
             </div>
            
-            <!-- QR Code - IMPORTANT: remplacé le canvas par une image -->
+            <!-- QR Code -->
             <div class="qr-section">
                 <div class="qr-container">
-                    <!-- Image QR code depuis l'URL générée -->
-                    <img src="{{ $ticket['qrcode_url'] }}" 
+                    <img src="{{ $ticket['qrcode_url'] ?? 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' viewBox=\'0 0 100 100\'%3E%3Crect width=\'100\' height=\'100\' fill=\'%23000\'/%3E%3C/svg%3E' }}" 
                          class="qr-image" 
                          alt="QR Code"
                          style="width: 35mm; height: 35mm; display: block; margin: 0 auto;">
                     
                     <div class="qr-text">SCANNEZ-MOI À L'ENTRÉE</div>
-                    <div class="qr-text" style="font-size: 6px; margin-top: 3px;">
-                        ID: {{ $ticket['ticket_id'] }}
+                    <div class="qr-text" style="font-size: 7px; margin-top: 3px;">
+                        ID: {{ $ticket['ticket_id'] ?? '000000' }}
                     </div>
                 </div>
             </div>
@@ -336,17 +382,14 @@
             <div class="transaction-details">
                 <div class="transaction-row">
                     <span class="transaction-label">Date d'achat:</span>
-                    <span class="transaction-value">{{ $ticket['purchase_date'] }}</span>
+                    <span class="transaction-value">{{ $ticket['purchase_date'] ?? date('d/m/Y H:i') }}</span>
                 </div>
                 <div class="transaction-row">
                     <span class="transaction-label">Prix unitaire:</span>
-                    <span class="transaction-value">{{ $ticket['price'] }} {{ $ticket['devise'] }}</span>
+                    <span class="transaction-value">{{ $ticket['price'] ?? '0' }} {{ $ticket['devise'] ?? 'FCFA' }}</span>
                 </div>
             </div>
         </div>
     </div>
-    <!-- SUPPRIMEZ TOUT LE JAVASCRIPT - il n'est pas utilisé pour les PDF -->
-   
 </body>
-
 </html>
