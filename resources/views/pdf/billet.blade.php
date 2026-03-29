@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Billet Événement - Style Boarding Pass</title>
-    <!-- Font Awesome 6 (gratuit, icônes pro) -->
+    <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * {
@@ -17,7 +17,7 @@
             background: #EFF3F8;
             font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
             display: flex;
-            justify-content: center;
+            justify-content: center;    /* centrage horizontal */
             align-items: center;
             min-height: 100vh;
             padding: 20px;
@@ -32,18 +32,39 @@
             box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.02);
             overflow: hidden;
             transition: transform 0.2s;
+            margin: 0 auto;   /* centrage supplémentaire */
         }
 
         .boarding-ticket:hover {
             transform: translateY(-3px);
         }
 
-        /* En-tête "boarding pass" avec effet d'étiquette */
+        /* En-tête avec image d'affiche en fond */
         .pass-header {
-            background: #0B1A2F;
+            position: relative;
             padding: 20px 20px 12px;
             color: white;
+            background-size: cover;
+            background-position: center 30%;
+            background-repeat: no-repeat;
+            z-index: 0;
+        }
+
+        /* Overlay sombre pour lisibilité */
+        .pass-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.55) 100%);
+            z-index: 1;
+        }
+
+        .pass-header > * {
             position: relative;
+            z-index: 2;
         }
 
         .pass-type {
@@ -51,7 +72,7 @@
             font-weight: 600;
             letter-spacing: 1.5px;
             text-transform: uppercase;
-            opacity: 0.75;
+            opacity: 0.9;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -67,19 +88,21 @@
             margin: 12px 0 6px;
             line-height: 1.2;
             letter-spacing: -0.3px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
         }
 
         .ticket-ref {
             font-size: 9px;
             font-family: monospace;
-            background: rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(4px);
             display: inline-block;
             padding: 3px 10px;
             border-radius: 30px;
             margin-top: 6px;
         }
 
-        /* section centrale inspirée des aéroports (départ / arrivée) */
+        /* section centrale inspirée des aéroports */
         .journey-section {
             display: flex;
             align-items: center;
@@ -87,7 +110,6 @@
             background: #FFFFFF;
             padding: 20px 20px 12px;
             border-bottom: 2px dashed #E2E8F0;
-            position: relative;
         }
 
         .location {
@@ -115,7 +137,7 @@
             margin: 0 8px;
         }
 
-        /* infos supplémentaires type vol / porte / catégorie */
+        /* infos supplémentaires type vol */
         .flight-info {
             display: flex;
             justify-content: space-between;
@@ -186,7 +208,7 @@
             color: #0F2A3B;
         }
 
-        /* QR code zone façon boarding pass */
+        /* QR code */
         .qr-boarding {
             padding: 20px 20px 16px;
             text-align: center;
@@ -217,7 +239,7 @@
             letter-spacing: 0.5px;
         }
 
-        /* détails transaction / achat */
+        /* détails transaction */
         .transaction-details {
             padding: 14px 20px;
             background: #FEFEFE;
@@ -262,26 +284,9 @@
             font-size: 9px;
         }
 
-        /* ligne pointillée décorative type boarding pass */
         .dashed-divider {
             height: 2px;
             background: repeating-linear-gradient(90deg, #CBD5E1, #CBD5E1 8px, transparent 8px, transparent 16px);
-            margin: 0 0;
-        }
-
-        /* poster optionnel (si image) avec un style plus intégré */
-        .poster-mini {
-            padding: 12px 20px 8px;
-            background: #FAFDFF;
-            text-align: center;
-            border-bottom: 1px solid #EFF3F8;
-        }
-
-        .poster-mini img {
-            max-width: 100%;
-            max-height: 55px;
-            border-radius: 12px;
-            object-fit: cover;
         }
 
         /* impression */
@@ -296,8 +301,8 @@
                 margin: 0 auto;
                 border-radius: 12px;
             }
-            .security-footer {
-                break-inside: avoid;
+            .pass-header::before {
+                background: rgba(0,0,0,0.5);
             }
         }
     </style>
@@ -305,17 +310,22 @@
 <body>
 
 <div class="boarding-ticket">
-    <!-- En-tête style boarding pass -->
-    <div class="pass-header">
+    <!-- En-tête avec image d'affiche en fond (si disponible) -->
+    @php
+        $hasPoster = !empty($ticket['photo_affiche']);
+        $posterUrl = $hasPoster ? (env('ENV_POINT_URL') . '/storage/app/public/' . $ticket['photo_affiche']) : '';
+    @endphp
+
+    <div class="pass-header" 
+         @if($hasPoster) style="background-image: url('{{ $posterUrl }}');" @endif>
         <div class="pass-type">
             <span><i class="fas fa-ticket-alt"></i> BILLET ÉLECTRONIQUE</span>
-            <span><i class="fas fa-mobile-alt"></i> SCAN@ENTRY</span>
         </div>
         <div class="event-name">{{ $ticket['event_name'] ?? 'SPECTACLE LIVE' }}</div>
         <div class="ticket-ref">#{{ $ticket['ticket_id'] ?? 'KM' . rand(10000,99999) }}</div>
     </div>
 
-    <!-- Section inspiration "aéroport" : lieu principal transformé en départ / arrivée (suggéré par l'image) -->
+    <!-- Section inspiration "aéroport" -->
     <div class="journey-section">
         <div class="location">
             <div class="location-code">{{ strtoupper(substr($ticket['location'] ?? 'LIEU', 0, 3)) }}</div>
@@ -330,14 +340,14 @@
         </div>
     </div>
 
-    <!-- Infos type "vol" = événement / catégorie / horaire -->
+    <!-- Infos style vol -->
     <div class="flight-info">
         <div class="info-chip">
             <div class="chip-label"><i class="far fa-calendar-alt"></i> DATE</div>
             <div class="chip-value">{{ $ticket['event_date'] ?? '--/--/----' }}</div>
         </div>
         <div class="info-chip">
-            <div class="chip-label"><i class="far fa-clock"></i> HORAIRE</div>
+            <div class="chip-label"><i class="far fa-clock"></i> HEURE</div>
             <div class="chip-value">{{ $ticket['event_time'] ?? '--:--' }}</div>
         </div>
         <div class="info-chip">
@@ -350,13 +360,13 @@
         </div>
     </div>
 
-    <!-- Participant (nom + icône) -->
+    <!-- Participant -->
     <div class="passenger-block">
         <div class="passenger-icon">
             <i class="fas fa-user-check"></i>
         </div>
         <div class="passenger-detail">
-            <div class="passenger-label">PASSAGER / TITULAIRE</div>
+            <div class="passenger-label">TITULAIRE</div>
             <div class="passenger-name">{{ $ticket['user_name'] ?? 'Participant' }}</div>
         </div>
         <div style="font-size: 10px; color:#2A6F8F;">
@@ -364,14 +374,7 @@
         </div>
     </div>
 
-    <!-- Affiche de l'événement si disponible (intégrée légèrement) -->
-    @if(!empty($ticket['photo_affiche']))
-    <div class="poster-mini">
-        <img src="{{ env('ENV_POINT_URL') }}/storage/app/public/{{ $ticket['photo_affiche'] }}" alt="affiche">
-    </div>
-    @endif
-
-    <!-- QR Code proche du style boarding pass -->
+    <!-- QR Code -->
     <div class="qr-boarding">
         <div class="qr-container">
             <img src="{{ $ticket['qrcode_url'] ?? 'https://quickchart.io/qr?text=TICKET_' . ($ticket['ticket_id'] ?? '000000') . '&size=200&margin=2&dark=1A3B4C' }}" 
@@ -384,10 +387,9 @@
         <div style="font-size: 8px; color:#7B8FA2; margin-top: 5px;">ID unique: {{ $ticket['ticket_id'] ?? '000000' }}</div>
     </div>
 
-    <!-- Ligne décorative pointillée (rappel boarding pass) -->
     <div class="dashed-divider"></div>
 
-    <!-- Détails transaction (prix, achat) -->
+    <!-- Détails transaction -->
     <div class="transaction-details">
         <div class="detail-row">
             <span class="detail-label"><i class="fas fa-receipt"></i> Date d'achat</span>
@@ -407,7 +409,7 @@
         </div>
     </div>
 
-    <!-- Footer sécurité / marque -->
+    <!-- Footer sécurité -->
     <div class="security-footer">
         <span><i class="fas fa-lock"></i> BILLET NOMINATIF</span>
         <span class="brand">KIMIA TICKETS</span>
