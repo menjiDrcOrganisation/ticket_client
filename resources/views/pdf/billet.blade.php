@@ -24,7 +24,7 @@
         }
         
         .ticket-container {
-            width: 85mm;
+            width: 115mm;
             max-width: 100%;
             height: auto;
             min-height: 180mm;
@@ -298,8 +298,9 @@
             .ticket-container {
                 box-shadow: none;
                 margin: 0;
+
                 page-break-inside: avoid;
-                width: 100mm;
+                width: 85mm;
                 height: auto;
             }
             
