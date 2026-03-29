@@ -865,12 +865,14 @@
                     alert('Veuillez remplir tous les champs obligatoires.');
                     return;
                 }
+                const originalText = submitBtn.innerHTML;
                 
                 try {
                   
                 const submitBtn = this.querySelector('button[type="submit"]');
-                const originalText = submitBtn.innerHTML;
+                
                 submitBtn.innerHTML = '<i data-lucide="loader" class="w-5 h-5 animate-spin"></i> Traitement...';
+                submitBtn.disabled = true;
                 lucide.createIcons();
 
                 const response = await fetch("{{ env('ENV_POINT_URL') }}/api/billet/achatBillet", {
@@ -880,9 +882,10 @@
                 });
         
                 const result = await response.json();
-                console.log(result);
+               
             
                 submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
                 lucide.createIcons();
 
                     if (result.status !== true) {
@@ -978,9 +981,13 @@
                         );
                     } else {
                         console.error(result.error);
+                        submitBtn.innerHTML = originalText;
+                        submitBtn.disabled = false;
                         alert(result.error || "Paiement échoué. Vérifiez vos informations.");
                     }
                 } catch (error) {
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
                     alert("Le paiement a échoué. Une erreur inattendue est survenue.");
                     console.error(error);
                 }
