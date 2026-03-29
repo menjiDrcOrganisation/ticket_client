@@ -2,271 +2,418 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ticket d'Événement</title>
-   <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Billet Événement - Style Boarding Pass</title>
+    <!-- Font Awesome 6 (gratuit, icônes pro) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-body {
-    font-family: 'Arial', sans-serif;
-    background: #f4f6f8;
-    
-    /* CENTRAGE VERTICAL + HORIZONTAL */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-}
+        body {
+            background: #EFF3F8;
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
 
-/* CONTAINER */
-.ticket-container {
-    width: 80mm;
-    min-height: 180mm;
-    background: #fff;
-    border-radius: 14px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-}
+        /* Ticket principal - style boarding pass */
+        .boarding-ticket {
+            max-width: 380px;
+            width: 100%;
+            background: white;
+            border-radius: 32px;
+            box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.02);
+            overflow: hidden;
+            transition: transform 0.2s;
+        }
 
-/* HEADER */
-.ticket-header {
-    position: relative;
-    height: 90px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    color: white;
-    background: linear-gradient(135deg, #0f172a, #1e293b);
-}
+        .boarding-ticket:hover {
+            transform: translateY(-3px);
+        }
 
-.ticket-header::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: rgba(0,0,0,0.5);
-}
+        /* En-tête "boarding pass" avec effet d'étiquette */
+        .pass-header {
+            background: #0B1A2F;
+            padding: 20px 20px 12px;
+            color: white;
+            position: relative;
+        }
 
-.event-title {
-    position: relative;
-    z-index: 2;
-    font-size: 14px;
-    font-weight: bold;
-}
+        .pass-type {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            opacity: 0.75;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-.ticket-subtitle {
-    position: relative;
-    z-index: 2;
-    font-size: 9px;
-    margin-top: 4px;
-}
+        .pass-type i {
+            font-size: 14px;
+        }
 
-/* CONTENT */
-.ticket-content {
-    padding: 12px;
-    flex: 1;
-}
+        .event-name {
+            font-size: 22px;
+            font-weight: 800;
+            margin: 12px 0 6px;
+            line-height: 1.2;
+            letter-spacing: -0.3px;
+        }
 
-/* GRID */
-.info-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
-    margin-bottom: 10px;
-}
+        .ticket-ref {
+            font-size: 9px;
+            font-family: monospace;
+            background: rgba(255,255,255,0.15);
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 30px;
+            margin-top: 6px;
+        }
 
-.info-item {
-    display: flex;
-    flex-direction: column;
-}
+        /* section centrale inspirée des aéroports (départ / arrivée) */
+        .journey-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #FFFFFF;
+            padding: 20px 20px 12px;
+            border-bottom: 2px dashed #E2E8F0;
+            position: relative;
+        }
 
-.info-label {
-    font-size: 7px;
-    color: #6b7280;
-    text-transform: uppercase;
-}
+        .location {
+            text-align: center;
+            flex: 1;
+        }
 
-.info-value {
-    font-size: 10px;
-    font-weight: bold;
-    color: #111827;
-}
+        .location-code {
+            font-size: 28px;
+            font-weight: 800;
+            color: #0F2B3D;
+            letter-spacing: 1px;
+        }
 
-/* PARTICIPANT */
-.participant-section {
-    background: #f9fafb;
-    padding: 8px;
-    border-radius: 6px;
-    margin: 10px 0;
-}
+        .location-city {
+            font-size: 11px;
+            font-weight: 500;
+            color: #5C6F87;
+            margin-top: 4px;
+        }
 
-.participant-name {
-    font-size: 12px;
-    font-weight: bold;
-}
+        .journey-icon {
+            font-size: 22px;
+            color: #94A3B8;
+            margin: 0 8px;
+        }
 
-/* QR */
-.qr-section {
-    text-align: center;
-    margin: 15px 0;
-}
+        /* infos supplémentaires type vol / porte / catégorie */
+        .flight-info {
+            display: flex;
+            justify-content: space-between;
+            padding: 16px 20px;
+            background: #F9FCFE;
+            border-bottom: 1px solid #EFF3F8;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
 
-.qr-container {
-    border: 1px dashed #9ca3af;
-    padding: 10px;
-    border-radius: 8px;
-    display: inline-block;
-}
+        .info-chip {
+            text-align: center;
+            flex: 1;
+            min-width: 65px;
+        }
 
-.qr-image {
-    width: 35mm;
-    height: 35mm;
-}
+        .chip-label {
+            font-size: 9px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #7F8FA4;
+            letter-spacing: 0.8px;
+        }
 
-.qr-text {
-    font-size: 8px;
-    margin-top: 5px;
-}
+        .chip-value {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1E2F3E;
+            margin-top: 5px;
+        }
 
-/* FOOTER */
-.security-section {
-    background: #f3f4f6;
-    padding: 10px;
-    text-align: center;
-}
+        /* participant */
+        .passenger-block {
+            padding: 16px 20px;
+            background: white;
+            border-bottom: 1px solid #EDF2F7;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
 
-.security-title {
-    font-size: 7px;
-    font-weight: bold;
-}
+        .passenger-icon {
+            background: #EFF6FF;
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 40px;
+            color: #2C6E9E;
+            font-size: 20px;
+        }
 
-.brand-name {
-    font-size: 8px;
-    color: #e11d48;
-    font-weight: bold;
-}
+        .passenger-detail {
+            flex: 1;
+        }
 
-/* PRINT */
-@media print {
-    body {
-        background: white;
-        display: block;
-    }
+        .passenger-label {
+            font-size: 8px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #6F8FAC;
+        }
 
-    .ticket-container {
-        box-shadow: none;
-        margin: auto;
-        page-break-inside: avoid;
-    }
-}
-</style>
+        .passenger-name {
+            font-size: 16px;
+            font-weight: 800;
+            color: #0F2A3B;
+        }
+
+        /* QR code zone façon boarding pass */
+        .qr-boarding {
+            padding: 20px 20px 16px;
+            text-align: center;
+            background: white;
+            border-bottom: 1px solid #ECF3F9;
+        }
+
+        .qr-container {
+            display: inline-block;
+            background: white;
+            padding: 6px;
+            border-radius: 20px;
+            box-shadow: 0 8px 18px -8px rgba(0, 0, 0, 0.1);
+        }
+
+        .qr-image {
+            width: 110px;
+            height: 110px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .qr-caption {
+            font-size: 8px;
+            font-weight: 600;
+            color: #2C6280;
+            margin-top: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        /* détails transaction / achat */
+        .transaction-details {
+            padding: 14px 20px;
+            background: #FEFEFE;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            padding: 6px 0;
+            border-bottom: 1px dashed #EFF3F8;
+        }
+
+        .detail-label {
+            color: #6E85A0;
+            font-weight: 500;
+        }
+
+        .detail-value {
+            font-weight: 700;
+            color: #1C3C54;
+        }
+
+        /* sécurité / footer */
+        .security-footer {
+            background: #F1F5F9;
+            padding: 12px 20px;
+            text-align: center;
+            font-size: 7px;
+            color: #5A6F89;
+            font-weight: 600;
+            text-transform: uppercase;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            letter-spacing: 0.3px;
+        }
+
+        .brand {
+            font-weight: 800;
+            color: #1F6E8C;
+            font-size: 9px;
+        }
+
+        /* ligne pointillée décorative type boarding pass */
+        .dashed-divider {
+            height: 2px;
+            background: repeating-linear-gradient(90deg, #CBD5E1, #CBD5E1 8px, transparent 8px, transparent 16px);
+            margin: 0 0;
+        }
+
+        /* poster optionnel (si image) avec un style plus intégré */
+        .poster-mini {
+            padding: 12px 20px 8px;
+            background: #FAFDFF;
+            text-align: center;
+            border-bottom: 1px solid #EFF3F8;
+        }
+
+        .poster-mini img {
+            max-width: 100%;
+            max-height: 55px;
+            border-radius: 12px;
+            object-fit: cover;
+        }
+
+        /* impression */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .boarding-ticket {
+                box-shadow: none;
+                max-width: 85mm;
+                margin: 0 auto;
+                border-radius: 12px;
+            }
+            .security-footer {
+                break-inside: avoid;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- Ticket avec photo d'affiche -->
-    <div class="ticket-container">
-        <!-- En-tête avec image d'arrière-plan conditionnelle -->
-        <div class="ticket-header" 
-             @if(!empty($ticket['photo_affiche'])) 
-                 style="background-image: url('{{ env('ENV_POINT_URL') }}/storage/app/public/{{ $ticket['photo_affiche'] }}'); background-size: cover; background-position: center;"
-             @endif>
-            <h2 class="event-title">{{ $ticket['event_name'] ?? 'Événement' }}</h2>
-            <p class="ticket-subtitle">Billet d'entrée #{{ $ticket['ticket_id'] ?? '000000' }}</p>
+
+<div class="boarding-ticket">
+    <!-- En-tête style boarding pass -->
+    <div class="pass-header">
+        <div class="pass-type">
+            <span><i class="fas fa-ticket-alt"></i> BILLET ÉLECTRONIQUE</span>
+            <span><i class="fas fa-mobile-alt"></i> SCAN@ENTRY</span>
         </div>
-        
-        <!-- Contenu -->
-        <div class="ticket-content">
-            <!-- Affichage de l'affiche si disponible -->
-            @if(!empty($ticket['photo_affiche']))
-            <div class="poster-section">
-                <div class="poster-title">AFFICHE DE L'ÉVÉNEMENT</div>
-                <img src="{{ env('ENV_POINT_URL') }}/storage/app/public/{{ $ticket['photo_affiche'] }}" 
-                     class="poster-image" 
-                     alt="Affiche événement">
-            </div>
-            @endif
-            
-            <!-- Informations du billet -->
-            <h3 class="section-title">INFORMATIONS DU BILLET</h3>
-            
-            <div class="info-grid">
-                <div class="info-item">
-                    <span class="info-label">LIEU</span>
-                    <span class="info-value">{{ $ticket['location'] ?? 'Non spécifié' }}</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">CATÉGORIE</span>
-                    <span class="info-value">{{ $ticket['type'] ?? 'Standard' }}</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">QUANTITÉ</span>
-                    <span class="info-value">{{ $ticket['quantity'] ?? '1' }} billet(s)</span>
-                </div>
-            </div>
-            
-            <div class="info-grid">
-                <div class="info-item">
-                    <span class="info-label">DATE ÉVÉNEMENT</span>
-                    <span class="info-value">{{ $ticket['event_date'] ?? 'Date non définie' }}</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">HEURE</span>
-                    <span class="info-value">{{ $ticket['event_time'] ?? 'Horaire non défini' }}</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">TOTAL A PAYER</span>
-                    <span class="info-value">{{ $ticket['total'] ?? '0' }} {{ $ticket['devise'] ?? 'FCFA' }}</span>
-                </div>
-            </div>
-            
-            <!-- Divider -->
-            <div class="divider"></div>
-            
-            <!-- Participant -->
-            <div class="participant-section">
-                <div class="participant-label">PARTICIPANT</div>
-                <div class="participant-name">{{ $ticket['user_name'] ?? 'Participant' }}</div>
-            </div>
-           
-            <!-- QR Code -->
-            <div class="qr-section">
-                <div class="qr-container">
-                    <img src="{{ $ticket['qrcode_url'] ?? 'https://quickchart.io/qr?text=TICKET_' . ($ticket['ticket_id'] ?? '000000') . '&size=150' }}" 
-                         class="qr-image" 
-                         alt="QR Code"
-                         style="width: 38mm; height: 38mm; display: block; margin: 0 auto;">
-                    
-                    <div class="qr-text">SCANNEZ-MOI À L'ENTRÉE</div>
-                    <div class="qr-text" style="font-size: 7px; margin-top: 3px;">
-                        ID: {{ $ticket['ticket_id'] ?? '000000' }}
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Section sécurité -->
-            <div class="security-section">
-                <div class="security-title">BILLET NOMINATIF - NON TRANSFÉRABLE</div>
-                <div class="security-subtitle">SÉCURISÉ ET VÉRIFIÉ PAR</div>
-                <div class="brand-name">KIMIA TICKETS</div>
-            </div>
-            
-            <!-- Détails transaction -->
-            <div class="transaction-details">
-                <div class="transaction-row">
-                    <span class="transaction-label">Date d'achat:</span>
-                    <span class="transaction-value">{{ $ticket['purchase_date'] ?? date('d/m/Y H:i') }}</span>
-                </div>
-                <div class="transaction-row">
-                    <span class="transaction-label">Prix unitaire:</span>
-                    <span class="transaction-value">{{ $ticket['price'] ?? '0' }} {{ $ticket['devise'] ?? 'FCFA' }}</span>
-                </div>
-            </div>
+        <div class="event-name">{{ $ticket['event_name'] ?? 'SPECTACLE LIVE' }}</div>
+        <div class="ticket-ref">#{{ $ticket['ticket_id'] ?? 'KM' . rand(10000,99999) }}</div>
+    </div>
+
+    <!-- Section inspiration "aéroport" : lieu principal transformé en départ / arrivée (suggéré par l'image) -->
+    <div class="journey-section">
+        <div class="location">
+            <div class="location-code">{{ strtoupper(substr($ticket['location'] ?? 'LIEU', 0, 3)) }}</div>
+            <div class="location-city">{{ $ticket['location'] ?? 'Lieu principal' }}</div>
+        </div>
+        <div class="journey-icon">
+            <i class="fas fa-arrow-right"></i>
+        </div>
+        <div class="location">
+            <div class="location-code">ENTRÉE</div>
+            <div class="location-city">{{ $ticket['gate_info'] ?? 'Scannez QR' }}</div>
         </div>
     </div>
+
+    <!-- Infos type "vol" = événement / catégorie / horaire -->
+    <div class="flight-info">
+        <div class="info-chip">
+            <div class="chip-label"><i class="far fa-calendar-alt"></i> DATE</div>
+            <div class="chip-value">{{ $ticket['event_date'] ?? '--/--/----' }}</div>
+        </div>
+        <div class="info-chip">
+            <div class="chip-label"><i class="far fa-clock"></i> HORAIRE</div>
+            <div class="chip-value">{{ $ticket['event_time'] ?? '--:--' }}</div>
+        </div>
+        <div class="info-chip">
+            <div class="chip-label"><i class="fas fa-tag"></i> CATÉGORIE</div>
+            <div class="chip-value">{{ $ticket['type'] ?? 'Standard' }}</div>
+        </div>
+        <div class="info-chip">
+            <div class="chip-label"><i class="fas fa-chair"></i> PLACE / QTE</div>
+            <div class="chip-value">{{ $ticket['quantity'] ?? 1 }} billet(s)</div>
+        </div>
+    </div>
+
+    <!-- Participant (nom + icône) -->
+    <div class="passenger-block">
+        <div class="passenger-icon">
+            <i class="fas fa-user-check"></i>
+        </div>
+        <div class="passenger-detail">
+            <div class="passenger-label">PASSAGER / TITULAIRE</div>
+            <div class="passenger-name">{{ $ticket['user_name'] ?? 'Participant' }}</div>
+        </div>
+        <div style="font-size: 10px; color:#2A6F8F;">
+            <i class="fas fa-check-circle"></i>
+        </div>
+    </div>
+
+    <!-- Affiche de l'événement si disponible (intégrée légèrement) -->
+    @if(!empty($ticket['photo_affiche']))
+    <div class="poster-mini">
+        <img src="{{ env('ENV_POINT_URL') }}/storage/app/public/{{ $ticket['photo_affiche'] }}" alt="affiche">
+    </div>
+    @endif
+
+    <!-- QR Code proche du style boarding pass -->
+    <div class="qr-boarding">
+        <div class="qr-container">
+            <img src="{{ $ticket['qrcode_url'] ?? 'https://quickchart.io/qr?text=TICKET_' . ($ticket['ticket_id'] ?? '000000') . '&size=200&margin=2&dark=1A3B4C' }}" 
+                 class="qr-image" 
+                 alt="QR Code">
+        </div>
+        <div class="qr-caption">
+            <i class="fas fa-qrcode"></i> PRÉSENTEZ CE CODE À L'ENTRÉE
+        </div>
+        <div style="font-size: 8px; color:#7B8FA2; margin-top: 5px;">ID unique: {{ $ticket['ticket_id'] ?? '000000' }}</div>
+    </div>
+
+    <!-- Ligne décorative pointillée (rappel boarding pass) -->
+    <div class="dashed-divider"></div>
+
+    <!-- Détails transaction (prix, achat) -->
+    <div class="transaction-details">
+        <div class="detail-row">
+            <span class="detail-label"><i class="fas fa-receipt"></i> Date d'achat</span>
+            <span class="detail-value">{{ $ticket['purchase_date'] ?? date('d/m/Y H:i') }}</span>
+        </div>
+        <div class="detail-row">
+            <span class="detail-label">Prix unitaire</span>
+            <span class="detail-value">{{ $ticket['price'] ?? '0' }} {{ $ticket['devise'] ?? 'FCFA' }}</span>
+        </div>
+        <div class="detail-row">
+            <span class="detail-label">Total payé</span>
+            <span class="detail-value">{{ $ticket['total'] ?? '0' }} {{ $ticket['devise'] ?? 'FCFA' }}</span>
+        </div>
+        <div class="detail-row">
+            <span class="detail-label">Référence</span>
+            <span class="detail-value">{{ $ticket['transaction_ref'] ?? substr(md5($ticket['ticket_id'] ?? 'KIMIA'), 0, 8) }}</span>
+        </div>
+    </div>
+
+    <!-- Footer sécurité / marque -->
+    <div class="security-footer">
+        <span><i class="fas fa-lock"></i> BILLET NOMINATIF</span>
+        <span class="brand">KIMIA TICKETS</span>
+        <span><i class="fas fa-check-double"></i> SÉCURISÉ</span>
+    </div>
+</div>
+
 </body>
 </html>
