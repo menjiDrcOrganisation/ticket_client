@@ -341,7 +341,7 @@
             <i class="fas fa-arrow-right"></i>
         </div>
         <div class="location">
-            <div class="location-code">ENTRÉE</div>
+            <div class="location-code">{{$ticket['event_name']}}</div>
             <div class="location-city">{{ $ticket['gate_info'] ?? 'Scannez QR' }}</div>
         </div>
     </div>
@@ -368,9 +368,8 @@
 
     <!-- Participant -->
     <div class="passenger-block">
-        <div class="passenger-icon">
             <i class="fas fa-user-check"></i>
-        </div>
+       
         <div class="passenger-detail">
             <div class="passenger-label">TITULAIRE</div>
             <div class="passenger-name">{{ $ticket['user_name'] ?? 'Participant' }}</div>
