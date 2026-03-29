@@ -865,12 +865,12 @@
                     alert('Veuillez remplir tous les champs obligatoires.');
                     return;
                 }
+                const submitBtn = this.querySelector('button[type="submit"]');
                 const originalText = submitBtn.innerHTML;
                 
                 try {
                   
-                const submitBtn = this.querySelector('button[type="submit"]');
-                
+            
                 submitBtn.innerHTML = '<i data-lucide="loader" class="w-5 h-5 animate-spin"></i> Traitement...';
                 submitBtn.disabled = true;
                 lucide.createIcons();
