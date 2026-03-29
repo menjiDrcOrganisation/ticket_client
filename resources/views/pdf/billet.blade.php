@@ -24,7 +24,7 @@
         }
         
         .ticket-container {
-            width: 115mm;
+            
             max-width: 100%;
             height: auto;
             min-height: 180mm;
