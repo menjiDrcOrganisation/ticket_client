@@ -17,7 +17,7 @@
             background: #EFF3F8;
             font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
             display: flex;
-            justify-content: center;    /* centrage horizontal */
+            justify-content: center;
             align-items: center;
             min-height: 100vh;
             padding: 20px;
@@ -32,25 +32,25 @@
             box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.02);
             overflow: hidden;
             transition: transform 0.2s;
-            margin: 0 auto;   /* centrage supplémentaire */
+            margin: 0 auto;
         }
 
         .boarding-ticket:hover {
             transform: translateY(-3px);
         }
 
-        /* En-tête avec image d'affiche en fond */
+        /* En-tête avec image d'affiche en fond - couverture et centrage parfaits */
         .pass-header {
             position: relative;
-            padding: 20px 20px 12px;
+            padding: 24px 20px 20px;   /* espacement vertical ajusté */
             color: white;
             background-size: cover;
-            background-position: center 30%;
+            background-position: center;  /* centrage exact */
             background-repeat: no-repeat;
             z-index: 0;
         }
 
-        /* Overlay sombre pour lisibilité */
+        /* Overlay sombre renforcé pour que le texte reste lisible quelle que soit l'image */
         .pass-header::before {
             content: '';
             position: absolute;
@@ -58,7 +58,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.55) 100%);
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.6) 100%);
             z-index: 1;
         }
 
@@ -72,10 +72,11 @@
             font-weight: 600;
             letter-spacing: 1.5px;
             text-transform: uppercase;
-            opacity: 0.9;
+            opacity: 0.95;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: 8px;
         }
 
         .pass-type i {
@@ -83,23 +84,23 @@
         }
 
         .event-name {
-            font-size: 22px;
+            font-size: 24px;
             font-weight: 800;
-            margin: 12px 0 6px;
-            line-height: 1.2;
+            margin: 16px 0 8px;
+            line-height: 1.25;
             letter-spacing: -0.3px;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            text-shadow: 0 2px 5px rgba(0,0,0,0.5); /* ombre forte pour contraste */
         }
 
         .ticket-ref {
-            font-size: 9px;
+            font-size: 10px;
             font-family: monospace;
             background: rgba(255,255,255,0.2);
             backdrop-filter: blur(4px);
             display: inline-block;
-            padding: 3px 10px;
+            padding: 4px 12px;
             border-radius: 30px;
-            margin-top: 6px;
+            margin-top: 8px;
         }
 
         /* section centrale inspirée des aéroports */
@@ -108,7 +109,7 @@
             align-items: center;
             justify-content: space-between;
             background: #FFFFFF;
-            padding: 20px 20px 12px;
+            padding: 20px 20px 16px;
             border-bottom: 2px dashed #E2E8F0;
         }
 
@@ -128,7 +129,7 @@
             font-size: 11px;
             font-weight: 500;
             color: #5C6F87;
-            margin-top: 4px;
+            margin-top: 5px;
         }
 
         .journey-icon {
@@ -141,17 +142,18 @@
         .flight-info {
             display: flex;
             justify-content: space-between;
-            padding: 16px 20px;
+            padding: 18px 20px;
             background: #F9FCFE;
             border-bottom: 1px solid #EFF3F8;
             flex-wrap: wrap;
             gap: 12px;
+            
         }
 
         .info-chip {
             text-align: center;
-            flex: 1;
             min-width: 65px;
+            margin-bottom: 5px;
         }
 
         .chip-label {
@@ -160,29 +162,29 @@
             text-transform: uppercase;
             color: #7F8FA4;
             letter-spacing: 0.8px;
+            
         }
 
         .chip-value {
             font-size: 15px;
             font-weight: 700;
             color: #1E2F3E;
-            margin-top: 5px;
         }
 
         /* participant */
         .passenger-block {
-            padding: 16px 20px;
+            padding: 18px 20px;
             background: white;
             border-bottom: 1px solid #EDF2F7;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 14px;
         }
 
         .passenger-icon {
             background: #EFF6FF;
-            width: 42px;
-            height: 42px;
+            width: 44px;
+            height: 44px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -200,6 +202,8 @@
             font-weight: 700;
             text-transform: uppercase;
             color: #6F8FAC;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
         }
 
         .passenger-name {
@@ -210,7 +214,7 @@
 
         /* QR code */
         .qr-boarding {
-            padding: 20px 20px 16px;
+            padding: 22px 20px 18px;
             text-align: center;
             background: white;
             border-bottom: 1px solid #ECF3F9;
@@ -219,8 +223,8 @@
         .qr-container {
             display: inline-block;
             background: white;
-            padding: 6px;
-            border-radius: 20px;
+            padding: 8px;
+            border-radius: 24px;
             box-shadow: 0 8px 18px -8px rgba(0, 0, 0, 0.1);
         }
 
@@ -232,16 +236,16 @@
         }
 
         .qr-caption {
-            font-size: 8px;
+            font-size: 9px;
             font-weight: 600;
             color: #2C6280;
-            margin-top: 10px;
+            margin-top: 12px;
             letter-spacing: 0.5px;
         }
 
         /* détails transaction */
         .transaction-details {
-            padding: 14px 20px;
+            padding: 16px 20px;
             background: #FEFEFE;
         }
 
@@ -249,7 +253,7 @@
             display: flex;
             justify-content: space-between;
             font-size: 10px;
-            padding: 6px 0;
+            padding: 8px 0;
             border-bottom: 1px dashed #EFF3F8;
         }
 
@@ -266,7 +270,7 @@
         /* sécurité / footer */
         .security-footer {
             background: #F1F5F9;
-            padding: 12px 20px;
+            padding: 14px 20px;
             text-align: center;
             font-size: 7px;
             color: #5A6F89;
@@ -302,7 +306,7 @@
                 border-radius: 12px;
             }
             .pass-header::before {
-                background: rgba(0,0,0,0.5);
+                background: rgba(0,0,0,0.6);
             }
         }
     </style>
@@ -310,16 +314,18 @@
 <body>
 
 <div class="boarding-ticket">
-    <!-- En-tête avec image d'affiche en fond (si disponible) -->
+    <!-- En-tête avec image d'affiche en fond (cover + center) -->
     @php
         $hasPoster = !empty($ticket['photo_affiche']);
         $posterUrl = $hasPoster ? (env('ENV_POINT_URL') . '/storage/app/public/' . $ticket['photo_affiche']) : '';
     @endphp
 
     <div class="pass-header" 
-         @if($hasPoster) style="background-image: url('{{ $posterUrl }}');" @endif>
+         @if($hasPoster) style="background-image: url('{{ $posterUrl }}'); background-size: cover; background-position: center;" 
+         @else style="background: linear-gradient(125deg, #0B1A2F, #1F3A4B);" @endif>
         <div class="pass-type">
             <span><i class="fas fa-ticket-alt"></i> BILLET ÉLECTRONIQUE</span>
+            <span><i class="fas fa-mobile-alt"></i> SCAN@ENTRY</span>
         </div>
         <div class="event-name">{{ $ticket['event_name'] ?? 'SPECTACLE LIVE' }}</div>
         <div class="ticket-ref">#{{ $ticket['ticket_id'] ?? 'KM' . rand(10000,99999) }}</div>
@@ -384,7 +390,7 @@
         <div class="qr-caption">
             <i class="fas fa-qrcode"></i> PRÉSENTEZ CE CODE À L'ENTRÉE
         </div>
-        <div style="font-size: 8px; color:#7B8FA2; margin-top: 5px;">ID unique: {{ $ticket['ticket_id'] ?? '000000' }}</div>
+        <div style="font-size: 8px; color:#7B8FA2; margin-top: 6px;">ID unique: {{ $ticket['ticket_id'] ?? '000000' }}</div>
     </div>
 
     <div class="dashed-divider"></div>
