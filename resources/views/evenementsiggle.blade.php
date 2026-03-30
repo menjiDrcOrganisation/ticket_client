@@ -653,8 +653,8 @@
                 <i data-lucide="x"></i>
             </button>
             
-            <h2 class="text-xl md:text-2xl font-bold text-center mb-4">
-                Votre billet
+            <h2 class="text-xl md:text-2xl font-bold text-white text-center mb-4">
+                Votre billet est pret
             </h2>
             
             <div class="flex justify-center mb-6">
@@ -663,11 +663,9 @@
             
             <div class="text-center">
                 <button id="download"  class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-semibold mr-2 w-full md:w-auto mb-2 md:mb-0">
-                    Télécharger PDF
+                    Télécharger votre billet
                 </button>
-                <button onclick="closeQRModal()" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg font-semibold w-full md:w-auto">
-                    Fermer
-                </button>
+
             </div>
         </div>
     </div>
