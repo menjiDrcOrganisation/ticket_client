@@ -1,558 +1,1037 @@
-@extends('layouts.org')
-@section('content')
-
-<!-- Overlay mobile -->
-<div id="overlay" class="fixed inset-0 bg-black/50 hidden z-40 md:hidden" onclick="toggleSidebar()"></div>
-
-<div class="p-4 md:p-6 mt-14 md:mt-0">
-    <div class="max-w-7xl mx-auto">
-
-        <!-- Header -->
-        <div class="mb-6">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
-                <div>
-                    <h2 class="text-2xl font-bold text-gray-800">Achats de Billets</h2>
-                    <p class="text-gray-500 mt-1">Tous les achats de billets pour vos événements</p>
-                </div>
-            </div>
-
-            <!-- Stats cards -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                <div class="stats-card rounded-xl p-4 shadow-sm border border-gray-100 card-hover">
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <p class="text-sm text-gray-500">Total des achats</p>
-                            <h3 class="text-xl font-bold text-gray-800">{{ $totalAchat }}</h3>
-                        </div>
-                        <div class="h-10 w-10 bg-blue-100 rounded-full flex items-center justify-center">
-                            <i class="fas fa-shopping-cart text-blue-600"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="stats-card rounded-xl p-4 shadow-sm border border-gray-100 card-hover">
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <p class="text-sm text-gray-500">Total restant</p>
-                            <h3 class="text-xl font-bold text-gray-800">{{ $totalRestant }}</h3>
-                        </div>
-                        <div class="h-10 w-10 bg-blue-100 rounded-full flex items-center justify-center">
-                            <i class="fas fa-shopping-cart text-blue-600"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="stats-card rounded-xl p-4 shadow-sm border border-gray-100 card-hover">
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <p class="text-sm text-gray-500">Total en CDF</p>
-                            <h3 class="text-xl font-bold text-gray-800">{{ number_format($totalCDF, 0, ',', ' ') }} FC</h3>
-                        </div>
-                        <div class="h-10 w-10 bg-yellow-100 rounded-full flex items-center justify-center">
-                            <i class="fas fa-money-bill text-yellow-600"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="stats-card rounded-xl p-4 shadow-sm border border-gray-100 card-hover">
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <p class="text-sm text-gray-500">Total en Dollars</p>
-                            <h3 class="text-xl font-bold text-gray-800">${{ number_format($totalUSD, 0, ',', ' ') }}</h3>
-                        </div>
-                        <div class="h-10 w-10 bg-red-100 rounded-full flex items-center justify-center">
-                            <i class="fas fa-dollar-sign text-red-600"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Search and controls -->
-        <div class="mb-6">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                <!-- Search input -->
-                <div class="relative flex-1 max-w-md">
-                    <input
-                        type="text"
-                        id="searchInput"
-                        placeholder="Rechercher par nom..."
-                        class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
-                    >
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <i class="fas fa-search text-gray-400"></i>
-                    </div>
-                </div>
-
-                <!-- Items per page selector -->
-                <div class="flex items-center gap-2">
-                    <span class="text-sm text-gray-600">Afficher :</span>
-                    <select id="itemsPerPage" class="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                        <option value="10">10</option>
-                        <option value="25">25</option>
-                        <option value="50">50</option>
-                        <option value="100">100</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-
-        <!-- Main content card -->
-        <div class="bg-white w-full p-4 md:p-6 rounded-xl shadow-sm border border-gray-100">
-
-            <!-- Desktop table -->
-            <div class="hidden md:block overflow-x-auto rounded-xl border border-gray-100 shadow-sm">
-                <!-- Conteneur interne avec largeur minimale pour forcer le défilement -->
-                <div class="min-w-[800px]">
-                    <table class="min-w-full text-gray-700">
-                        <thead class="bg-gray-50 border-b border-gray-100">
-                            <tr>
-                                <th>#</th>
-                                <th class="px-6 py-4 text-left font-medium">Client</th>
-                                <th class="px-6 py-4 text-left font-medium">Type</th>
-                                <th class="px-6 py-4 text-left font-medium">Prix unitaire</th>
-                                <th class="px-6 py-4 text-center font-medium">Quantité acheté</th>
-                                <th class="px-6 py-4 text-center font-medium">Quantité restant</th>
-                                <th class="px-6 py-4 text-center font-medium">Total</th>
-                                <th class="px-6 py-4 text-center font-medium">Statut</th>
-                                <th class="px-6 py-4 text-center font-medium">Date d'achat</th>
-                                <th class="px-6 py-4 text-center font-medium">Actions</th>
-                            </tr>
-                        </thead>
-
-                        <tbody class="divide-y divide-gray-100" id="tableBody">
-                            @forelse($detailleParBillet as $billet)
-                            <tr class="hover:bg-gray-50 transition" data-client="{{ strtolower($billet['auteur'] ?? '') }}">
-                                <td class="px-6 py-4">{{ $loop->iteration }}</td>
-                                <td class="px-6 py-4">{{ $billet["auteur"] ?? "N/A" }}</td>
-                                <td class="px-6 py-4">{{ $billet["type"] }}</td>
-                                <td class="px-6 py-4">{{ $billet["prix_unitaire"] }} {{ $billet["devise"] }}</td>
-                                <td class="px-6 py-4 text-center">{{ $billet["quantite"] }}</td>
-                                <td class="px-6 py-4 text-center">{{ $billet["quantite_fictif"] }}</td>
-                                <td class="px-6 py-4 text-center">{{ $billet["total"] }} {{ $billet['devise'] }}</td>
-                                <td class="px-6 py-4 text-center">
-                                    <span class="px-3 py-1 text-xs rounded-full bg-green-100 text-green-700">
-                                        {{ $billet["statut"] }}
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4 text-center">{{ $billet["date"] }}</td>
-                                <td class="px-6 py-4 text-center">
-                                    <div class="flex justify-center gap-2">
-                                        <button onclick="openModal('detailsModal{{ $billet['id'] }}')"
-                                                class="w-8 h-8 bg-gray-100 text-gray-700 rounded-full flex items-center justify-center hover:bg-gray-200 transition">
-                                            <i class="fas fa-eye text-xs"></i>
-                                        </button>
-
-                                        <button
-                                            class="w-8 h-8 bg-red-100 text-red-700 rounded-full flex items-center justify-center hover:bg-red-200 transition"
-                                            data-delete-id="{{ $billet['id'] }}">
-                                            <i class="fas fa-trash text-xs"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            @empty
-                            <tr>
-                                <td colspan="10" class="py-6 text-center text-gray-500">
-                                    Aucun achat trouvé.
-                                </td>
-                            </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Mobile cards -->
-            <div class="md:hidden space-y-4" id="mobileCards">
-                @forelse($detailleParBillet as $billet)
-                <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition" data-client="{{ strtolower($billet['auteur'] ?? '') }}">
-                    <div class="flex justify-between items-start mb-3">
-                        <div>
-                            <h3 class="font-semibold text-gray-800">{{ $billet["auteur"] ?? "N/A" }}</h3>
-                            <p class="text-sm text-gray-600">{{ $billet["type"] }}</p>
-                        </div>
-                        <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">
-                            {{ $billet["statut"] }}
-                        </span>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-3 text-sm">
-                        <div>
-                            <p class="text-gray-500">Prix unitaire</p>
-                            <p class="font-medium">{{ $billet["prix_unitaire"] }} {{ $billet["devise"] }}</p>
-                        </div>
-                        <div>
-                            <p class="text-gray-500">Quantité acheté</p>
-                            <p class="font-medium text-center">{{ $billet["quantite"] }}</p>
-                        </div>
-                        <div>
-                            <p class="text-gray-500">Quantité restant</p>
-                            <p class="font-medium text-center">{{ $billet["quantite_fictif"] }}</p>
-                        </div>
-                        <div>
-                            <p class="text-gray-500">Total</p>
-                            <p class="font-medium">{{ $billet["total"] }} {{ $billet['devise'] }}</p>
-                        </div>
-                    </div>
-
-                    <div class="flex justify-between items-center mt-4 pt-3 border-t border-gray-100">
-                        <span class="text-sm text-gray-500">{{ $billet["date"] }}</span>
-                        <div class="flex gap-2">
-                            <button onclick="openModal('detailsModal{{ $billet['id'] }}')"
-                                    class="w-8 h-8 bg-gray-100 text-gray-700 rounded-full flex items-center justify-center hover:bg-gray-200 transition">
-                                <i class="fas fa-eye text-xs"></i>
-                            </button>
-                            <button
-                                class="w-8 h-8 bg-red-100 text-red-700 rounded-full flex items-center justify-center hover:bg-red-200 transition"
-                                data-delete-id="{{ $billet['id'] }}">
-                                <i class="fas fa-trash text-xs"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                @empty
-                <div class="text-center py-8 text-gray-500">
-                    Aucun achat trouvé.
-                </div>
-                @endforelse
-            </div>
-
-            <!-- Pagination -->
-            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6 pt-6 border-t border-gray-200">
-                <div class="text-sm text-gray-600">
-                    Affichage de <span id="startItem">1</span> à <span id="endItem">10</span> sur <span id="totalItems">{{ count($detailleParBillet) }}</span> résultats
-                </div>
-
-                <div class="flex items-center gap-2">
-                    <button id="prevPage" class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-
-                    <div id="paginationNumbers" class="flex gap-1">
-                        <!-- Les numéros de page seront générés ici par JavaScript -->
-                    </div>
-
-                    <button id="nextPage" class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition">
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
-                </div>
-            </div>
-
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ $evenement['nom'] ?? 'Événement' }} | Billetterie Kimiaticket</title>
+    <!-- Favicon : logo dans l'onglet -->
+    <link rel="icon" href="{{ asset('icons/Icone_Kimia.png') }}" type="image/png" />
+    <!-- Optionnel : favicon pour Apple touch (iPhone/iPad) -->
+    <link rel="apple-touch-icon" href="{{ asset('icons/Icone_Kimia.png') }}" />
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/scrollreveal"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #e11d48;
+            --primary-dark: #be123c;
+            --secondary: #0f172a;
+            --accent: #f59e0b;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+        }
+        
+        .ticket-shape {
+            border-radius: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(225, 29, 72, 0.7) 100%);
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 1s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .bg-pattern {
+            background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.15) 1px, transparent 0);
+            background-size: 20px 20px;
+        }
+        
+        .hover-lift {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .countdown-item {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 15px 20px;
+            min-width: 100px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+        
+        .modal-content {
+            background: var(--secondary);
+            border-radius: 15px;
+            max-width: 500px;
+            width: 100%;
+            padding: 1.5rem;
+            position: relative;
+            animation: modalFadeIn 0.3s ease-out;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 10;
+        }
+        
+        .text-typing {
+            overflow: hidden;
+            border-right: 2px solid var(--primary);
+            white-space: nowrap;
+            animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+        
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+        
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: var(--primary) }
+        }
+        
+        .text-float {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px) }
+            50% { transform: translateY(-10px) }
+            100% { transform: translateY(0px) }
+        }
+        
+        .text-gradient-animate {
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient 15s ease infinite;
+        }
+        
+        @keyframes gradient {
+            0% { background-position: 0% 50% }
+            50% { background-position: 100% 50% }
+            100% { background-position: 0% 50% }
+        }
+        
+        .text-fade-in-up {
+            animation: fadeInUp 1.5s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .text-bounce {
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        
+        .stagger-animation > * {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: staggerFadeIn 0.6s ease forwards;
+        }
+        
+        .stagger-animation > *:nth-child(1) { animation-delay: 0.1s; }
+        .stagger-animation > *:nth-child(2) { animation-delay: 0.2s; }
+        .stagger-animation > *:nth-child(3) { animation-delay: 0.3s; }
+        .stagger-animation > *:nth-child(4) { animation-delay: 0.4s; }
+        .stagger-animation > *:nth-child(5) { animation-delay: 0.5s; }
+        
+        @keyframes staggerFadeIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Styles pour le modal de paiement amélioré */
+        .payment-modal {
+            max-width: 600px;
+            width: 100%;
+        }
+        
+        .form-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 12px 16px;
+            color: white;
+            width: 100%;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(225, 29, 72, 0.2);
+        }
+        
+        .ticket-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .ticket-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Responsive améliorations */
+        @media (max-width: 768px) {
+            .modal-content {
+                padding: 1.25rem;
+                margin: 1rem;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem !important;
+                line-height: 1.2;
+            }
+            
+            .section-padding {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            
+            .ticket-grid {
+                grid-template-columns: 1fr !important;
+                gap: 1.5rem;
+            }
+            
+            .countdown-item {
+                min-width: 80px;
+                padding: 10px 15px;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr !important;
+                gap: 1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .modal-content {
+                padding: 1rem;
+                margin: 0.5rem;
+            }
+            
+            .hero-title {
+                font-size: 2rem !important;
+            }
+            
+            .countdown-item {
+                min-width: 70px;
+                padding: 8px 12px;
+            }
+            
+            .section-title {
+                font-size: 2rem !important;
+            }
+        }
+        
+        /* Améliorations pour très petits écrans */
+        @media (max-width: 360px) {
+            .hero-title {
+                font-size: 1.75rem !important;
+            }
+            
+            .modal-content {
+                padding: 0.75rem;
+            }
+            
+            .form-input {
+                padding: 10px 12px;
+            }
+        }
+        
+        /* Améliorations pour les grands écrans */
+        @media (min-width: 1440px) {
+            .container-wide {
+                max-width: 1200px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+        
+        /* Scrollbar personnalisée pour les modals */
+        .modal-content::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .modal-content::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        
+        .modal-content::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+        
+        /* Amélioration de la lisibilité sur mobile */
+        .text-responsive {
+            font-size: clamp(1rem, 4vw, 1.25rem);
+        }
+        
+        .title-responsive {
+            font-size: clamp(1.5rem, 8vw, 3.5rem);
+        }
+        
+        /* Optimisation des images de fond */
+        .hero-bg {
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: scroll;
+        }
+        
+        /* Correction pour le logo dans la navbar */
+        .navbar-logo {
+            height: 8px;
+            width: auto;
+        }
+    </style>
+</head>
+<body>
+    @if(isset($error))
+    <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800 px-4">
+        <div class="text-center p-6 bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full fade-in">
+            <i data-lucide="alert-circle" class="w-16 h-16 text-red-500 mx-auto mb-4"></i>
+            <h2 class="text-2xl font-bold text-white mb-2">Erreur</h2>
+            <p class="text-red-400 mb-6">{{ $error }}</p>
+            <a href="/" class="inline-block bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-full transition-all duration-300 transform hover:scale-105">
+                Retour à l'accueil
+            </a>
         </div>
     </div>
-</div>
-
-<!-- ============================
-     MODALS POUR CHAQUE BILLET
-============================ -->
-
-@forelse($detailleParBillet as $billet)
-
-<!-- Modal Réenvoyer -->
-<div id="resendModal{{ $billet['id'] }}" class="hidden fixed inset-0 bg-black/50 z-50 flex justify-center items-center p-4">
-    <div class="bg-white p-6 rounded-xl max-w-md w-full mx-4">
-        <h3 class="text-lg font-semibold mb-4">Réenvoyer le billet</h3>
-        <p class="text-gray-600">Renvoyer à <b>{{ $billet['auteur'] }}</b> ?</p>
-        <div class="flex justify-end gap-3 mt-6">
-            <button onclick="closeModal('resendModal{{ $billet['id'] }}')" class="px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition">Annuler</button>
-            <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Confirmer</button>
+    @else
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-gray-800">
+        <div class=" px-12 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <img src="{{ asset('icons/Icone_Kimia.png') }}" alt="KimiaTicket" class="h-8 md:h-10 lg:h-12">
+                <span class="text-xl font-bold truncate max-w-[150px] md:max-w-none">{{ $evenement['nom'] }}</span>
+            </div>
+            
+            <div class="hidden md:flex space-x-8">
+                <a href="#about" class="text-gray-600 hover:text-white transition-colors">À propos</a>
+                <a href="#tickets" class="text-gray-600 hover:text-white transition-colors">Billets</a>
+                <a href="#location" class="text-gray-600 hover:text-white transition-colors">Lieu</a>
+                <a href="#contact" class="text-gray-600 hover:text-white transition-colors">Contact</a>
+            </div>
+            
+            <button id="menu-toggle" class="md:hidden text-white">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
         </div>
-    </div>
-</div>
+        
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="md:hidden bg-gray-900 border-t border-gray-800 hidden">
+            <div class="container mx-auto px-4 py-4 flex flex-col space-y-4">
+                <a href="#about" class="text-gray-600 hover:text-white transition-colors">À propos</a>
+                <a href="#tickets" class="text-gray-600 hover:text-white transition-colors">Billets</a>
+                <a href="#location" class="text-gray-600 hover:text-white transition-colors">Lieu</a>
+                <a href="#contact" class="text-gray-600 hover:text-white transition-colors">Contact</a>
+            </div>
+        </div>
+    </nav>
 
-<!-- Modal Détails -->
-<div id="detailsModal{{ $billet['id'] }}" class="hidden fixed inset-0 bg-black/50 z-50 flex justify-center items-center p-4">
-    <div class="bg-white p-6 rounded-xl max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
-        <h3 class="text-lg font-semibold mb-4">Détails du billet</h3>
+    <!-- Section Hero -->
+    <header class="relative min-h-screen hero-bg flex items-center justify-center pt-16 px-4"
+       style="background-image: url('{{ env('ENV_POINT_URL') }}/storage/app/public/{{ $evenement['ressource'][0]['photo_affiche'] ?? 'img/concert.jpg' }}')">
 
-        <div class="space-y-3 text-sm">
-            <div class="flex justify-between"><span class="font-medium">Client :</span> <span>{{ $billet['auteur'] }}</span></div>
-            <div class="flex justify-between"><span class="font-medium">Type :</span> <span>{{ $billet['type'] }}</span></div>
-            <div class="flex justify-between"><span class="font-medium">Quantité achetée :</span> <span>{{ $billet['quantite'] }}</span></div>
-            <div class="flex justify-between"><span class="font-medium">Quantité restante :</span> <span>{{ $billet['quantite_fictif'] }}</span></div>
-            <div class="flex justify-between"><span class="font-medium">Total :</span> <span>{{ $billet['total'] }} {{ $billet['devise'] }}</span></div>
-            <div class="flex justify-between"><span class="font-medium">Prix unitaire :</span> <span>{{ $billet['prix_unitaire'] }} {{ $billet['devise'] }}</span></div>
-            <div class="flex justify-between"><span class="font-medium">Statut :</span> <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">{{ $billet['statut'] }}</span></div>
-
-            @if(!empty($billet["code"]))
-            <div class="flex flex-col items-center mt-4 pt-4 border-t border-gray-200">
-                <p class="text-sm text-gray-600 mb-3">QR Code du billet</p>
-                <div id="qrcode-{{ $billet['id'] }}" class="border p-2 rounded-md bg-white"></div>
-                <button onclick="downloadQRCode('{{ $billet['id'] }}')"
-                        class="mt-3 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm">
-                    Télécharger QR Code
-                </button>
+        <div class="absolute inset-0 hero-gradient"></div>
+        <div class="absolute inset-0 bg-pattern"></div>
+        
+        <div class="relative z-10 text-center w-full max-w-6xl mx-auto space-y-8">
+            
+            
+            <h1 class="title-responsive font-extrabold uppercase tracking-tight">
+                <span class="bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent text-typing">
+                    {{ $evenement["nom"] }}
+                </span>
+            </h1>
+            
+            <div class="text-responsive font-medium space-y-3 max-w-2xl mx-auto">
+                <p class="flex items-center justify-center gap-2 text-float flex-wrap">
+                    <i data-lucide="map-pin" class="w-5 h-5 text-red-500 flex-shrink-0"></i>
+                    <span class="text-center">{{ $evenement["salle"] }} - {{ $evenement["adresse"] }}</span>
+                </p>
+                <p class="flex items-center justify-center gap-2 flex-wrap justify-center">
+                    <span class="font-bold text-yellow-400 flex items-center gap-1 text-bounce">
+                        <i data-lucide="calendar" class="w-5 h-5"></i>
+                        {{ \Carbon\Carbon::parse($evenement['date_debut'])->translatedFormat('d F Y') }}
+                        à
+                        {{ \Carbon\Carbon::parse($evenement['heure_debut'])->format('H:i') }}
+                    </span>
+                    <span class="text-gray-300 mx-2 hidden md:inline">→</span>
+                    <span class="text-gray-300 flex items-center gap-1 text-bounce">
+                        <i data-lucide="clock" class="w-5 h-5"></i>
+                        Jusqu'au
+                        {{ \Carbon\Carbon::parse($evenement['date_fin'])->translatedFormat('d F Y') }}
+                        à
+                        {{ \Carbon\Carbon::parse($evenement['heure_fin'])->format('H:i') }}
+                    </span>
+                </p>
+            </div>
+            
+            <!-- Phrase d'accroche -->
+            @if(isset($evenement['ressource'][0]['phrase_accroche']))
+            <div class="bg-white/10 backdrop-blur-md rounded-2xl p-6 md:p-8 max-w-3xl mx-auto border border-white/20">
+                <p class="text-lg md:text-2xl text-center italic text-gray-200 text-gradient-animate">
+                    "{{ $evenement["ressource"][0]["phrase_accroche"] }}"
+                </p>
             </div>
             @endif
+        </div>
+        
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-bounce">
+            <a href="#about" class="text-white">
+                <i data-lucide="chevron-down" class="w-8 h-8"></i>
+            </a>
+        </div>
+    </header>
 
-            <div class="flex justify-between mt-4 pt-4 border-t border-gray-200">
-                <span class="font-medium">Date :</span> <span>{{ $billet['date'] }}</span>
+    <!-- Section description -->
+    <section id="about" class="py-16 md:py-20 bg-gray-800 section-padding relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-red-500 to-transparent"></div>
+        
+        <div class="max-w-6xl mx-auto">
+            <h2 class="section-title text-white text-3xl md:text-4xl font-bold mb-6 text-center">
+                À propos de l'événement
+            </h2>
+            <div class="bg-gray-900/50 rounded-2xl p-6 md:p-12 shadow-2xl">
+                <p class="text-lg leading-relaxed text-gray-300 text-center md:text-left">
+                    {{ $evenement["ressource"][0]["a_propos"] ?? "Aucune description disponible pour cet événement." }}
+                </p>
             </div>
         </div>
+    </section>
 
-        <div class="flex justify-end mt-6">
-            <button onclick="closeModal('detailsModal{{ $billet['id'] }}')" class="px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition">Fermer</button>
+    <!-- Section billets -->
+    <section id="tickets" class="py-16 md:py-20 bg-gray-900 section-padding">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="section-title text-3xl text-white md:text-4xl font-bold mb-8 md:mb-12 text-center">
+                Billets disponibles
+            </h2>
+            
+            <div class="ticket-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                @foreach($evenement['type_billets'] as $index => $billet)
+                <div class="ticket-card bg-white shadow-2xl hover-lift rounded-2xl p-6 md:p-8 flex flex-col items-center text-center">
+                    <div class="bg-red-100 p-4 rounded-2xl mb-6">
+                        <i data-lucide="ticket" class="w-10 h-10 md:w-12 md:h-12 text-red-600"></i>
+                    </div>
+                    <h3 class="text-xl md:text-2xl font-semibold mb-3 text-gray-800">
+                        Billet {{ $billet["nom_type"] }}
+                    </h3>
+                    <p class="text-gray-600 mb-6">
+                        Accès à l'événement avec placement libre
+                    </p>
+                   
+                    <a href="http://">
+                         {{$billet["pivot"]["devise"]}}
+
+                    </a>
+                    
+                    <p class="text-3xl md:text-4xl font-bold text-red-600 mb-2">
+                        {{ number_format($billet["pivot"]["prix_unitaire"] ?? 0, 0, ",", " ") }} {{ $billet["pivot"]["devise"] ?? "FC" }}
+                    </p>
+                    <p class="text-sm text-gray-500 mb-6">Disponible</p>
+                    <button class="w-full buy-ticket-btn bg-red-600 hover:bg-red-700 text-white py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-105"
+                        data-ticket-type="{{ $billet['nom_type'] }}"
+                        data-ticket-price="{{ $billet['pivot']['prix_unitaire'] ?? '0' }}"
+                        data-ticket-id="{{ $billet['id'] }}"
+                        data-ticket-devise="{{ $billet['pivot']['devise'] ?? 'FC' }}">
+                        Acheter maintenant
+                    </button>
+                </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
+    <!-- Section lieu -->
+    <section id="location" class="py-16 md:py-20 bg-gray-800 section-padding">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="section-title text-white text-3xl md:text-4xl font-bold mb-8 md:mb-12 text-center">
+                Lieu de l'événement
+            </h2>
+            
+            <div class="bg-gray-900 text-white rounded-2xl overflow-hidden shadow-2xl">
+                <div class="w-full p-6 md:p-12">
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-3">
+                            <i data-lucide="map-pin" class="w-5 h-5 text-red-500 mt-1 flex-shrink-0"></i>
+                            <div>
+                                <p class="font-medium">Salle</p>
+                                <p class="text-gray-400">{{ $evenement["salle"] }}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <i data-lucide="map-pin" class="w-5 h-5 text-red-500 mt-1 flex-shrink-0"></i>
+                            <div>
+                                <p class="font-medium">Adresse</p>
+                                <p class="text-gray-400">{{ $evenement["adresse"] }}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start gap-3">
+                            <i data-lucide="calendar" class="w-5 h-5 text-red-500 mt-1 flex-shrink-0"></i>
+                            <div>
+                                <p class="font-medium">Date et heure</p>
+                                <p class="text-gray-400">
+                                    {{ \Carbon\Carbon::parse($evenement['date_debut'])->translatedFormat('d F Y') }}
+                                    à
+                                    {{ \Carbon\Carbon::parse($evenement['heure_debut'])->format('H:i') }}
+                                    -
+                                    {{ \Carbon\Carbon::parse($evenement['date_fin'])->translatedFormat('d F Y') }}
+                                    à
+                                    {{ \Carbon\Carbon::parse($evenement['heure_fin'])->format('H:i') }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 md:mt-8">
+                        <a href="https://maps.google.com/?q={{ urlencode($evenement['adresse']) }}"
+                           target="_blank"
+                           class="inline-flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg transition-all duration-300 w-full md:w-auto">
+                            <i data-lucide="navigation" class="w-5 h-5"></i>
+                            Voir sur Google Maps
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal de paiement amélioré -->
+    <div id="payment-modal" class="modal">
+        <div class="modal-content payment-modal">
+            <button class="close-modal" onclick="closePaymentModal()">
+                <i data-lucide="x"></i>
+            </button>
+            
+            <h3 class="text-xl md:text-2xl text-white font-bold mb-2" id="modal-title">
+                Finalisez votre achat
+            </h3>
+            <p class="text-gray-400 mb-4 md:mb-6 text-sm md:text-base" id="modal-subtitle">
+                Remplissez vos informations pour compléter votre achat
+            </p>
+            
+            <form id="payment-form" class="space-y-4">
+                <input type="hidden" value="{{ $evenement['id'] }}" name="id_evenement" />
+                <input type="hidden" id="selected-ticket-type" name="type_billet" />
+                
+                <div class="form-grid grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="fullname" class="block text-sm font-medium text-gray-300 mb-1">Nom complet</label>
+                        <input type="text" id="fullname" name="nom_complet_client" class="form-input" required />
+                    </div>
+                    
+                    <div>
+                        <label for="telephone" class="block text-sm font-medium text-gray-300 mb-1">Téléphone</label>
+                        <input type="tel" id="telephone" name="numero_client" placeholder="+243xxxxxxxxx" class="form-input" required pattern="^\+243[0-9]{9}$" title="Entrez un numéro congolais valide au format +243 suivi de 9 chiffres" />
+                    </div>
+                </div>
+                
+                <div class="form-grid grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="service" class="block text-sm font-medium text-gray-300 mb-1">Service de paiement</label>
+                        <select id="service" name="service" class="form-input bg-black" required>
+                            <option value="MPESA" class=" hover:bg-red-500">M-Pesa</option>
+                            <option value="orange" class=" hover:bg-red-500">Orange Money</option>
+                            <option value="airtel" class=" hover:bg-red-500">Airtel Money</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label for="devise" class="block text-sm font-medium text-gray-300 mb-1">Devise</label>
+                        
+                        <select id="devise-display" name="devise_display" class="form-input bg-black">
+                            <option value="CDF">CDF</option>
+                            <option value="USD">USD</option>
+                        </select>
+                        <div class="text-sm text-yellow-400 mt-1" id="taux-info">
+                            Taux: chargement...
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-grid grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="quantity" class="block text-sm font-medium text-gray-300 mb-1">Nombre de billets</label>
+                        <input type="number" id="quantity" name="nombre_reel" min="1" value="1" class="form-input" required />
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-1">Prix unitaire</label>
+                        <div class="form-input bg-gray-700">
+                            <span id="unit-price" class="text-white font-semibold">0 FC</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="pt-4 border-t border-gray-700">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-gray-400 text-lg">Total:</span>
+                        <span id="total-price" class="text-xl md:text-2xl font-bold text-white">0 FC</span>
+                    </div>
+                    
+                    <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2">
+                        <i data-lucide="credit-card" class="w-5 h-5"></i>
+                        Procéder au paiement
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
-</div>
 
-@empty
-<!-- Aucun billet : pas de modale à afficher -->
-@endforelse
+    <!-- Modal QR Code -->
+    <div id="qr-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeQRModal()">
+                <i data-lucide="x"></i>
+            </button>
+            
+            <h2 class="text-xl md:text-2xl font-bold text-white text-center mb-4">
+                Votre billet est pret
+            </h2>
+            
+            <div class="flex justify-center mb-6">
+                <canvas id="qrcode-canvas" class="max-w-full"></canvas>
+            </div>
+            
+            <div class="text-center">
+                <button id="download"  class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-semibold mr-2 w-full md:w-auto mb-2 md:mb-0">
+                    Télécharger votre billet
+                </button>
 
-<!-- JS -->
-<script>
-// Variables globales pour la pagination
-let currentPage = 1;
-let itemsPerPage = 10;
-let filteredData = [];
-let allData = [];
+            </div>
+        </div>
+    </div>
 
-function openModal(id){
-    document.getElementById(id).classList.remove('hidden');
-    document.body.style.overflow = 'hidden';
-}
+    <!-- Footer -->
+    <footer id="contact" class="bg-gray-900 text-white py-12 px-6 border-t border-gray-800">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div class="md:col-span-2">
+                    <div class="flex items-center space-x-2 mb-4">
+                        <i data-lucide="ticket" class="w-8 h-8 text-red-500"></i>
+                        <span class="text-xl font-bold">Kimia<span class="text-red-500">Ticket</span></span>
+                    </div>
+                    <p class="text-gray-400 mb-4">
+                        Votre plateforme de billetterie de confiance pour les meilleurs événements en République Démocratique du Congo.
+                    </p>
+                    
+                    <div class="flex space-x-4">
+                        <a href="#" class="bg-gray-800 p-3 rounded-full text-gray-300 hover:bg-red-600 hover:text-white transition-all">
+                            <i data-lucide="facebook" class="w-5 h-5"></i>
+                        </a>
+                        <a href="#" class="bg-gray-800 p-3 rounded-full text-gray-300 hover:bg-red-600 hover:text-white transition-all">
+                            <i data-lucide="twitter" class="w-5 h-5"></i>
+                        </a>
+                        <a href="#" class="bg-gray-800 p-3 rounded-full text-gray-300 hover:bg-red-600 hover:text-white transition-all">
+                            <i data-lucide="instagram" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Liens rapides</h4>
+                    <ul class="space-y-2">
+                        <li>
+                            <a href="#about" class="text-gray-400 hover:text-white transition-colors">À propos</a>
+                        </li>
+                        <li>
+                            <a href="#tickets" class="text-gray-400 hover:text-white transition-colors">Billets</a>
+                        </li>
+                        <li>
+                            <a href="#location" class="text-gray-400 hover:text-white transition-colors">Lieu</a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contact</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex items-center gap-2">
+                            <i data-lucide="mail" class="w-4 h-4"></i>
+                            <span>contact@menjidrc.com</span>
+                        </li>
+                        <li class="flex items-center gap-2 text-fade-in-up">
+                            <i data-lucide="phone" class="w-4 h-4 text-bounce"></i>
+                            <span>+243 973439644</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="pt-8 border-t border-gray-800 text-center text-gray-500">
+                <p>© {{ date("Y") }} Menji DRC — Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+    @endif
 
-function closeModal(id){
-    document.getElementById(id).classList.add('hidden');
-    document.body.style.overflow = 'auto';
-}
+    <script>
+        lucide.createIcons();
+        
+        // Menu mobile
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
 
-// Fermer les modals en cliquant à l'extérieur
-document.addEventListener('click', function(e) {
-    if (e.target.classList.contains('fixed') && e.target.classList.contains('inset-0')) {
-        e.target.classList.add('hidden');
-        document.body.style.overflow = 'auto';
-    }
-});
+        let tauxUSD_CDF =chargerTaux() ; 
 
-// Initialisation
-document.addEventListener('DOMContentLoaded', function() {
-    // Stocker toutes les données initiales
-    const tableRows = document.querySelectorAll('#tableBody tr');
-    const mobileCards = document.querySelectorAll('#mobileCards > div:not(.text-center)'); // exclure le message vide
+        async function chargerTaux() {
+            const taux = await getTaux();
+            if (taux) {
+                tauxUSD_CDF = taux;
+                document.getElementById('taux-info').textContent =
+            `1 USD = ${taux.toLocaleString('fr-FR')} CDF`;
+            }
 
-    allData = Array.from(tableRows).map((row, index) => ({
-        element: row,
-        mobileElement: mobileCards[index],
-        client: row.getAttribute('data-client')
-    }));
-
-    filteredData = [...allData];
-
-    initializePagination();
-    setupEventListeners();
-
-    // Générer les QR codes
-    @foreach($detailleParBillet as $billet)
-        @if(!empty($billet["code"]))
-            new QRCode(document.getElementById("qrcode-{{ $billet['id'] }}"), {
-                text: "{{ $billet['code'] }}",
-                width: 120,
-                height: 120
+        }
+        
+        if (menuToggle && mobileMenu) {
+            menuToggle.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+                const icon = menuToggle.querySelector('i');
+                if (mobileMenu.classList.contains('hidden')) {
+                    icon.setAttribute('data-lucide', 'menu');
+                } else {
+                    icon.setAttribute('data-lucide', 'x');
+                }
+                lucide.createIcons();
             });
-        @endif
-    @endforeach
-});
-
-function setupEventListeners() {
-    // Recherche
-    document.getElementById('searchInput').addEventListener('input', function(e) {
-        const searchTerm = e.target.value.toLowerCase().trim();
-        filterData(searchTerm);
-    });
-
-    // Items par page
-    document.getElementById('itemsPerPage').addEventListener('change', function(e) {
-        itemsPerPage = parseInt(e.target.value);
-        currentPage = 1;
-        updateDisplay();
-    });
-
-    // Boutons précédent/suivant
-    document.getElementById('prevPage').addEventListener('click', function() {
-        if (currentPage > 1) {
-            currentPage--;
-            updateDisplay();
         }
-    });
+        
+        // Gestion du modal de paiement
+        let currentTicketPrice = 0;
+        let currentTicketId = '';
+        let clientName = '';
+        let currentTicketDevise = 'CDF';
+        let currentTicketData = null;
+        
+        function openPaymentModal(ticketType, ticketPrice, ticketId, ticketDevise) {
+            console.log('Opening modal for:', ticketType, ticketPrice, ticketId, ticketDevise);
+            
+            currentTicketPrice = parseFloat(ticketPrice) || 0;
+            currentTicketId = ticketId;
+            currentTicketDevise = ticketDevise || 'CDF';
+            
+            document.getElementById('modal-title').textContent = `Acheter un billet ${ticketType}`;
+            document.getElementById('selected-ticket-type').value = ticketId;
+            document.getElementById('unit-price').textContent = `${currentTicketPrice.toLocaleString('fr-FR')} ${currentTicketDevise}`;
+            let deviseNormale = (currentTicketDevise === 'CDF') ? 'CDF' : 'USD';
+            document.getElementById('devise-display').value = deviseNormale;
 
-    document.getElementById('nextPage').addEventListener('click', function() {
-        const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-        if (currentPage < totalPages) {
-            currentPage++;
-            updateDisplay();
+            updateTotalPrice();
+            document.getElementById('payment-modal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            
+            
         }
-    });
-}
+        
+        function closePaymentModal() {
+            document.getElementById('payment-modal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        
+        function closeQRModal() {
+            document.getElementById('qr-modal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        
+        function updateTotalPrice() {
+            const quantity = parseInt(document.getElementById('quantity').value) || 1;
+            const total = currentTicketPrice * quantity;
+            document.getElementById('total-price').textContent = `${total.toLocaleString('fr-FR')} ${currentTicketDevise}`;
+        }
 
-function filterData(searchTerm) {
-    if (searchTerm === '') {
-        filteredData = [...allData];
-    } else {
-        filteredData = allData.filter(item =>
-            item.client && item.client.includes(searchTerm)
-        );
-    }
+        async function getTaux() {
+            try {
+                    const response = await fetch("https://api.exchangerate-api.com/v4/latest/USD");
+                    const data = await response.json();
 
-    currentPage = 1;
-    updateDisplay();
-}
+                    const tauxCDF = data.rates.CDF;
+                    console.log("Taux USD → CDF :", tauxCDF);
 
-function initializePagination() {
-    updateDisplay();
-}
-
-function updateDisplay() {
-    const totalItems = filteredData.length;
-    const totalPages = Math.ceil(totalItems / itemsPerPage);
-
-    // Calculer les indices de début et fin
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
-
-    // Masquer tous les éléments
-    allData.forEach(item => {
-        if (item.element) item.element.style.display = 'none';
-        if (item.mobileElement) item.mobileElement.style.display = 'none';
-    });
-
-    // Afficher seulement les éléments de la page courante
-    for (let i = startIndex; i < endIndex; i++) {
-        if (filteredData[i]) {
-            filteredData[i].element.style.display = '';
-            if (filteredData[i].mobileElement) {
-                filteredData[i].mobileElement.style.display = '';
+                    return tauxCDF;
+                } catch (error) {
+                    console.error("Erreur récupération taux:", error);
+                    return null;
+                }
             }
-        }
-    }
+        
+        // Fonction pour télécharger le ticket
 
-    // Mettre à jour les informations de pagination
-    document.getElementById('startItem').textContent = totalItems === 0 ? 0 : startIndex + 1;
-    document.getElementById('endItem').textContent = endIndex;
-    document.getElementById('totalItems').textContent = totalItems;
+        document.addEventListener('DOMContentLoaded', function() {
+            // Gestion des boutons d'achat
+            document.querySelectorAll('.buy-ticket-btn').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const ticketType = this.getAttribute('data-ticket-type');
+                    const ticketPrice = this.getAttribute('data-ticket-price');
+                    const ticketId = this.getAttribute('data-ticket-id');
+                    const ticketDevise = this.getAttribute('data-ticket-devise');
+                    
+                    openPaymentModal(ticketType, ticketPrice, ticketId, ticketDevise);
+                });
+            });
+            
+            // Calcul du prix total
+            document.getElementById('quantity').addEventListener('input', updateTotalPrice);
+            
+            // Soumission du formulaire
+            document.getElementById('payment-form').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const formData = {
+                    id_evenement: this.id_evenement.value,
+                    nom_complet_client: this.nom_complet_client.value,
+                    numero_client: this.numero_client.value,
+                    nombre_reel: this.nombre_reel.value,
+                    type_billet: this.type_billet.value,
+                    service: this.service.value,
+                    devise:this.devise_display.value
+                };
+                
+                clientName = formData.nom_complet_client;
+                
+                // Validation basique
+                if (!formData.nom_complet_client || !formData.numero_client) {
+                    alert('Veuillez remplir tous les champs obligatoires.');
+                    return;
+                }
+                const submitBtn = this.querySelector('button[type="submit"]');
+                const originalText = submitBtn.innerHTML;
+                
+                try {
+                  
+            
+                submitBtn.innerHTML = '<i data-lucide="loader" class="w-5 h-5 animate-spin"></i> Traitement...';
+                submitBtn.disabled = true;
+                lucide.createIcons();
 
-    // Mettre à jour les boutons de pagination
-    document.getElementById('prevPage').disabled = currentPage === 1;
-    document.getElementById('nextPage').disabled = currentPage === totalPages || totalPages === 0;
+                const response = await fetch("{{ env('ENV_POINT_URL') }}/api/billet/achatBillet", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(formData),
+                });
+        
+                const result = await response.json();
+               
+            
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                lucide.createIcons();
 
-    // Générer les numéros de page
-    generatePaginationNumbers(totalPages);
-}
+                    if (result.status !== true) {
+                        alert(result.message || "Paiement échoué.");
+                        return;
+                    }
 
-function generatePaginationNumbers(totalPages) {
-    const paginationContainer = document.getElementById('paginationNumbers');
-    paginationContainer.innerHTML = '';
+                    if (result.status === true) {
+                        
+                        const billet = result.billet; 
+                        const uniqueCode = billet.code_billet;
+                        const canvas = document.getElementById("qrcode-canvas");
+                        const download=document.getElementById('download');
 
-    if (totalPages === 0) return;
+                        
+                        
+                
+                            const data_info_billet = {
+                                name_user: result.billet.nom_auteur,
+                                name_event: result.billet.evenement.nom,
+                                location: result.billet.evenement.adresse,
+                                type: result.billet.type_billet.nom_type,
+                                quantity: result.billet.quantite,
+                                price: result.data_sup.prix_unitaire,
+                                devise: result.data_sup.devise,
+                                photo_affiche: result.billet.evenement.ressource[0].photo_affiche,
+                                qrcode: result.billet.code_billet,
+                                date_achat: result.billet.date_achat,
+                                debut: result.billet.evenement.date_debut,
+                                heure: result.billet.evenement.heure_debut
+                            };
 
-    // Afficher maximum 5 pages autour de la page courante
-    let startPage = Math.max(1, currentPage - 2);
-    let endPage = Math.min(totalPages, currentPage + 2);
+                            // Assurez-vous que 'download' est bien votre bouton
+                            // Par exemple: <button id="downloadBtn">Télécharger</button>
+                            const downloadBtn = document.getElementById('download');
 
-    // Ajuster si on est près du début
-    if (currentPage <= 3) {
-        endPage = Math.min(5, totalPages);
-    }
-
-    // Ajuster si on est près de la fin
-    if (currentPage >= totalPages - 2) {
-        startPage = Math.max(1, totalPages - 4);
-    }
-
-    // Bouton première page
-    if (startPage > 1) {
-        const firstPageBtn = createPageButton(1);
-        paginationContainer.appendChild(firstPageBtn);
-
-        if (startPage > 2) {
-            const ellipsis = document.createElement('span');
-            ellipsis.className = 'px-3 py-2 text-gray-500';
-            ellipsis.textContent = '...';
-            paginationContainer.appendChild(ellipsis);
-        }
-    }
-
-    // Boutons des pages
-    for (let i = startPage; i <= endPage; i++) {
-        const pageBtn = createPageButton(i);
-        paginationContainer.appendChild(pageBtn);
-    }
-
-    // Bouton dernière page
-    if (endPage < totalPages) {
-        if (endPage < totalPages - 1) {
-            const ellipsis = document.createElement('span');
-            ellipsis.className = 'px-3 py-2 text-gray-500';
-            ellipsis.textContent = '...';
-            paginationContainer.appendChild(ellipsis);
-        }
-
-        const lastPageBtn = createPageButton(totalPages);
-        paginationContainer.appendChild(lastPageBtn);
-    }
-}
-
-function createPageButton(pageNumber) {
-    const button = document.createElement('button');
-    button.className = `px-3 py-2 border rounded-lg transition ${
-        pageNumber === currentPage
-            ? 'bg-blue-600 text-white border-blue-600'
-            : 'border-gray-300 hover:bg-gray-50 text-gray-700'
-    }`;
-    button.textContent = pageNumber;
-
-    button.addEventListener('click', function() {
-        currentPage = pageNumber;
-        updateDisplay();
-    });
-
-    return button;
-}
-
-function downloadQRCode(id){
-    const canvas = document.querySelector("#qrcode-" + id + " canvas");
-    if(!canvas) return alert("QR Code introuvable");
-    const link = document.createElement("a");
-    link.download = "qrcode_billet_" + id + ".png";
-    link.href = canvas.toDataURL("image/png");
-    link.click();
-}
-
-// Gestion de la suppression
-document.addEventListener('DOMContentLoaded', function() {
-    const deleteButtons = document.querySelectorAll('button[data-delete-id]');
-
-    deleteButtons.forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            const billetId = this.getAttribute('data-delete-id');
-
-            if (confirm('Êtes-vous sûr de vouloir supprimer ce billet ?')) {
-                const form = document.createElement('form');
-                form.method = 'POST';
-                form.action = `/billet/${billetId}`;
-
-                const csrfInput = document.createElement('input');
-                csrfInput.type = 'hidden';
-                csrfInput.name = '_token';
-                csrfInput.value = '{{ csrf_token() }}';
-                form.appendChild(csrfInput);
-
-                const methodInput = document.createElement('input');
-                methodInput.type = 'hidden';
-                methodInput.name = '_method';
-                methodInput.value = 'DELETE';
-                form.appendChild(methodInput);
-
-                document.body.appendChild(form);
-                form.submit();
+                            downloadBtn.addEventListener('click', function() {
+                                // Appeler VOTRE contrôleur Laravel
+                                fetch("{{ route('ticket.generate.pdf') }}", {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                        'Accept': 'application/pdf'
+                                    },
+                                    body: JSON.stringify(data_info_billet)
+                                })
+                                .then(response => {
+                                    // Vérifier si la réponse est OK
+                                    if (!response.ok) {
+                                        throw new Error('Erreur réseau: ' + response.status);
+                                    }
+                                    return response.blob();
+                                })
+                                .then(blob => {
+                                    // Créer un URL pour le blob
+                                    const url = window.URL.createObjectURL(blob);
+                            
+                                    // Créer un lien de téléchargement
+                                    const a = document.createElement('a');
+                                    a.href = url;
+                                    a.download = 'billet-' + data_info_billet.qrcode + '.pdf'; // Nom personnalisé
+                                    document.body.appendChild(a);
+                                      
+                                    // Déclencher le téléchargement
+                                    a.click();
+                                    
+                                    // Nettoyer
+                                    document.body.removeChild(a);
+                                    window.URL.revokeObjectURL(url);
+                                })
+                                .catch(error => {
+                                    console.error('Erreur:', error);
+                                    alert('Erreur lors du téléchargement: ' + error.message);
+                                });
+                            });
+                        QRCode.toCanvas(
+                            canvas,
+                            uniqueCode,
+                            {
+                                width: 200,
+                                color: { dark: "#000000", light: "#ffffff" },
+                            },
+                            function (error) {
+                                if (error) {
+                                    console.error(error);
+                                    alert("Erreur lors de la génération du QR Code");
+                                    return;
+                                }
+                                document.getElementById('qr-modal').style.display = 'flex';
+                                document.body.style.overflow = 'hidden';
+                            }
+                        );
+                    } else {
+                        console.error(result.error);
+                        submitBtn.innerHTML = originalText;
+                        submitBtn.disabled = false;
+                        alert(result.error || "Paiement échoué. Vérifiez vos informations.");
+                    }
+                } catch (error) {
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                    alert("Le paiement a échoué. Une erreur inattendue est survenue.");
+                    console.error(error);
+                }
+            });
+            
+            // Fermer les modals en cliquant à l'extérieur
+            window.addEventListener('click', function(e) {
+                const paymentModal = document.getElementById('payment-modal');
+                const qrModal = document.getElementById('qr-modal');
+                
+                if (e.target === paymentModal) closePaymentModal();
+                if (e.target === qrModal) closeQRModal();
+            });
+            
+            // Fermer les modals avec la touche Échap
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closePaymentModal();
+                    closeQRModal();
+                }
+            });
+            
+            // Initialisation
+            if (typeof ScrollReveal !== 'undefined') {
+                ScrollReveal().reveal('.fade-in', { delay: 300, duration: 1000 });
             }
+
+            document.getElementById('devise-display').addEventListener('change', function () {
+                const deviseChoisie = this.value;
+
+                if (deviseChoisie === 'USD' && currentTicketDevise === 'CDF') {
+                    currentTicketPrice = currentTicketPrice / tauxUSD_CDF;
+                    currentTicketDevise = 'USD';
+                }
+
+                if (deviseChoisie === 'CDF' && currentTicketDevise === 'USD') {
+                    currentTicketPrice = currentTicketPrice * tauxUSD_CDF;
+                    currentTicketDevise = 'CDF';
+                }
+
+                document.getElementById('unit-price').textContent =
+                    `${currentTicketPrice.toLocaleString('fr-FR')} ${currentTicketDevise}`;
+
+                updateTotalPrice();
+            });
         });
-    });
-});
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
-@endsection
+    </script>
+</body>
+</html>
