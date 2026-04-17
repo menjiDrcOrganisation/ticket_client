@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Conbtrollers\ApiController;
+use App\Http\Controllers\ApiController;
 use App\Http\Controllers\PdfController;
 
 
