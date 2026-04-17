@@ -27,6 +27,41 @@
             font-family: 'Poppins', sans-serif;
             scroll-behavior: smooth;
         }
+        .qr-wrapper {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* QR code */
+.qr-canvas {
+    filter: blur(4px) contrast(1.2) brightness(0.9);
+    transform: scale(1.02);
+}
+
+/* masque de sécurité (empêche lecture) */
+.qr-wrapper::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    /* effet billet sécurisé */
+    background: repeating-linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.25),
+        rgba(255, 255, 255, 0.25) 8px,
+        rgba(0, 0, 0, 0.05) 8px,
+        rgba(0, 0, 0, 0.05) 16px
+    );
+
+    backdrop-filter: blur(1.5px);
+    -webkit-backdrop-filter: blur(1.5px);
+
+    pointer-events: none;
+
+    border-radius: 10px;
+}
         
         .ticket-shape {
             border-radius: 1.5rem;
@@ -657,9 +692,9 @@
                 Votre billet est pret
             </h2>
             
-            <div class="flex justify-center mb-6">
-                <canvas id="qrcode-canvas" class="max-w-full"></canvas>
-            </div>
+            <div class="qr-wrapper flex justify-center mb-6">
+    <canvas id="qrcode-canvas" class="qr-canvas"></canvas>
+</div>
             
             <div class="text-center">
                 <button id="download"  class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-semibold mr-2 w-full md:w-auto mb-2 md:mb-0">
@@ -733,119 +768,149 @@
     @endif
 
     <script>
-        lucide.createIcons();
-        
-        // Menu mobile
-        const menuToggle = document.getElementById('menu-toggle');
-        const mobileMenu = document.getElementById('mobile-menu');
+    lucide.createIcons();
 
-        let tauxUSD_CDF =chargerTaux() ; 
+    let lastBillet = null;
 
-        async function chargerTaux() {
-            const taux = await getTaux();
-            if (taux) {
-                tauxUSD_CDF = taux;
-                document.getElementById('taux-info').textContent =
-            `1 USD = ${taux.toLocaleString('fr-FR')} CDF`;
+    // ====== VARIABLES GLOBALES ======
+    let tauxUSD_CDF = 0;
+    let currentTicketPrice = 0;
+    let currentTicketId = '';
+    let currentTicketDevise = 'CDF';
+    let clientName = '';
+
+    // ====== MENU MOBILE ======
+    const menuToggle = document.getElementById('menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    if (menuToggle && mobileMenu) {
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+
+            const icon = menuToggle.querySelector('i');
+            icon.setAttribute(
+                'data-lucide',
+                mobileMenu.classList.contains('hidden') ? 'menu' : 'x'
+            );
+
+            lucide.createIcons();
+        });
+    }
+
+    // ====== TAUX DE CHANGE ======
+    async function getTaux() {
+        try {
+            const response = await fetch("https://api.exchangerate-api.com/v4/latest/USD");
+            const data = await response.json();
+            return data.rates.CDF;
+        } catch (error) {
+            console.error("Erreur récupération taux:", error);
+            return null;
+        }
+    }
+
+    async function chargerTaux() {
+        const taux = await getTaux();
+
+        if (taux) {
+            tauxUSD_CDF = taux;
+            document.getElementById('taux-info').textContent =
+                `1 USD = ${taux.toLocaleString('fr-FR')} CDF`;
+        }
+    }
+
+    // lancer au chargement
+    chargerTaux();
+
+    // ====== MODAL PAIEMENT ======
+    function openPaymentModal(ticketType, ticketPrice, ticketId, ticketDevise) {
+        currentTicketPrice = parseFloat(ticketPrice) || 0;
+        currentTicketId = ticketId;
+        currentTicketDevise = ticketDevise || 'CDF';
+
+        document.getElementById('modal-title').textContent =
+            `Acheter un billet ${ticketType}`;
+
+        document.getElementById('selected-ticket-type').value = ticketId;
+
+        document.getElementById('unit-price').textContent =
+            `${currentTicketPrice.toLocaleString('fr-FR')} ${currentTicketDevise}`;
+
+        document.getElementById('devise-display').value =
+            currentTicketDevise === 'CDF' ? 'CDF' : 'USD';
+
+        updateTotalPrice();
+
+        document.getElementById('payment-modal').style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closePaymentModal() {
+        document.getElementById('payment-modal').style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+
+    function closeQRModal() {
+        document.getElementById('qr-modal').style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+
+    // ====== CALCUL PRIX ======
+    function updateTotalPrice() {
+        const qty = parseInt(document.getElementById('quantity').value) || 1;
+        const total = currentTicketPrice * qty;
+
+        document.getElementById('total-price').textContent =
+            `${total.toLocaleString('fr-FR')} ${currentTicketDevise}`;
+    }
+
+    // ====== CHANGE DE DEVISE ======
+    document.addEventListener('DOMContentLoaded', function () {
+
+        document.getElementById('devise-display').addEventListener('change', function () {
+            const devise = this.value;
+
+            if (!tauxUSD_CDF) return;
+
+            if (devise === 'USD' && currentTicketDevise === 'CDF') {
+                currentTicketPrice = currentTicketPrice / tauxUSD_CDF;
+                currentTicketDevise = 'USD';
             }
 
-        }
-        
-        if (menuToggle && mobileMenu) {
-            menuToggle.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-                const icon = menuToggle.querySelector('i');
-                if (mobileMenu.classList.contains('hidden')) {
-                    icon.setAttribute('data-lucide', 'menu');
-                } else {
-                    icon.setAttribute('data-lucide', 'x');
-                }
-                lucide.createIcons();
-            });
-        }
-        
-        // Gestion du modal de paiement
-        let currentTicketPrice = 0;
-        let currentTicketId = '';
-        let clientName = '';
-        let currentTicketDevise = 'CDF';
-        let currentTicketData = null;
-        
-        function openPaymentModal(ticketType, ticketPrice, ticketId, ticketDevise) {
-            console.log('Opening modal for:', ticketType, ticketPrice, ticketId, ticketDevise);
-            
-            currentTicketPrice = parseFloat(ticketPrice) || 0;
-            currentTicketId = ticketId;
-            currentTicketDevise = ticketDevise || 'CDF';
-            
-            document.getElementById('modal-title').textContent = `Acheter un billet ${ticketType}`;
-            document.getElementById('selected-ticket-type').value = ticketId;
-            document.getElementById('unit-price').textContent = `${currentTicketPrice.toLocaleString('fr-FR')} ${currentTicketDevise}`;
-            let deviseNormale = (currentTicketDevise === 'CDF') ? 'CDF' : 'USD';
-            document.getElementById('devise-display').value = deviseNormale;
+            if (devise === 'CDF' && currentTicketDevise === 'USD') {
+                currentTicketPrice = currentTicketPrice * tauxUSD_CDF;
+                currentTicketDevise = 'CDF';
+            }
+
+            document.getElementById('unit-price').textContent =
+                `${currentTicketPrice.toLocaleString('fr-FR')} ${currentTicketDevise}`;
 
             updateTotalPrice();
-            document.getElementById('payment-modal').style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-            
-            
-        }
-        
-        function closePaymentModal() {
-            document.getElementById('payment-modal').style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-        
-        function closeQRModal() {
-            document.getElementById('qr-modal').style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-        
-        function updateTotalPrice() {
-            const quantity = parseInt(document.getElementById('quantity').value) || 1;
-            const total = currentTicketPrice * quantity;
-            document.getElementById('total-price').textContent = `${total.toLocaleString('fr-FR')} ${currentTicketDevise}`;
-        }
+        });
 
-        async function getTaux() {
-            try {
-                    const response = await fetch("https://api.exchangerate-api.com/v4/latest/USD");
-                    const data = await response.json();
-
-                    const tauxCDF = data.rates.CDF;
-                    console.log("Taux USD → CDF :", tauxCDF);
-
-                    return tauxCDF;
-                } catch (error) {
-                    console.error("Erreur récupération taux:", error);
-                    return null;
-                }
-            }
-        
-        // Fonction pour télécharger le ticket
-
-        document.addEventListener('DOMContentLoaded', function() {
-            // Gestion des boutons d'achat
-            document.querySelectorAll('.buy-ticket-btn').forEach(button => {
-                button.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    const ticketType = this.getAttribute('data-ticket-type');
-                    const ticketPrice = this.getAttribute('data-ticket-price');
-                    const ticketId = this.getAttribute('data-ticket-id');
-                    const ticketDevise = this.getAttribute('data-ticket-devise');
-                    
-                    openPaymentModal(ticketType, ticketPrice, ticketId, ticketDevise);
-                });
-            });
-            
-            // Calcul du prix total
-            document.getElementById('quantity').addEventListener('input', updateTotalPrice);
-            
-            // Soumission du formulaire
-            document.getElementById('payment-form').addEventListener('submit', async function(e) {
+        // ====== BOUTONS ACHAT ======
+        document.querySelectorAll('.buy-ticket-btn').forEach(btn => {
+            btn.addEventListener('click', function (e) {
                 e.preventDefault();
-                
+
+                openPaymentModal(
+                    this.dataset.ticketType,
+                    this.dataset.ticketPrice,
+                    this.dataset.ticketId,
+                    this.dataset.ticketDevise
+                );
+            });
+        });
+
+        // ====== QUANTITE ======
+        document.getElementById('quantity')
+            .addEventListener('input', updateTotalPrice);
+
+        // ====== SUBMIT PAIEMENT ======
+        document.getElementById('payment-form')
+            .addEventListener('submit', async function (e) {
+                e.preventDefault();
+
                 const formData = {
                     id_evenement: this.id_evenement.value,
                     nom_complet_client: this.nom_complet_client.value,
@@ -853,185 +918,113 @@
                     nombre_reel: this.nombre_reel.value,
                     type_billet: this.type_billet.value,
                     service: this.service.value,
-                    devise:this.devise_display.value
+                    devise: this.devise_display.value
                 };
-                
+
                 clientName = formData.nom_complet_client;
-                
-                // Validation basique
-                if (!formData.nom_complet_client || !formData.numero_client) {
-                    alert('Veuillez remplir tous les champs obligatoires.');
-                    return;
-                }
-                const submitBtn = this.querySelector('button[type="submit"]');
-                const originalText = submitBtn.innerHTML;
-                
+
+                const btn = this.querySelector('button[type="submit"]');
+                const oldText = btn.innerHTML;
+
                 try {
-                  
-            
-                submitBtn.innerHTML = '<i data-lucide="loader" class="w-5 h-5 animate-spin"></i> Traitement...';
-                submitBtn.disabled = true;
-                lucide.createIcons();
+                    btn.innerHTML = 'Traitement...';
+                    btn.disabled = true;
 
-                const response = await fetch("{{ env('ENV_POINT_URL') }}/api/billet/achatBillet", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(formData),
-                });
-        
-                const result = await response.json();
-               
-            
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-                lucide.createIcons();
+                    const response = await fetch(
+                        "{{ env('ENV_POINT_URL') }}/api/billet/achatBillet",
+                        {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(formData),
+                        }
+                    );
 
-                    if (result.status !== true) {
-                        alert(result.message || "Paiement échoué.");
+                    const result = await response.json();
+
+                    console.log(result);
+                    
+
+                    btn.innerHTML = oldText;
+                    btn.disabled = false;
+
+                    if (!result.status) {
+                        alert(result.message || "Erreur paiement");
                         return;
                     }
 
-                    if (result.status === true) {
-                        
-                        const billet = result.billet; 
-                        const uniqueCode = billet.code_billet;
-                        const canvas = document.getElementById("qrcode-canvas");
-                        const download=document.getElementById('download');
+                    lastBillet = result.pdf_url;
 
-                        
-                        
-                
-                            const data_info_billet = {
-                                name_user: result.billet.nom_auteur,
-                                name_event: result.billet.evenement.nom,
-                                location: result.billet.evenement.adresse,
-                                type: result.billet.type_billet.nom_type,
-                                quantity: result.billet.quantite,
-                                price: result.data_sup.prix_unitaire,
-                                devise: result.data_sup.devise,
-                                photo_affiche: result.billet.evenement.ressource[0].photo_affiche,
-                                qrcode: result.billet.code_billet,
-                                date_achat: result.billet.date_achat,
-                                debut: result.billet.evenement.date_debut,
-                                heure: result.billet.evenement.heure_debut
-                            };
+                    const canvas = document.getElementById("qrcode-canvas");
 
-                            // Assurez-vous que 'download' est bien votre bouton
-                            // Par exemple: <button id="downloadBtn">Télécharger</button>
-                            const downloadBtn = document.getElementById('download');
+                    QRCode.toCanvas(
+                        canvas,
+                        result.billet.code_billet,
+                        { width: 200 },
+                        function (err) {
+                            if (err) return alert("Erreur QR Code");
 
-                            downloadBtn.addEventListener('click', function() {
-                                // Appeler VOTRE contrôleur Laravel
-                                fetch("{{ route('ticket.generate.pdf') }}", {
-                                    method: 'POST',
-                                    headers: {
-                                        'Content-Type': 'application/json',
-                                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                        'Accept': 'application/pdf'
-                                    },
-                                    body: JSON.stringify(data_info_billet)
-                                })
-                                .then(response => {
-                                    // Vérifier si la réponse est OK
-                                    if (!response.ok) {
-                                        throw new Error('Erreur réseau: ' + response.status);
-                                    }
-                                    return response.blob();
-                                })
-                                .then(blob => {
-                                    // Créer un URL pour le blob
-                                    const url = window.URL.createObjectURL(blob);
-                            
-                                    // Créer un lien de téléchargement
-                                    const a = document.createElement('a');
-                                    a.href = url;
-                                    a.download = 'billet-' + data_info_billet.qrcode + '.pdf'; // Nom personnalisé
-                                    document.body.appendChild(a);
-                                      
-                                    // Déclencher le téléchargement
-                                    a.click();
-                                    
-                                    // Nettoyer
-                                    document.body.removeChild(a);
-                                    window.URL.revokeObjectURL(url);
-                                })
-                                .catch(error => {
-                                    console.error('Erreur:', error);
-                                    alert('Erreur lors du téléchargement: ' + error.message);
-                                });
-                            });
-                        QRCode.toCanvas(
-                            canvas,
-                            uniqueCode,
-                            {
-                                width: 200,
-                                color: { dark: "#000000", light: "#ffffff" },
-                            },
-                            function (error) {
-                                if (error) {
-                                    console.error(error);
-                                    alert("Erreur lors de la génération du QR Code");
-                                    return;
-                                }
-                                document.getElementById('qr-modal').style.display = 'flex';
-                                document.body.style.overflow = 'hidden';
-                            }
-                        );
-                    } else {
-                        console.error(result.error);
-                        submitBtn.innerHTML = originalText;
-                        submitBtn.disabled = false;
-                        alert(result.error || "Paiement échoué. Vérifiez vos informations.");
-                    }
+                            document.getElementById('qr-modal').style.display = 'flex';
+                            document.body.style.overflow = 'hidden';
+                        }
+                    );
+
                 } catch (error) {
-                    submitBtn.innerHTML = originalText;
-                    submitBtn.disabled = false;
-                    alert("Le paiement a échoué. Une erreur inattendue est survenue.");
                     console.error(error);
+                    btn.innerHTML = oldText;
+                    btn.disabled = false;
+                    alert("Erreur réseau");
                 }
             });
-            
-            // Fermer les modals en cliquant à l'extérieur
-            window.addEventListener('click', function(e) {
-                const paymentModal = document.getElementById('payment-modal');
-                const qrModal = document.getElementById('qr-modal');
-                
-                if (e.target === paymentModal) closePaymentModal();
-                if (e.target === qrModal) closeQRModal();
-            });
-            
-            // Fermer les modals avec la touche Échap
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') {
-                    closePaymentModal();
-                    closeQRModal();
-                }
-            });
-            
-            // Initialisation
-            if (typeof ScrollReveal !== 'undefined') {
-                ScrollReveal().reveal('.fade-in', { delay: 300, duration: 1000 });
-            }
 
-            document.getElementById('devise-display').addEventListener('change', function () {
-                const deviseChoisie = this.value;
-
-                if (deviseChoisie === 'USD' && currentTicketDevise === 'CDF') {
-                    currentTicketPrice = currentTicketPrice / tauxUSD_CDF;
-                    currentTicketDevise = 'USD';
-                }
-
-                if (deviseChoisie === 'CDF' && currentTicketDevise === 'USD') {
-                    currentTicketPrice = currentTicketPrice * tauxUSD_CDF;
-                    currentTicketDevise = 'CDF';
-                }
-
-                document.getElementById('unit-price').textContent =
-                    `${currentTicketPrice.toLocaleString('fr-FR')} ${currentTicketDevise}`;
-
-                updateTotalPrice();
-            });
+        // ====== CLICK OUTSIDE MODAL ======
+        window.addEventListener('click', function (e) {
+            if (e.target.id === 'payment-modal') closePaymentModal();
+            if (e.target.id === 'qr-modal') closeQRModal();
         });
-    </script>
+
+        // ====== ESCAPE KEY ======
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                closePaymentModal();
+                closeQRModal();
+            }
+        });
+
+        // ====== DOWNLOAD PDF ======
+        document.getElementById('download').addEventListener('click', function () {
+        if (!lastBillet) {
+            alert("Aucun billet");
+            return;
+        }
+
+        // cas 1: API renvoie juste pdf_url
+        let url = typeof lastBillet === 'string'
+            ? lastBillet
+            : lastBillet.pdf_url;
+
+        if (!url) {
+            alert("Lien introuvable");
+            return;
+        }
+
+        const link = document.createElement('a');
+        link.href = url;
+        link.target = '_blank';
+        link.download = 'billet.pdf';
+
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+    });
+
+        if (typeof ScrollReveal !== 'undefined') {
+            ScrollReveal().reveal('.fade-in', {
+                delay: 300,
+                duration: 1000
+            });
+        }
+    });
+
+</script>
 </body>
 </html>
