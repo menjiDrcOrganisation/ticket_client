@@ -159,6 +159,25 @@
             cursor: pointer;
             z-index: 10;
         }
+
+        #recap-modal .close-modal {
+            width: 36px;
+            height: 36px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 9999px;
+            background: rgba(0, 0, 0, 0.7);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            z-index: 30;
+        }
+
+        #recap-modal .close-modal:hover {
+            background: rgba(245, 158, 11, 0.25);
+            color: #fde68a;
+            border-color: rgba(245, 158, 11, 0.7);
+        }
         
         .text-typing {
             overflow: hidden;
@@ -245,7 +264,7 @@
         
         .form-input {
             background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: none;
             border-radius: 10px;
             padding: 12px 16px;
             color: white;
@@ -256,7 +275,6 @@
         
         .form-input:focus {
             outline: none;
-            border-color: var(--primary);
             box-shadow: 0 0 0 2px rgba(225, 29, 72, 0.2);
         }
         
@@ -370,6 +388,141 @@
         .title-responsive {
             font-size: clamp(1.5rem, 8vw, 3.5rem);
         }
+
+        .recap-grid {
+            display: grid;
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+            gap: 0.75rem;
+        }
+
+        @media (min-width: 768px) {
+            .recap-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        .recap-field {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .recap-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #9ca3af;
+        }
+
+        .recap-value {
+            background: rgba(255, 255, 255, 0.05);
+            border: none;
+            border-radius: 10px;
+            padding: 10px 12px;
+            color: #ffffff;
+            line-height: 1.3;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+        }
+
+        .recap-value.recap-total {
+            color: #fde68a;
+            font-weight: 700;
+            background: rgba(245, 158, 11, 0.12);
+        }
+
+        .status-recap-link {
+            color: #fde68a;
+            text-decoration: underline;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .status-recap-link:hover {
+            color: #facc15;
+        }
+
+        .blink-download {
+            animation: blinkDownload 1s ease-in-out infinite;
+        }
+
+        @keyframes blinkDownload {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.35; }
+        }
+
+        .recap-spinner {
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255, 255, 255, 0.25);
+            border-top-color: #34d399;
+            border-radius: 9999px;
+            animation: recapSpin 0.8s linear infinite;
+            flex-shrink: 0;
+        }
+
+        @keyframes recapSpin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .button-spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: currentColor;
+            border-radius: 9999px;
+            animation: buttonSpin 0.8s linear infinite;
+            flex-shrink: 0;
+        }
+
+        @keyframes buttonSpin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .status-box {
+            display: none;
+            margin-top: 0.75rem;
+            padding: 0.65rem 0.85rem;
+            border-radius: 0.75rem;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            background: rgba(15, 23, 42, 0.7);
+            font-size: 0.9rem;
+            line-height: 1.35;
+        }
+
+        .status-info {
+            color: #c7d2fe;
+            border-color: rgba(99, 102, 241, 0.45);
+            background: rgba(99, 102, 241, 0.18);
+        }
+
+        .status-progress {
+            color: #bfdbfe;
+            border-color: rgba(59, 130, 246, 0.45);
+            background: rgba(59, 130, 246, 0.18);
+        }
+
+        .status-success {
+            color: #d1fae5;
+            border-color: rgba(16, 185, 129, 0.5);
+            background: rgba(16, 185, 129, 0.2);
+        }
+
+        .status-warning {
+            color: #fef3c7;
+            border-color: rgba(245, 158, 11, 0.5);
+            background: rgba(245, 158, 11, 0.2);
+        }
+
+        .status-error {
+            color: #fecaca;
+            border-color: rgba(239, 68, 68, 0.5);
+            background: rgba(239, 68, 68, 0.2);
+        }
         
         /* Optimisation des images de fond */
         .hero-bg {
@@ -400,7 +553,7 @@
     </div>
     @else
     <!-- Navigation -->
-    <nav class="fixed top-0 left-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-gray-800">
+    <nav class="fixed top-0 left-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-gray-300">
         <div class=" px-12 py-3 flex justify-between items-center">
             <div class="flex items-center space-x-2">
                 <img src="{{ asset('icons/Icone_Kimia.png') }}" alt="KimiaTicket" class="h-8 md:h-10 lg:h-12">
@@ -420,7 +573,7 @@
         </div>
         
         <!-- Mobile menu -->
-        <div id="mobile-menu" class="md:hidden bg-gray-900 border-t border-gray-800 hidden">
+        <div id="mobile-menu" class="md:hidden bg-gray-900 border-t border-gray-700 hidden">
             <div class="container mx-auto px-4 py-4 flex flex-col space-y-4">
                 <a href="#about" class="text-gray-600 hover:text-white transition-colors">À propos</a>
                 <a href="#tickets" class="text-gray-600 hover:text-white transition-colors">Billets</a>
@@ -494,7 +647,7 @@
             <h2 class="section-title text-white text-3xl md:text-4xl font-bold mb-6 text-center">
                 À propos de l'événement
             </h2>
-            <div class="bg-gray-900/50 rounded-2xl p-6 md:p-12 shadow-2xl">
+            <div class="bg-gray-800/50 rounded-2xl p-6 md:p-12 shadow-2xl">
                 <p class="text-lg leading-relaxed text-gray-300 text-center md:text-left">
                     {{ $evenement["ressource"][0]["a_propos"] ?? "Aucune description disponible pour cet événement." }}
                 </p>
@@ -551,7 +704,7 @@
                 Lieu de l'événement
             </h2>
             
-            <div class="bg-gray-900 text-white rounded-2xl overflow-hidden shadow-2xl">
+            <div class="bg-gray-800 text-white rounded-2xl overflow-hidden shadow-2xl">
                 <div class="w-full p-6 md:p-12">
                     <div class="space-y-4">
                         <div class="flex items-start gap-3">
@@ -625,24 +778,24 @@
                     
                     <div>
                         <label for="telephone" class="block text-sm font-medium text-gray-300 mb-1">Téléphone</label>
-                        <input type="tel" id="telephone" name="numero_client" placeholder="+243xxxxxxxxx" class="form-input" required pattern="^\+243[0-9]{9}$" title="Entrez un numéro congolais valide au format +243 suivi de 9 chiffres" />
+                        <input type="tel" id="telephone" name="numero_client" placeholder="+243xxxxxxxxx" class="form-input" required pattern="^(\+243|243|0)?[0-9]{9}$" title="Formats acceptés: +243XXXXXXXXX, 243XXXXXXXXX, 0XXXXXXXXX ou XXXXXXXXX" />
                     </div>
                 </div>
                 
                 <div class="form-grid grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label for="service" class="block text-sm font-medium text-gray-300 mb-1">Service de paiement</label>
-                        <select id="service" name="service" class="form-input bg-black" required>
+                        <select id="service" name="service" class="form-input bg-gray-800" required>
                             <option value="MPESA" class=" hover:bg-red-500">M-Pesa</option>
-                            <option value="orange" class=" hover:bg-red-500">Orange Money</option>
-                            <option value="airtel" class=" hover:bg-red-500">Airtel Money</option>
+                            <option value="ORANGE" class=" hover:bg-red-500">Orange Money</option>
+                            <option value="AIRTEL" class=" hover:bg-red-500">Airtel Money</option>
                         </select>
                     </div>
                     
                     <div>
                         <label for="devise" class="block text-sm font-medium text-gray-300 mb-1">Devise</label>
                         
-                        <select id="devise-display" name="devise_display" class="form-input bg-black">
+                        <select id="devise-display" name="devise_display" class="form-input bg-gray-800">
                             <option value="CDF">CDF</option>
                             <option value="USD">USD</option>
                         </select>
@@ -660,8 +813,8 @@
                     
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1">Prix unitaire</label>
-                        <div class="form-input bg-gray-700">
-                            <span id="unit-price" class="text-white font-semibold">0 FC</span>
+                        <div class="form-input bg-gray-800">
+                            <span id="unit-price" class="text-yellow-400 font-semibold">0 FC</span>
                         </div>
                     </div>
                 </div>
@@ -669,15 +822,60 @@
                 <div class="pt-4 border-t border-gray-700">
                     <div class="flex justify-between items-center mb-4">
                         <span class="text-gray-400 text-lg">Total:</span>
-                        <span id="total-price" class="text-xl md:text-2xl font-bold text-white">0 FC</span>
+                        <span id="total-price" class="text-xl md:text-2xl font-bold text-yellow-400">0 FC</span>
                     </div>
                     
                     <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2">
-                        <i data-lucide="credit-card" class="w-5 h-5"></i>
-                        Procéder au paiement
+                        <span class="button-content flex items-center justify-center gap-2">
+                            <i data-lucide="credit-card" class="w-5 h-5"></i>
+                            <span>Acheter votre billet</span>
+                        </span>
+                        <span class="button-loader" style="display:none; align-items:center; justify-content:center; gap:0.5rem;">
+                            <span class="button-spinner"></span>
+                            <span class="loader-text">Chargement...</span>
+                        </span>
                     </button>
+
+                    <div id="status" class="status-box"></div>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Modal recapitulatif transaction -->
+    <div id="recap-modal" class="modal">
+        <div class="modal-content max-w-lg bg-gray-900">
+            <button class="close-modal" onclick="closeRecapModal()">
+                <i data-lucide="x"></i>
+            </button>
+
+            <h3 class="text-xl md:text-2xl text-white font-bold mb-2">
+                Recapitulatif de votre achat
+            </h3>
+           
+            <label for="transaction-reference" class="block text-sm font-medium text-gray-300 mb-1">Reference d'achat</label>
+            <div class="flex flex-col md:flex-row gap-2 mb-3">
+                <input id="transaction-reference" type="text" readonly class="form-input bg-gray-800" value="" />
+                <button type="button" id="btnCopyReference" class="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg font-semibold transition-all duration-300">
+                    Copier
+                </button>
+            </div>
+
+            <div id="recap" class="mt-2 text-sm text-gray-200 bg-gray-800 rounded-lg p-4"></div>
+
+            <button type="button" id="btnDownloadRecap" style="display:none;" class="mb-3 w-full bg-yellow-500 hover:bg-yellow-600 text-black py-3 rounded-lg font-bold transition-all duration-300 blink-download">
+                Télécharger le billet
+            </button>
+
+            <button type="button" id="btnConfirmerRecap" class="mt-4 w-full bg-yellow-500 hover:bg-yellow-600 text-black py-3 rounded-lg font-bold transition-all duration-300 flex items-center justify-center gap-2">
+                <span class="button-content flex items-center justify-center gap-2">
+                    <span>Valider et payer</span>
+                </span>
+                <span class="button-loader" style="display:none; align-items:center; justify-content:center; gap:0.5rem;">
+                    <span class="button-spinner"></span>
+                    <span class="loader-text">Traitement...</span>
+                </span>
+            </button>
         </div>
     </div>
 
@@ -697,7 +895,7 @@
 </div>
             
             <div class="text-center">
-                <button id="download"  class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-semibold mr-2 w-full md:w-auto mb-2 md:mb-0">
+                <button id="download"  class="bg-yellow-500 hover:bg-yellow-600 text-black px-6 py-3 rounded-lg font-semibold mr-2 w-full md:w-auto mb-2 md:mb-0">
                     Télécharger votre billet
                 </button>
 
@@ -706,7 +904,7 @@
     </div>
 
     <!-- Footer -->
-    <footer id="contact" class="bg-gray-900 text-white py-12 px-6 border-t border-gray-800">
+    <footer id="contact" class="bg-gray-900 text-white py-12 px-6 border-t border-gray-700">
         <div class="max-w-6xl mx-auto">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
                 <div class="md:col-span-2">
@@ -719,13 +917,13 @@
                     </p>
                     
                     <div class="flex space-x-4">
-                        <a href="#" class="bg-gray-800 p-3 rounded-full text-gray-300 hover:bg-red-600 hover:text-white transition-all">
+                        <a href="#" class="bg-yellow-500 p-3 rounded-full text-black hover:bg-yellow-600 transition-all">
                             <i data-lucide="facebook" class="w-5 h-5"></i>
                         </a>
-                        <a href="#" class="bg-gray-800 p-3 rounded-full text-gray-300 hover:bg-red-600 hover:text-white transition-all">
+                        <a href="#" class="bg-yellow-500 p-3 rounded-full text-black hover:bg-yellow-600 transition-all">
                             <i data-lucide="twitter" class="w-5 h-5"></i>
                         </a>
-                        <a href="#" class="bg-gray-800 p-3 rounded-full text-gray-300 hover:bg-red-600 hover:text-white transition-all">
+                        <a href="#" class="bg-yellow-500 p-3 rounded-full text-black hover:bg-yellow-600 transition-all">
                             <i data-lucide="instagram" class="w-5 h-5"></i>
                         </a>
                     </div>
@@ -760,7 +958,7 @@
                 </div>
             </div>
             
-            <div class="pt-8 border-t border-gray-800 text-center text-gray-500">
+            <div class="pt-8 border-t border-red-600 text-center text-gray-400">
                 <p>© {{ date("Y") }} Menji DRC — Tous droits réservés.</p>
             </div>
         </div>
@@ -770,14 +968,35 @@
     <script>
     lucide.createIcons();
 
-    let lastBillet = null;
+    const API_BASE = "{{ rtrim((string) env('ENV_POINT_URL', ''), '/') }}/api";
+    const STORAGE_KEY = 'pending_transaction_reference';
+    const POLLING_INTERVAL_MS = 1500;
+    const POLLING_TIMEOUT_MS = 10000;
 
     // ====== VARIABLES GLOBALES ======
     let tauxUSD_CDF = 0;
     let currentTicketPrice = 0;
+    let baseTicketPrice = 0;
     let currentTicketId = '';
     let currentTicketDevise = 'CDF';
-    let clientName = '';
+    let currentReference = null;
+    let currentDownloadUrl = null;
+    let pollTimer = null;
+    let pollStartedAt = null;
+    let pollInFlight = false;
+    let pollingSessionId = 0;
+    let recapConfirmed = false;
+    let currentBuyerName = '';
+
+    const statusEl = document.getElementById('status');
+    const recapEl = document.getElementById('recap');
+    const paymentForm = document.getElementById('payment-form');
+    const btnAcheter = paymentForm ? paymentForm.querySelector('button[type="submit"]') : null;
+    const recapModalEl = document.getElementById('recap-modal');
+    const transactionReferenceEl = document.getElementById('transaction-reference');
+    const btnCopyReference = document.getElementById('btnCopyReference');
+    const btnConfirmerRecap = document.getElementById('btnConfirmerRecap');
+    const btnDownloadRecap = document.getElementById('btnDownloadRecap');
 
     // ====== MENU MOBILE ======
     const menuToggle = document.getElementById('menu-toggle');
@@ -825,6 +1044,7 @@
     // ====== MODAL PAIEMENT ======
     function openPaymentModal(ticketType, ticketPrice, ticketId, ticketDevise) {
         currentTicketPrice = parseFloat(ticketPrice) || 0;
+        baseTicketPrice = parseFloat(ticketPrice) || 0;
         currentTicketId = ticketId;
         currentTicketDevise = ticketDevise || 'CDF';
 
@@ -847,12 +1067,497 @@
 
     function closePaymentModal() {
         document.getElementById('payment-modal').style.display = 'none';
-        document.body.style.overflow = 'auto';
+        syncBodyScrollLock();
     }
 
     function closeQRModal() {
         document.getElementById('qr-modal').style.display = 'none';
-        document.body.style.overflow = 'auto';
+        syncBodyScrollLock();
+    }
+
+    function openRecapModal() {
+        if (!recapModalEl) return;
+        recapModalEl.style.display = 'flex';
+        syncBodyScrollLock();
+    }
+
+    function closeRecapModal() {
+        if (!recapModalEl) return;
+        recapModalEl.style.display = 'none';
+        syncBodyScrollLock();
+    }
+
+    function syncBodyScrollLock() {
+        const paymentModal = document.getElementById('payment-modal');
+        const qrModal = document.getElementById('qr-modal');
+        const hasOpenModal =
+            (paymentModal && paymentModal.style.display === 'flex') ||
+            (qrModal && qrModal.style.display === 'flex') ||
+            (recapModalEl && recapModalEl.style.display === 'flex');
+
+        document.body.style.overflow = hasOpenModal ? 'hidden' : 'auto';
+    }
+
+    function setStatus(text) {
+        if (!statusEl) return;
+        const type = arguments[1] || 'info';
+        const allowHtml = Boolean(arguments[2]);
+        const normalizedType = ['info', 'progress', 'success', 'warning', 'error'].includes(type)
+            ? type
+            : 'info';
+
+        statusEl.classList.remove('status-info', 'status-progress', 'status-success', 'status-warning', 'status-error');
+
+        if (!text) {
+            statusEl.textContent = '';
+            statusEl.style.display = 'none';
+            return;
+        }
+
+        if (allowHtml) {
+            statusEl.innerHTML = text;
+        } else {
+            statusEl.textContent = text;
+        }
+        statusEl.style.display = 'block';
+        statusEl.classList.add(`status-${normalizedType}`);
+    }
+
+    function setStatusRecapLink(prefixText, type = 'success') {
+        setStatus(`${prefixText} <a href="#" id="status-recap-link" data-open-recap class="status-recap-link">cliquer ici</a>.`, type, true);
+
+        const recapLinkEl = document.getElementById('status-recap-link');
+        if (recapLinkEl) {
+            recapLinkEl.addEventListener('click', function (e) {
+                e.preventDefault();
+                openRecapFromStatus();
+            });
+        }
+    }
+
+    function setStatusDownloadReadyLink(prefixText) {
+        setStatus(`${prefixText} <a href="#" id="status-download-link" data-download-ticket class="status-recap-link">telecharger ici</a>.`, 'success', true);
+
+        const downloadLinkEl = document.getElementById('status-download-link');
+        if (downloadLinkEl) {
+            downloadLinkEl.addEventListener('click', function (e) {
+                e.preventDefault();
+                if (currentDownloadUrl) {
+                    downloadTicketNow();
+                } else {
+                    openRecapFromStatus();
+                }
+            });
+        }
+    }
+
+    function openRecapFromStatus() {
+        if (!currentReference && !recapEl?.innerHTML?.trim()) {
+            setStatus('Aucun recapitulatif disponible pour le moment.', 'error');
+            return;
+        }
+
+        openRecapModal();
+    }
+
+    function setLoading(button, loading, labelLoading = 'Chargement...') {
+        if (!button) return;
+        
+        const content = button.querySelector('.button-content');
+        const loader = button.querySelector('.button-loader');
+        const loaderText = loader?.querySelector('.loader-text');
+        
+        if (loading) {
+            button.disabled = true;
+            if (content) content.style.display = 'none';
+            if (loader) {
+                loader.style.display = 'flex';
+                if (loaderText) loaderText.textContent = labelLoading;
+            }
+        } else {
+            button.disabled = false;
+            if (content) content.style.display = 'flex';
+            if (loader) loader.style.display = 'none';
+        }
+    }
+
+    function setAcheterDisabled(disabled) {
+        if (!btnAcheter) return;
+
+        btnAcheter.disabled = disabled;
+        btnAcheter.classList.toggle('opacity-60', disabled);
+        btnAcheter.classList.toggle('cursor-not-allowed', disabled);
+    }
+
+    function savePendingReference(reference) {
+        localStorage.setItem(STORAGE_KEY, reference);
+    }
+
+    function clearPendingReference() {
+        localStorage.removeItem(STORAGE_KEY);
+    }
+
+    function normalizePhoneNumber(raw) {
+        const value = String(raw || '').trim();
+        let digits = value.replace(/\D/g, '');
+
+        if (digits.startsWith('00')) {
+            digits = digits.slice(2);
+        }
+
+        if (digits.startsWith('243') && digits.length === 12) {
+            return `+${digits}`;
+        }
+
+        if (digits.startsWith('0') && digits.length === 10) {
+            return `+243${digits.slice(1)}`;
+        }
+
+        if (digits.length === 9) {
+            return `+243${digits}`;
+        }
+
+        if (value.startsWith('+') && digits.length >= 10) {
+            return `+${digits}`;
+        }
+
+        throw new Error('Numero invalide. Format attendu: +243XXXXXXXXX');
+    }
+
+    function normalizeService(rawService) {
+        const service = String(rawService || '').trim().toUpperCase();
+        const map = {
+            MPESA: 'MPESA',
+            'M-PESA': 'MPESA',
+            ORANGE: 'ORANGE',
+            AIRTEL: 'AIRTEL'
+        };
+
+        if (!map[service]) {
+            throw new Error('Service de paiement invalide');
+        }
+
+        return map[service];
+    }
+
+    function renderRecap(tx) {
+        if (!recapEl) return;
+
+        const billet = tx.billet || {};
+        if (tx.nom_complet_client) {
+            currentBuyerName = tx.nom_complet_client;
+        }
+
+        const acheteur = tx.nom_complet_client || currentBuyerName || '-';
+        const type = billet.type || tx.type_billet || '-';
+        const quantite = billet.quantite || tx.nombre_billet || 0;
+        const total = billet.montant_total || tx.montant || 0;
+        const devise = billet.devise || tx.devise || '';
+
+        recapEl.innerHTML = `
+            <div class="recap-grid">
+                <div class="recap-field md:col-span-2">
+                    <span class="recap-label">Acheteur</span>
+                    <div class="recap-value">${acheteur}</div>
+                </div>
+                <div class="recap-field">
+                    <span class="recap-label">Type de billet</span>
+                    <div class="recap-value">${type}</div>
+                </div>
+                <div class="recap-field">
+                    <span class="recap-label">Quantite</span>
+                    <div class="recap-value">${quantite}</div>
+                </div>
+                <div class="recap-field md:col-span-2">
+                    <span class="recap-label">Total a payer</span>
+                    <div class="recap-value recap-total">${total} ${devise}</div>
+                </div>
+            </div>
+        `;
+
+        if (transactionReferenceEl) {
+            transactionReferenceEl.value = tx.reference || '';
+        }
+
+    }
+
+    async function apiPost(url, body) {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(body || {})
+        });
+
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok || data.status === false) {
+            throw new Error(data.message || 'Erreur API');
+        }
+
+        return data;
+    }
+
+    async function apiGet(url) {
+        const response = await fetch(url, {
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
+
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok || data.status === false) {
+            throw new Error(data.message || 'Erreur API');
+        }
+
+        return data;
+    }
+
+    function stopPolling() {
+        if (pollTimer) {
+            clearInterval(pollTimer);
+            pollTimer = null;
+        }
+        pollInFlight = false;
+        pollStartedAt = null;
+    }
+
+    function resetTransactionUi() {
+        recapConfirmed = false;
+
+        if (btnDownloadRecap) {
+            btnDownloadRecap.style.display = 'none';
+        }
+        if (btnConfirmerRecap) {
+            btnConfirmerRecap.style.display = 'block';
+            setLoading(btnConfirmerRecap, false);
+        }
+        currentDownloadUrl = null;
+    }
+
+    function highlightDownloadAction() {
+        if (btnDownloadRecap) {
+            btnDownloadRecap.style.display = 'block';
+        }
+        if (btnConfirmerRecap) {
+            btnConfirmerRecap.style.display = 'none';
+        }
+
+        openRecapModal();
+    }
+
+    function downloadTicketNow() {
+        if (!currentDownloadUrl) {
+            setStatus('Le lien de telechargement n\'est pas encore disponible.', 'warning');
+            return;
+        }
+
+        window.open(currentDownloadUrl, '_blank');
+        closeRecapModal();
+    }
+
+    async function chargerRecap(reference) {
+        try {
+            const recap = await apiGet(`${API_BASE}/transactions/${reference}/recapitulatif`);
+            renderRecap(recap.transaction || {});
+        } catch (error) {
+            console.warn('Recap indisponible:', error.message);
+        }
+    }
+
+    async function initierTransaction(form) {
+        setLoading(btnAcheter, true, 'Creation...');
+
+        try {
+            const payload = {
+                type_billet: Number(form.type_billet.value),
+                nombre_reel: Number(form.nombre_reel.value || 1),
+                nom_complet_client: String(form.nom_complet_client.value || '').trim(),
+                numero_client: normalizePhoneNumber(form.numero_client.value),
+                service: normalizeService(form.service.value),
+                id_evenement: Number(form.id_evenement.value),
+                devise: form.devise_display.value
+            };
+
+            const data = await apiPost(`${API_BASE}/transactions/initier`, payload);
+            const tx = data.transaction || {};
+
+            if (!tx.reference) {
+                throw new Error('Reference de transaction absente');
+            }
+
+            currentReference = tx.reference;
+            currentBuyerName = payload.nom_complet_client;
+            savePendingReference(currentReference);
+            recapConfirmed = false;
+
+            renderRecap(tx);
+            await chargerRecap(currentReference);
+
+            if (btnDownloadRecap) {
+                btnDownloadRecap.style.display = 'none';
+            }
+            if (btnConfirmerRecap) {
+                btnConfirmerRecap.style.display = 'block';
+                setLoading(btnConfirmerRecap, false);
+            }
+
+            openRecapModal();
+        } catch (error) {
+            setStatus(`Nous n'avons pas pu lancer votre achat: ${error.message}`, 'error');
+        } finally {
+            setLoading(btnAcheter, false);
+        }
+    }
+
+    async function validerPaiement() {
+        if (!currentReference) {
+            setStatus('Aucun achat en cours pour le moment.', 'error');
+            return;
+        }
+
+        setAcheterDisabled(true);
+        setLoading(btnConfirmerRecap, true, 'Traitement...');
+
+        try {
+            const data = await apiPost(`${API_BASE}/transactions/${currentReference}/valider-paiement`);
+
+            if (data.pending) {
+                setLoading(btnConfirmerRecap, true, 'Verification...');
+            }
+
+            startPollingConfirmation(currentReference);
+        } catch (error) {
+            setStatus(`Le paiement n'a pas pu etre lance: ${error.message}`, 'error');
+
+            if (/expiree|introuvable/i.test(error.message)) {
+                clearPendingReference();
+                resetTransactionUi();
+                currentReference = null;
+            }
+
+            setAcheterDisabled(false);
+            setLoading(btnConfirmerRecap, false);
+        }
+    }
+
+    function handleConfirmationStatus(data, reference) {
+        const statut = data.statut;
+        const downloadUrl = data.download_url;
+
+        if (statut === 'paye' && downloadUrl) {
+            stopPolling();
+            currentDownloadUrl = downloadUrl;
+            clearPendingReference();
+
+            highlightDownloadAction();
+            setAcheterDisabled(false);
+            setLoading(btnConfirmerRecap, false);
+            setStatusDownloadReadyLink('Votre billet est deja pret,');
+            return;
+        }
+
+        if (statut === 'paye' && !downloadUrl) {
+            setLoading(btnConfirmerRecap, true, 'Generation du billet...');
+            return;
+        }
+
+        if (statut === 'paye_sans_billet') {
+            setLoading(btnConfirmerRecap, true, 'Generation du billet...');
+            return;
+        }
+
+        if (statut === 'echoue') {
+            stopPolling();
+            clearPendingReference();
+            setAcheterDisabled(false);
+            setLoading(btnConfirmerRecap, false);
+            if (btnConfirmerRecap) btnConfirmerRecap.style.display = 'block';
+            setStatus('Le paiement a echoue. Vous pouvez relancer un nouvel achat.', 'error');
+            return;
+        }
+
+        if (statut === 'en_attente' || statut === 'paiement_en_cours') {
+            setLoading(btnConfirmerRecap, true, 'Verification...');
+            return;
+        }
+    }
+
+    async function startPollingConfirmation(reference) {
+        stopPolling();
+
+        const sessionId = ++pollingSessionId;
+        pollStartedAt = Date.now();
+
+        const checkStatus = async () => {
+            if (sessionId !== pollingSessionId || pollInFlight) {
+                return;
+            }
+
+            pollInFlight = true;
+
+            if (Date.now() - pollStartedAt > POLLING_TIMEOUT_MS) {
+                console.warn('[Verification] Timeout atteint', {
+                    reference,
+                    elapsedMs: Date.now() - pollStartedAt,
+                    timeoutMs: POLLING_TIMEOUT_MS,
+                });
+                stopPolling();
+                await chargerRecap(reference);
+                setAcheterDisabled(false);
+                setLoading(btnConfirmerRecap, false);
+                pollInFlight = false;
+                return;
+            }
+
+            try {
+                const data = await apiGet(`${API_BASE}/transactions/${reference}/confirmation`);
+                if (sessionId !== pollingSessionId) {
+                    return;
+                }
+                console.log('[Verification] Reponse confirmation', {
+                    reference,
+                    data,
+                    statut: data?.statut,
+                    downloadUrl: data?.download_url,
+                });
+                handleConfirmationStatus(data, reference);
+            } catch (error) {
+                console.error('[Verification] Erreur confirmation', {
+                    reference,
+                    error: error?.message || error,
+                });
+                setLoading(btnConfirmerRecap, true, 'Verification...');
+            } finally {
+                pollInFlight = false;
+            }
+        };
+
+        await checkStatus();
+        if (sessionId !== pollingSessionId) {
+            return;
+        }
+        pollTimer = setInterval(checkStatus, POLLING_INTERVAL_MS);
+    }
+
+    function reprendreApresRefresh() {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (!saved) return;
+
+        currentReference = saved;
+        recapConfirmed = true;
+        setAcheterDisabled(true);
+
+        if (btnConfirmerRecap) {
+            btnConfirmerRecap.style.display = 'block';
+            setLoading(btnConfirmerRecap, true, 'Verification...');
+        }
+
+        chargerRecap(saved);
+        startPollingConfirmation(saved);
     }
 
     // ====== CALCUL PRIX ======
@@ -872,13 +1577,11 @@
 
             if (!tauxUSD_CDF) return;
 
-            if (devise === 'USD' && currentTicketDevise === 'CDF') {
-                currentTicketPrice = currentTicketPrice / tauxUSD_CDF;
+            if (devise === 'USD') {
+                currentTicketPrice = baseTicketPrice / tauxUSD_CDF;
                 currentTicketDevise = 'USD';
-            }
-
-            if (devise === 'CDF' && currentTicketDevise === 'USD') {
-                currentTicketPrice = currentTicketPrice * tauxUSD_CDF;
+            } else {
+                currentTicketPrice = baseTicketPrice;
                 currentTicketDevise = 'CDF';
             }
 
@@ -906,79 +1609,84 @@
         document.getElementById('quantity')
             .addEventListener('input', updateTotalPrice);
 
-        // ====== SUBMIT PAIEMENT ======
-        document.getElementById('payment-form')
-            .addEventListener('submit', async function (e) {
+        // ====== SUBMIT CREATION TRANSACTION ======
+        if (paymentForm) {
+            paymentForm.addEventListener('submit', async function (e) {
                 e.preventDefault();
+                await initierTransaction(this);
+            });
+        }
 
-                const formData = {
-                    id_evenement: this.id_evenement.value,
-                    nom_complet_client: this.nom_complet_client.value,
-                    numero_client: this.numero_client.value,
-                    nombre_reel: this.nombre_reel.value,
-                    type_billet: this.type_billet.value,
-                    service: this.service.value,
-                    devise: this.devise_display.value
-                };
+        if (btnDownloadRecap) {
+            btnDownloadRecap.addEventListener('click', function () {
+                downloadTicketNow();
+            });
+        }
 
-                clientName = formData.nom_complet_client;
-
-                const btn = this.querySelector('button[type="submit"]');
-                const oldText = btn.innerHTML;
+        if (btnCopyReference) {
+            btnCopyReference.addEventListener('click', async function () {
+                const reference = transactionReferenceEl ? transactionReferenceEl.value.trim() : '';
+                if (!reference) {
+                    setStatus('Aucune reference d\'achat a copier.', 'warning');
+                    return;
+                }
 
                 try {
-                    btn.innerHTML = 'Traitement...';
-                    btn.disabled = true;
-
-                    const response = await fetch(
-                        "{{ env('ENV_POINT_URL') }}/api/billet/achatBillet",
-                        {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify(formData),
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        await navigator.clipboard.writeText(reference);
+                    } else {
+                        if (transactionReferenceEl) {
+                            transactionReferenceEl.focus();
+                            transactionReferenceEl.select();
                         }
-                    );
-
-                    const result = await response.json();
-
-                    console.log(result);
-                    
-
-                    btn.innerHTML = oldText;
-                    btn.disabled = false;
-
-                    if (!result.status) {
-                        alert(result.message || "Erreur paiement");
-                        return;
+                        document.execCommand('copy');
                     }
 
-                    lastBillet = result.pdf_url;
-
-                    const canvas = document.getElementById("qrcode-canvas");
-
-                    QRCode.toCanvas(
-                        canvas,
-                        result.billet.code_billet,
-                        { width: 200 },
-                        function (err) {
-                            if (err) return alert("Erreur QR Code");
-
-                            document.getElementById('qr-modal').style.display = 'flex';
-                            document.body.style.overflow = 'hidden';
-                        }
-                    );
-
+                    setStatus('Reference d\'achat copiee avec succes.', 'success');
                 } catch (error) {
-                    console.error(error);
-                    btn.innerHTML = oldText;
-                    btn.disabled = false;
-                    alert("Erreur réseau");
+                    setStatus('Copie automatique impossible. Copiez le code manuellement.', 'warning');
                 }
             });
+        }
+
+        if (statusEl) {
+            statusEl.addEventListener('click', function (e) {
+                const link = e.target.closest('[data-open-recap]');
+                if (link) {
+                    e.preventDefault();
+                    openRecapFromStatus();
+                    return;
+                }
+
+                const downloadLink = e.target.closest('[data-download-ticket]');
+                if (!downloadLink) return;
+
+                e.preventDefault();
+                if (currentDownloadUrl) {
+                    downloadTicketNow();
+                } else {
+                    openRecapFromStatus();
+                }
+            });
+        }
+
+        if (btnConfirmerRecap) {
+            btnConfirmerRecap.addEventListener('click', async function () {
+                recapConfirmed = true;
+                try {
+                    setLoading(btnConfirmerRecap, true, 'Validation...');
+                    setStatus('Recapitulatif confirme. Lancement du paiement...', 'progress');
+                    await validerPaiement();
+                } catch (error) {
+                    setLoading(btnConfirmerRecap, false);
+                }
+            });
+        }
 
         // ====== CLICK OUTSIDE MODAL ======
         window.addEventListener('click', function (e) {
             if (e.target.id === 'payment-modal') closePaymentModal();
+            if (e.target.id === 'recap-modal') closeRecapModal();
             if (e.target.id === 'qr-modal') closeQRModal();
         });
 
@@ -986,36 +1694,12 @@
         document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape') {
                 closePaymentModal();
+                closeRecapModal();
                 closeQRModal();
             }
         });
 
-        // ====== DOWNLOAD PDF ======
-        document.getElementById('download').addEventListener('click', function () {
-        if (!lastBillet) {
-            alert("Aucun billet");
-            return;
-        }
-
-        // cas 1: API renvoie juste pdf_url
-        let url = typeof lastBillet === 'string'
-            ? lastBillet
-            : lastBillet.pdf_url;
-
-        if (!url) {
-            alert("Lien introuvable");
-            return;
-        }
-
-        const link = document.createElement('a');
-        link.href = url;
-        link.target = '_blank';
-        link.download = 'billet.pdf';
-
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-    });
+        reprendreApresRefresh();
 
         if (typeof ScrollReveal !== 'undefined') {
             ScrollReveal().reveal('.fade-in', {
