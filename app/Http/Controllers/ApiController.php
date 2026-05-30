@@ -79,6 +79,48 @@ public function sendDemandeEvenement(Request $request)
         return redirect()->back()->with('error', 'Exception rencontrée : ');
     }
 }
+
+public function telechargerBilletParCode(Request $request)
+{
+    $validated = $request->validate([
+        'transaction_reference' => 'required|string|max:100',
+    ]);
+
+    $baseUrl = rtrim((string) env('ENV_POINT_URL', ''), '/');
+    $reference = strtoupper(trim($validated['transaction_reference']));
+
+    if ($baseUrl === '') {
+        return redirect()->back()->withInput()->with('ticket_download_error', 'Configuration API manquante.');
+    }
+
+    try {
+        $confirmationResponse = Http::withOptions([
+            'verify' => false,
+        ])->get($baseUrl . '/api/transactions/' . rawurlencode($reference) . '/confirmation');
+
+        $confirmationData = $confirmationResponse->json();
+
+        if (!$confirmationResponse->successful() || !($confirmationData['status'] ?? false)) {
+            $message = $confirmationData['message'] ?? 'Code transaction introuvable.';
+            return redirect()->back()->withInput()->with('ticket_download_error', $message);
+        }
+
+        $statut = strtolower((string) ($confirmationData['statut'] ?? ''));
+        if (!in_array($statut, ['paye', 'paye_sans_billet'], true)) {
+            return redirect()->back()->withInput()->with('ticket_download_error', 'Paiement non valide pour ce code transaction.');
+        }
+
+        $downloadUrl = (string) ($confirmationData['download_url'] ?? '');
+        if ($downloadUrl === '') {
+            return redirect()->back()->withInput()->with('ticket_download_error', 'Billet indisponible pour le moment.');
+        }
+
+        return redirect()->away($downloadUrl);
+    } catch (\Throwable $e) {
+        return redirect()->back()->withInput()->with('ticket_download_error', 'Impossible de telecharger le billet pour le moment.');
+    }
+}
+
     public function createDemandeEvenement(Request $request)
     {
         return view('demandeEvenement.create');

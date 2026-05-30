@@ -694,6 +694,37 @@
                 </div>
                 @endforeach
             </div>
+
+            <div class="mt-10 bg-gray-800/80 border border-gray-700 rounded-2xl p-6 md:p-8 max-w-3xl mx-auto">
+                <h3 class="text-xl md:text-2xl font-bold text-white mb-3">Telecharger mon billet</h3>
+                <p class="text-gray-300 mb-5">
+                    Entrez votre code transaction pour recuperer votre billet deja paye.
+                </p>
+
+                @if(session('ticket_download_error'))
+                    <div class="mb-4 p-3 rounded-lg border border-red-500/50 bg-red-500/15 text-red-200 text-sm">
+                        {{ session('ticket_download_error') }}
+                    </div>
+                @endif
+
+                <form action="{{ route('ticket.download.by.transaction') }}" method="POST" class="flex flex-col md:flex-row gap-3">
+                    @csrf
+                    <input
+                        type="text"
+                        name="transaction_reference"
+                        value="{{ old('transaction_reference') }}"
+                        placeholder="Ex: CMD-20260530120000-AB12CD34EF56"
+                        class="form-input bg-gray-900 flex-1"
+                        required
+                    />
+                    <button
+                        type="submit"
+                        class="bg-yellow-500 hover:bg-yellow-600 text-black px-5 py-3 rounded-lg font-bold transition-all duration-300"
+                    >
+                        Telecharger
+                    </button>
+                </form>
+            </div>
         </div>
     </section>
 
@@ -945,14 +976,16 @@
                 </div>
                 <div>
                     <h4 class="text-lg font-semibold mb-4">Contact</h4>
+                    @php
+                        $numeroOrganisateur = $evenement['organisateur']['telephone']
+                            ?? $evenement['organisateur_telephone']
+                            ?? $evenement['contact_organisateur']
+                            ?? null;
+                    @endphp
                     <ul class="space-y-2 text-gray-400">
-                        <li class="flex items-center gap-2">
-                            <i data-lucide="mail" class="w-4 h-4"></i>
-                            <span>contact@menjidrc.com</span>
-                        </li>
                         <li class="flex items-center gap-2 text-fade-in-up">
                             <i data-lucide="phone" class="w-4 h-4 text-bounce"></i>
-                            <span>+243 973439644</span>
+                            <span>Numero organisateur: {{ $numeroOrganisateur ?? 'Non disponible' }}</span>
                         </li>
                     </ul>
                 </div>

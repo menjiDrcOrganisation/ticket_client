@@ -35,6 +35,7 @@
         .event-card {
             transition: all 0.3s ease;
             border-radius: 1rem;
+            position: relative;
             overflow: hidden;
         }
         
@@ -497,17 +498,6 @@
     </div>
 </nav>
 
-{{-- Script toggle menu --}}
-<script>
-    const menuToggle = document.getElementById('menu-toggle');
-    const mobileMenu = document.getElementById('mobile-menu');
-
-    menuToggle.addEventListener('click', () => {
-        mobileMenu.classList.toggle('hidden');
-    });
-</script>
-
-
     <!-- Hero Section -->
     <header class="relative bg-cover bg-center bg-fixed min-h-screen flex items-center justify-center pt-16 overflow-fix" 
             style="background-image: url('https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');">
@@ -551,10 +541,10 @@
         <div class="max-w-7xl mx-auto w-full">
             <div class="text-center mb-12 sm:mb-16 mobile-padding">
                 <h2 class="section-title text-3xl sm:text-4xl font-bold mb-4  text-center-mobile">
-                    Événements à venir
+                    Tous les événements
                 </h2>
                 <p class="section-subtitle text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto  text-center-mobile">
-                    Découvrez notre sélection d'événements exceptionnels et réservez votre place dès maintenant
+                    Parcourez les événements en cours et les événements passés classés automatiquement par date
                 </p>
             </div>
 
@@ -566,6 +556,15 @@
                 </div>
                 
                 <div class="filter-section">
+                    <div class="filter-group">
+                        <label class="filter-label text-center-mobile" for="status-filter">Statut</label>
+                        <select id="status-filter" class="filter-select">
+                            <option value="all">Tous les statuts</option>
+                            <option value="avenir">A venir</option>
+                            <option value="encours">En cours</option>
+                            <option value="passe">Passe</option>
+                        </select>
+                    </div>
             
                     <div class="filter-group">
                         <label class="filter-label text-center-mobile" for="date-filter">Date</label>
@@ -594,77 +593,128 @@
           
 
             @if(!empty($evenements))
-                <div id="events-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 stagger-animation">
-                    @foreach($evenements as $evenement)
-                        <div class="event-card bg-white rounded-2xl shadow-lg overflow-hidden group mx-auto-mobile" 
-                             data-name="{{ strtolower($evenement['nom']) }}"
-                             data-status="{{ $evenement['statut'] }}"
-                             data-date="{{ $evenement['date_debut'] }}"
-                             data-location="{{ $evenement['salle'] }}"
-                             data-price="{{ $evenement['type_billets'][0]['pivot']['prix'] ?? 0 }}">
-                            <!-- Badge de statut -->
-                            @php
-                                $statusClass = 'status-upcoming';
-                                $statusText = 'À venir';
-                                if ($evenement['statut'] === 'Actif') {
-                                    $statusClass = 'status-active';
-                                    $statusText = 'Actif';
-                                } elseif ($evenement['statut'] === 'Complet') {
-                                    $statusClass = 'status-soldout';
-                                    $statusText = 'Complet';
-                                }
-                            @endphp
-                            <div class="status-badge {{ $statusClass }} text-red-500 bg-white">
-                                {{ $statusText }}
-                            </div>
-                            
-                            <!-- Image de l'événement -->
-                   <div class="event-image" 
-     style="background-image: url('{{ 
-         isset($evenement['ressource'][0]['photo_affiche']) 
-             ?   env('ENV_POINT_URL') . '/storage/app/public/' . $evenement['ressource'][0]['photo_affiche'] 
-             : 'https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80' 
-     }}');">
-</div>
-                            
-                            <!-- Contenu de la carte -->
-                            <div class="p-4 sm:p-6">
-                                <h3 class="card-title text-xl sm:text-2xl font-bold mb-3 text-gray-800 group-hover:text-red-600 transition-colors text-center-mobile">
-                                    {{ ucfirst($evenement['nom']) }}
-                                </h3>
-                                
-                                <div class="sm:space-y-3 mb-4">
-                                    <div class="flex items-center gap-3 text-gray-600">
-                                        <span class="card-text text-sm">
-                                            {{ \Carbon\Carbon::parse($evenement['date_debut'])->translatedFormat('d F Y') }}
-                                            @if($evenement['date_debut'] !== $evenement['date_fin'])
-                                                - {{ \Carbon\Carbon::parse($evenement['date_fin'])->translatedFormat('d F Y') }}
-                                            @endif
-                                        </span>
-                                    </div>
-                                    
-                                    <div class="flex items-center gap-3 text-gray-600">
-                                        <span class="card-text text-sm">{{ $evenement['salle'] }}, {{ $evenement['adresse'] }}</span>
-                                    </div>
-                                    
-                                    @if(!empty($evenement['type_billets']))
-                                    <div class="flex items-center gap-3 text-gray-600">
-                                        <span class="card-text text-sm">
-                                            {{ count($evenement['type_billets']) }} type(s) de billet disponible(s)
-                                        </span>
-                                    </div>
-                                    @endif
+                @php
+                    $today = now()->startOfDay();
+                    $evenementsCollection = collect($evenements);
+
+                    $evenementsAvenir = $evenementsCollection->filter(function ($evenement) use ($today) {
+                        $debut = \Carbon\Carbon::parse($evenement['date_debut'])->startOfDay();
+                        return $debut->greaterThan($today);
+                    })->values();
+
+                    $evenementsEncours = $evenementsCollection->filter(function ($evenement) use ($today) {
+                        $debut = \Carbon\Carbon::parse($evenement['date_debut'])->startOfDay();
+                        $fin = \Carbon\Carbon::parse($evenement['date_fin'] ?? $evenement['date_debut'])->endOfDay();
+                        return $debut->lessThanOrEqualTo($today) && $fin->greaterThanOrEqualTo($today);
+                    })->values();
+
+                    $evenementsPasses = $evenementsCollection->filter(function ($evenement) use ($today) {
+                        $fin = \Carbon\Carbon::parse($evenement['date_fin'] ?? $evenement['date_debut'])->endOfDay();
+                        return $fin->lessThan($today);
+                    })->values();
+                @endphp
+
+                <div id="events-container" class="space-y-10 stagger-animation">
+                    @foreach([
+                        'Événements à venir' => $evenementsAvenir,
+                        'Événements en cours' => $evenementsEncours,
+                        'Événements passés' => $evenementsPasses,
+                    ] as $sectionTitle => $sectionEvents)
+                        @if($sectionEvents->isNotEmpty())
+                            <div class="event-section">
+                                <h3 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-6 text-center-mobile">{{ $sectionTitle }}</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+                                    @foreach($sectionEvents as $evenement)
+                                        @php
+                                            $eventStartDate = \Carbon\Carbon::parse($evenement['date_debut'])->startOfDay();
+                                            $eventEndDate = \Carbon\Carbon::parse($evenement['date_fin'] ?? $evenement['date_debut'])->endOfDay();
+
+                                            if ($eventStartDate->greaterThan(now()->startOfDay())) {
+                                                $statusClass = 'status-upcoming';
+                                                $statusText = 'A venir';
+                                                $statusValue = 'avenir';
+                                            } elseif ($eventEndDate->lessThan(now()->startOfDay())) {
+                                                $statusClass = 'status-soldout';
+                                                $statusText = 'Passe';
+                                                $statusValue = 'passe';
+                                            } else {
+                                                $statusClass = 'status-active';
+                                                $statusText = 'En cours';
+                                                $statusValue = 'encours';
+                                            }
+                                        @endphp
+                                        <div class="event-card bg-white rounded-2xl shadow-lg overflow-hidden group mx-auto-mobile"
+                                            data-name="{{ strtolower($evenement['nom']) }}"
+                                            data-status="{{ $statusValue }}"
+                                            data-date="{{ $evenement['date_debut'] }}"
+                                            data-category="{{ strtolower($evenement['type_evenement']['nom'] ?? $evenement['categorie'] ?? 'autre') }}"
+                                            data-location="{{ $evenement['salle'] }}"
+                                            data-price="{{ $evenement['type_billets'][0]['pivot']['prix'] ?? 0 }}">
+                                            <!-- Badge de statut -->
+                                            <div class="status-badge {{ $statusClass }} text-red-500 bg-white">
+                                                {{ $statusText }}
+                                            </div>
+
+                                            <!-- Image de l'événement -->
+                                            <div class="event-image"
+                                                style="background-image: url('{{
+                                                    isset($evenement['ressource'][0]['photo_affiche'])
+                                                        ? env('ENV_POINT_URL') . '/storage/app/public/' . $evenement['ressource'][0]['photo_affiche']
+                                                        : 'https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80'
+                                                }}');">
+                                            </div>
+
+                                            <!-- Contenu de la carte -->
+                                            <div class="p-4 sm:p-6">
+                                                <h3 class="card-title text-xl sm:text-2xl font-bold mb-3 text-gray-800 group-hover:text-red-600 transition-colors text-center-mobile">
+                                                    {{ ucfirst($evenement['nom']) }}
+                                                </h3>
+
+                                                <div class="sm:space-y-3 mb-4">
+                                                    @php
+                                                        $numeroOrganisateur = $evenement['organisateur']['telephone']
+                                                            ?? $evenement['organisateur_telephone']
+                                                            ?? $evenement['contact_organisateur']
+                                                            ?? null;
+                                                    @endphp
+                                                    <div class="flex items-center gap-3 text-gray-600">
+                                                        <span class="card-text text-sm">
+                                                            {{ \Carbon\Carbon::parse($evenement['date_debut'])->translatedFormat('d F Y') }}
+                                                            @if($evenement['date_debut'] !== $evenement['date_fin'])
+                                                                - {{ \Carbon\Carbon::parse($evenement['date_fin'])->translatedFormat('d F Y') }}
+                                                            @endif
+                                                        </span>
+                                                    </div>
+
+                                                    <div class="flex items-center gap-3 text-gray-600">
+                                                        <span class="card-text text-sm">{{ $evenement['salle'] }}, {{ $evenement['adresse'] }}</span>
+                                                    </div>
+
+                                                    @if(!empty($numeroOrganisateur))
+                                                        <div class="flex items-center gap-3 text-gray-600">
+                                                            <span class="card-text text-sm">Numero organisateur: {{ $numeroOrganisateur }}</span>
+                                                        </div>
+                                                    @endif
+
+                                                    @if(!empty($evenement['type_billets']))
+                                                        <div class="flex items-center gap-3 text-gray-600">
+                                                            <span class="card-text text-sm">
+                                                                {{ count($evenement['type_billets']) }} type(s) de billet disponible(s)
+                                                            </span>
+                                                        </div>
+                                                    @endif
+                                                </div>
+
+                                                <a href="/{{ $evenement['url_evenement'] ?? '1' }}"
+                                                    class="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2 group-hover:scale-105">
+                                                    Acheter
+                                                </a>
+                                            </div>
+                                        </div>
+                                    @endforeach
                                 </div>
-                                
-                                <!-- Types de billets -->
-                                
-                                
-                                <a href="/{{ $evenement['url_evenement'] ?? '1' }}" 
-                                   class="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2 group-hover:scale-105">
-                                    Acheter
-                                </a>
                             </div>
-                        </div>
+                        @endif
                     @endforeach
                 </div>
             @else
@@ -690,6 +740,9 @@
                     <p class="text-gray-400 mb-6 text-center md:text-left">
                         Votre plateforme de billetterie de confiance pour les meilleurs événements en République Démocratique du Congo.
                     </p>
+                    <p class="text-gray-300 mb-6 text-center md:text-left font-medium">
+                        Contact: +243 824 307 504
+                    </p>
                     <div class="flex space-x-4 justify-center md:justify-start ">
                         <a href="https://www.facebook.com/share/1BfdJ6i7mD/" class="social-icon bg-gray-800 p-3 rounded-full text-gray-300 hover:bg-red-600 transition-all ">
                             <i data-lucide="facebook" class="w-5 h-5"></i>
@@ -704,7 +757,7 @@
                             </svg>
 
                         </a>
-                        <a href="https://wa.me/message/3J22RREHQMZ4B1" class="social-icon cursor-pointer bg-gray-800 p-3 rounded-full text-gray-300 hover:bg-red-600 transition-all ">
+                        <a href="https://wa.me/243824307504" class="social-icon cursor-pointer bg-gray-800 p-3 rounded-full text-gray-300 hover:bg-red-600 transition-all ">
                             <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24">
                             <path fill="currentColor" fill-rule="evenodd" d="M12 4a8 8 0 0 0-6.895 12.06l.569.718-.697 2.359 2.32-.648.379.243A8 8 0 1 0 12 4ZM2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10a9.96 9.96 0 0 1-5.016-1.347l-4.948 1.382 1.426-4.829-.006-.007-.033-.055A9.958 9.958 0 0 1 2 12Z" clip-rule="evenodd"/>
                             <path fill="currentColor" d="M16.735 13.492c-.038-.018-1.497-.736-1.756-.83a1.008 1.008 0 0 0-.34-.075c-.196 0-.362.098-.49.291-.146.217-.587.732-.723.886-.018.02-.042.045-.057.045-.013 0-.239-.093-.307-.123-1.564-.68-2.751-2.313-2.914-2.589-.023-.04-.024-.057-.024-.057.005-.021.058-.074.085-.101.08-.079.166-.182.249-.283l.117-.14c.121-.14.175-.25.237-.375l.033-.066a.68.68 0 0 0-.02-.64c-.034-.069-.65-1.555-.715-1.711-.158-.377-.366-.552-.655-.552-.027 0 0 0-.112.005-.137.005-.883.104-1.213.311-.35.22-.94.924-.94 2.16 0 1.112.705 2.162 1.008 2.561l.041.06c1.161 1.695 2.608 2.951 4.074 3.537 1.412.564 2.081.63 2.461.63.16 0 .288-.013.4-.024l.072-.007c.488-.043 1.56-.599 1.804-1.276.192-.534.243-1.117.115-1.329-.088-.144-.239-.216-.43-.308Z"/>
@@ -798,12 +851,17 @@
         // FONCTIONNALITÉ DE FILTRAGE AMÉLIORÉE
         document.addEventListener('DOMContentLoaded', function() {
             const searchInput = document.getElementById('search-input');
-            // const statusFilter = document.getElementById('status-filter');
+            const statusFilter = document.getElementById('status-filter');
             const dateFilter = document.getElementById('date-filter');
             // const locationFilter = document.getElementById('location-filter');
-            const priceFilter = document.getElementById('price-filter');
+            const categoryFilter = document.getElementById('price-filter');
             const eventCards = document.querySelectorAll('.event-card');
             const eventsContainer = document.getElementById('events-container');
+            const eventSections = document.querySelectorAll('.event-section');
+
+            if (!searchInput || !statusFilter || !dateFilter || !categoryFilter || !eventsContainer) {
+                return;
+            }
             
             // Fonction pour formater la date
             function formatDate(dateString) {
@@ -854,26 +912,26 @@
             // Fonction pour filtrer les événements
             function filterEvents() {
                 const searchTerm = searchInput.value.toLowerCase().trim();
-                // const statusValue = statusFilter.value;
+                const statusValue = statusFilter.value;
                 const dateValue = dateFilter.value;
                 // const locationValue = locationFilter.value;
-                const priceValue = priceFilter.value;
+                const categoryValue = categoryFilter.value.toLowerCase();
                 
                 const today = new Date();
                 let visibleCount = 0;
                 
                 eventCards.forEach(card => {
                     const eventName = card.getAttribute('data-name');
-                    // const eventStatus = card.getAttribute('data-status');
+                    const eventStatus = (card.getAttribute('data-status') || '').toLowerCase();
                     const eventDate = new Date(card.getAttribute('data-date'));
                     // const eventLocation = card.getAttribute('data-location');
-                    const eventPrice = parseFloat(card.getAttribute('data-price')) || 0;
+                    const eventCategory = (card.getAttribute('data-category') || '').toLowerCase();
                     
                     // Vérifier la recherche par nom
                     const nameMatch = !searchTerm || eventName.includes(searchTerm);
                     
                     // Vérifier le statut
-                    // const statusMatch = statusValue === 'all' || eventStatus === statusValue;
+                    const statusMatch = statusValue === 'all' || eventStatus === statusValue;
                     
                     // Vérifier la date
                     let dateMatch = true;
@@ -900,27 +958,30 @@
                     // const locationMatch = locationValue === 'all' || 
                     //     eventLocation.toLowerCase().includes(locationValue.toLowerCase());
                     
-                    // Vérifier le prix
-                    let priceMatch = true;
-                    if (priceValue !== 'all') {
-                        if (priceValue === 'free') {
-                            priceMatch = eventPrice === 0;
-                        } else if (priceValue === 'low') {
-                            priceMatch = eventPrice > 0 && eventPrice < 10;
-                        } else if (priceValue === 'medium') {
-                            priceMatch = eventPrice >= 10 && eventPrice <= 30;
-                        } else if (priceValue === 'high') {
-                            priceMatch = eventPrice > 30;
-                        }
-                    }
+                    // Vérifier la catégorie
+                    const categoryMatch = categoryValue === 'all' || eventCategory.includes(categoryValue);
                     
                     // Afficher ou masquer la carte selon les critères
-                    if (nameMatch && dateMatch && priceMatch) {
-                        card.style.display = 'block';
+                    if (nameMatch && statusMatch && dateMatch && categoryMatch) {
+                        card.style.display = '';
                         visibleCount++;
                     } else {
                         card.style.display = 'none';
                     }
+                });
+
+                // Masquer les sections vides après filtrage
+                eventSections.forEach(section => {
+                    const cardsInSection = section.querySelectorAll('.event-card');
+                    let hasVisibleCard = false;
+
+                    cardsInSection.forEach(card => {
+                        if (card.style.display !== 'none') {
+                            hasVisibleCard = true;
+                        }
+                    });
+
+                    section.style.display = hasVisibleCard ? '' : 'none';
                 });
                 
                 // Afficher un message si aucun événement ne correspond
@@ -950,10 +1011,10 @@
             // Réinitialiser les filtres
             function resetFilters() {
                 searchInput.value = '';
-                // statusFilter.value = 'all';
+                statusFilter.value = 'all';
                 dateFilter.value = 'all';
                 // locationFilter.value = 'all';
-                priceFilter.value = 'all';
+                categoryFilter.value = 'all';
                 filterEvents();
             }
             
@@ -970,10 +1031,10 @@
             
             // Écouter les changements dans les filtres
             searchInput.addEventListener('input', filterEvents);
-            // statusFilter.addEventListener('change', filterEvents);
+            statusFilter.addEventListener('change', filterEvents);
             dateFilter.addEventListener('change', filterEvents);
             // locationFilter.addEventListener('change', filterEvents);
-            priceFilter.addEventListener('change', filterEvents);
+            categoryFilter.addEventListener('change', filterEvents);
             
             // Initialiser les filtres et ajouter le bouton de réinitialisation
             filterEvents();

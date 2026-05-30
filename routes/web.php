@@ -21,6 +21,9 @@ Route::get('/ticket/pdf', [PdfController::class, 'generateTicket'])->name('ticke
 Route::post('/ticket/generate-pdf', [PdfController::class, 'generateTicket'])
     ->name('ticket.generate.pdf');
 
+Route::post('/ticket/telecharger-billet', [ApiController::class, 'telechargerBilletParCode'])
+    ->name('ticket.download.by.transaction');
+
 Route::get('/ticket/test', [PdfController::class, 'testTicket']);
 
 Route::get('/demandeEvenement/create', [ApiController::class, 'createDemandeEvenement'])->name('demandeEvenement.create');
