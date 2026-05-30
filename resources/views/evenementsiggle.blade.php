@@ -971,7 +971,7 @@
     const API_BASE = "{{ rtrim((string) env('ENV_POINT_URL', ''), '/') }}/api";
     const STORAGE_KEY = 'pending_transaction_reference';
     const POLLING_INTERVAL_MS = 1500;
-    const POLLING_TIMEOUT_MS = 30000;
+    const POLLING_TIMEOUT_MS = 20000;
 
     // ====== VARIABLES GLOBALES ======
     let tauxUSD_CDF = 0;
