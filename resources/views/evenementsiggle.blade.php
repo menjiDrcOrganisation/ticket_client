@@ -971,7 +971,7 @@
     const API_BASE = "{{ rtrim((string) env('ENV_POINT_URL', ''), '/') }}/api";
     const STORAGE_KEY = 'pending_transaction_reference';
     const POLLING_INTERVAL_MS = 1500;
-    const POLLING_TIMEOUT_MS = 10000;
+    const POLLING_TIMEOUT_MS = 30000;
 
     // ====== VARIABLES GLOBALES ======
     let tauxUSD_CDF = 0;
@@ -1500,11 +1500,6 @@
             pollInFlight = true;
 
             if (Date.now() - pollStartedAt > POLLING_TIMEOUT_MS) {
-                console.warn('[Verification] Timeout atteint', {
-                    reference,
-                    elapsedMs: Date.now() - pollStartedAt,
-                    timeoutMs: POLLING_TIMEOUT_MS,
-                });
                 stopPolling();
                 await chargerRecap(reference);
                 setAcheterDisabled(false);
