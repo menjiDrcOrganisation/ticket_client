@@ -27,21 +27,134 @@
             scroll-behavior: smooth;
             overflow-x: hidden;
         }
+
+        .site-nav {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .site-logo {
+            height: 2.6rem;
+            width: auto;
+        }
+
+        .nav-link {
+            position: relative;
+            color: #475569;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: color 0.25s ease;
+        }
+
+        .nav-link:hover {
+            color: #0f172a;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -0.45rem;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #ef4444 0%, #f59e0b 100%);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.25s ease;
+        }
+
+        .nav-link.active {
+            color: #0f172a;
+        }
+
+        .nav-link.active::after {
+            transform: scaleX(1);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr 1fr;
+            gap: 2.25rem;
+        }
+
+        .footer-list a {
+            color: #94a3b8;
+            transition: color 0.2s ease;
+        }
+
+        .footer-list a:hover {
+            color: #f8fafc;
+        }
+
+        .social-icon {
+            width: 3rem;
+            height: 3rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 9999px;
+            color: #cbd5e1;
+            transition: color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+        }
+
+        .social-icon svg {
+            width: 1.25rem;
+            height: 1.25rem;
+            fill: currentColor;
+        }
+
+        .social-icon:hover {
+            color: #ffffff;
+            transform: translateY(-1px);
+        }
+
+        .about-feature {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.65rem;
+            color: #475569;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .about-feature i {
+            color: #dc2626;
+            width: 1rem;
+            height: 1rem;
+            margin-top: 0.2rem;
+            flex-shrink: 0;
+        }
+
+        .about-metric {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 1rem;
+            padding: 1rem;
+            text-align: center;
+        }
         
         .hero-gradient {
             background: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(225, 29, 72, 0.6) 100%);
         }
         
         .event-card {
-            transition: all 0.3s ease;
-            border-radius: 1rem;
             position: relative;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            border-radius: 1.35rem;
             overflow: hidden;
+            box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
         }
         
         .event-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            transform: translateY(-6px);
+            border-color: rgba(248, 113, 113, 0.35);
+            box-shadow: 0 24px 48px rgba(15, 23, 42, 0.14);
         }
         
         .ticket-card {
@@ -135,40 +248,121 @@
             100% { transform: scale(1); }
         }
         
-        .status-badge {
+        .status-badge,
+        .event-category-badge {
             position: absolute;
-            top: 1rem;
-            right: 1rem;
-            padding: 0.5rem 1rem;
-            border-radius: 2rem;
-            font-size: 0.875rem;
-            font-weight: 600;
+            top: 0.95rem;
             z-index: 10;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 2.2rem;
+            padding: 0.45rem 0.9rem;
+            border-radius: 9999px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.01em;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 12px 24px rgba(15, 23, 42, 0.16);
+        }
+
+        .status-badge {
+            right: 0.95rem;
+            background: rgba(255, 255, 255, 0.92);
+        }
+
+        .event-category-badge {
+            left: 0.95rem;
+            background: rgba(15, 23, 42, 0.82);
+            color: #f8fafc;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-width: 68%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .filter-badge-count {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 0.45rem;
+            min-width: 1.4rem;
+            min-height: 1.4rem;
+            padding: 0 0.35rem;
+            border-radius: 9999px;
+            background: #eef2f7;
+            color: #334155;
+            font-size: 0.72rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .filter-badge.active .filter-badge-count {
+            background: rgba(255, 255, 255, 0.22);
+            color: #ffffff;
+        }
+
+        .status-combo-wrap {
+            display: flex;
+            justify-content: center;
+            margin-top: 0.95rem;
+        }
+
+        .status-combo {
+            width: min(23rem, 100%);
+            min-height: 3.15rem;
+            padding: 0.8rem 2.9rem 0.8rem 1.25rem;
+            border: 1px solid #cfe0f5;
+            border-radius: 9999px;
+            background: #ffffff;
+            color: #0f172a;
+            font-size: 1rem;
+            font-weight: 700;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: linear-gradient(45deg, transparent 50%, #475569 50%), linear-gradient(135deg, #475569 50%, transparent 50%);
+            background-position: calc(100% - 1.15rem) calc(50% - 0.12rem), calc(100% - 0.8rem) calc(50% - 0.12rem);
+            background-size: 0.52rem 0.52rem, 0.52rem 0.52rem;
+            background-repeat: no-repeat;
+            transition: border-color 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .status-combo:focus {
+            outline: none;
+            border-color: #0f172a;
+            box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.12);
         }
         
         .status-active {
-            background: rgba(34, 197, 94, 0.2);
-            color: #16a34a;
-            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: #15803d;
+            border: 1px solid rgba(34, 197, 94, 0.32);
         }
         
         .status-upcoming {
-            background: rgba(59, 130, 246, 0.2);
-            color: #2563eb;
-            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #ef4444;
+            border: 1px solid rgba(248, 113, 113, 0.35);
         }
         
         .status-soldout {
-            background: rgba(239, 68, 68, 0.2);
-            color: #dc2626;
-            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #b91c1c;
+            border: 1px solid rgba(239, 68, 68, 0.32);
         }
         
         .event-image {
-            height: 200px;
+            height: 220px;
             background-size: cover;
             background-position: center;
             position: relative;
+        }
+
+        .event-image::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(15, 23, 42, 0.12) 0%, rgba(15, 23, 42, 0.5) 100%);
+            z-index: 0;
         }
         
         .event-image::after {
@@ -177,15 +371,101 @@
             bottom: 0;
             left: 0;
             right: 0;
-            height: 60%;
-            background: linear-gradient(transparent, rgba(0,0,0,0.7));
+            height: 50%;
+            background: linear-gradient(transparent, rgba(0,0,0,0.45));
+        }
+
+        .event-card-content {
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            gap: 0.95rem;
+            padding: 1.2rem 1.2rem 1.3rem;
+        }
+
+        .event-type-inline {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            width: fit-content;
+            padding: 0.28rem 0.7rem;
+            border-radius: 9999px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            color: #334155;
+            font-size: 0.78rem;
+            font-weight: 600;
+            line-height: 1;
+            margin-top: -0.35rem;
+        }
+
+        .event-type-inline svg {
+            width: 0.82rem;
+            height: 0.82rem;
+        }
+
+        .event-meta-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.65rem;
+        }
+
+        .event-meta-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.65rem;
+            color: #475569;
+        }
+
+        .event-meta-icon {
+            width: 1.9rem;
+            height: 1.9rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 9999px;
+            background: #f8fafc;
+            color: #334155;
+            flex-shrink: 0;
+        }
+
+        .event-meta-icon svg {
+            width: 0.95rem;
+            height: 0.95rem;
+        }
+
+        .event-card-footer {
+            margin-top: auto;
+            padding-top: 0.3rem;
+        }
+
+        .event-cta {
+            width: 100%;
+            min-height: 3.15rem;
+            border-radius: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: #ffffff;
+            font-size: 0.98rem;
+            font-weight: 700;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+            box-shadow: 0 16px 30px rgba(220, 38, 38, 0.24);
+        }
+
+        .event-cta:hover {
+            transform: translateY(-1px);
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            box-shadow: 0 20px 36px rgba(220, 38, 38, 0.3);
         }
         
         /* Styles pour la recherche et filtres */
         .search-filter-container {
             background: white;
             border-radius: 1rem;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            box-shadow: none;
             padding: 1.5rem;
             margin-bottom: 2rem;
             width: 100%;
@@ -194,14 +474,16 @@
         
         .search-box {
             position: relative;
-            margin-bottom: 1.5rem;
+            width: 70%;
+            margin: 0 auto 1.5rem;
         }
         
         .search-input {
             width: 100%;
-            padding: 0.75rem 1rem 0.75rem 3rem;
+            min-height: 3.2rem;
+            padding: 0.95rem 1.15rem 0.95rem 3rem;
             border: 1px solid #e2e8f0;
-            border-radius: 0.75rem;
+            border-radius: 9999px;
             font-size: 1rem;
             transition: all 0.3s ease;
             box-sizing: border-box;
@@ -219,6 +501,36 @@
             top: 50%;
             transform: translateY(-50%);
             color: #64748b;
+        }
+
+        .filter-badges {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.65rem;
+        }
+
+        .filter-badge {
+            border: 1px solid #dbe4ef;
+            background: #ffffff;
+            color: #0f172a;
+            padding: 0.55rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            transition: all 0.25s ease;
+            white-space: nowrap;
+        }
+
+        .filter-badge:hover {
+            border-color: #cbd5e1;
+            background: #f8fafc;
+        }
+
+        .filter-badge.active {
+            background: #1e293b;
+            border-color: #0f172a;
+            color: #ffffff;
         }
         
         .filter-section {
@@ -272,6 +584,15 @@
                 padding-left: 1rem;
                 padding-right: 1rem;
             }
+
+            .site-logo {
+                height: 3rem;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
             
             .hero-title {
                 font-size: 2.25rem !important;
@@ -316,6 +637,14 @@
                 min-width: 100%;
                 width: 100%;
             }
+
+            .search-box {
+                width: 100%;
+            }
+
+            .status-combo {
+                width: 100%;
+            }
             
             .search-filter-container {
                 padding: 1rem;
@@ -331,6 +660,15 @@
                 padding: 0.375rem 0.75rem;
                 font-size: 0.75rem;
             }
+
+            .event-category-badge {
+                font-size: 0.72rem;
+                max-width: 52%;
+            }
+
+            .event-card-content {
+                padding: 1rem;
+            }
             
             .mobile-padding {
                 padding-left: 1rem;
@@ -342,13 +680,13 @@
             }
             
             .card-title {
-                font-size: 1.5rem !important;
-                text-align: center;
+                font-size: 1.4rem !important;
+                text-align: left;
             }
             
             .card-text {
-                font-size: 0.875rem !important;
-                text-align: center;
+                font-size: 0.9rem !important;
+                text-align: left;
             }
             
             .info-card {
@@ -391,6 +729,11 @@
             .event-image {
                 height: 160px;
             }
+
+            .event-meta-icon {
+                width: 1.75rem;
+                height: 1.75rem;
+            }
             
             .search-input {
                 font-size: 0.875rem;
@@ -425,6 +768,11 @@
             
             .event-image {
                 height: 140px;
+            }
+
+            .event-cta {
+                min-height: 3rem;
+                font-size: 0.92rem;
             }
             
             .hero-subtitle,
@@ -465,41 +813,40 @@
 <body class="bg-gray-50 text-gray-800 overflow-x-hidden">
 
     <!-- Navigation -->
-<nav class="fixed top-0 left-0 w-full z-50 bg-white/80 backdrop-blur-md border border-red-200">
-    <div " class=" border-blue-200  mx-12 py-3 flex justify-between items-center">
-      
-        <div class="flex items-center  slide-in-left">
-           
-            {{-- <i data-lucide="ticket" class="w-8 h-8 text-red-600"></i>
-            <img src="{{ asset('images/logo.png') }}" alt="KimiaTicket" class="h-8 md:h-10 lg:h-12"> --}}
-            <img src="{{ asset('icons/Icone_Kimia.png') }}" alt="KimiaTicket" class="h-10">
+<nav class="site-nav fixed top-0 left-0 w-full z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-[auto_1fr_auto] items-center py-3 gap-3">
+            <a href="#accueil" class="flex items-center slide-in-left" data-nav-link>
+                <img src="{{ asset('icons/Icone_Kimia.png') }}" alt="KimiaTicket" class="site-logo">
+            </a>
+
+            <div class="hidden md:flex items-center justify-center gap-8">
+                <a href="#accueil" class="nav-link" data-nav-link>Accueil</a>
+                <a href="#evenements" class="nav-link" data-nav-link>Événements</a>
+                <a href="#apropos" class="nav-link" data-nav-link>À propos</a>
+                <a href="#contact" class="nav-link" data-nav-link>Contact</a>
+            </div>
+
+            <div class="flex items-center justify-end">
+                <button id="menu-toggle" class="md:hidden text-gray-700 focus:outline-none" aria-label="Ouvrir le menu" aria-controls="mobile-menu" aria-expanded="false">
+                    <i data-lucide="menu" class="w-7 h-7"></i>
+                </button>
+            </div>
         </div>
-        
-        {{-- Menu desktop --}}
-        <div class="hidden md:flex space-x-8">
-            <a href="#evenements" class="text-gray-600 hover:text-red-600 transition-colors font-medium">Événements</a>
-            <a href="#billets" class="text-gray-600 hover:text-red-600 transition-colors font-medium">Billetterie</a>
-            <a href="#contact" class="text-gray-600 hover:text-red-600 transition-colors font-medium">Contact</a>
-        </div>
-        
-        {{-- Bouton menu mobile --}}
-        <button id="menu-toggle" class="md:hidden text-gray-600 focus:outline-none">
-            <i data-lucide="menu" class="w-6 h-6"></i>
-        </button>
     </div>
-    
-    {{-- Menu mobile --}}
+
     <div id="mobile-menu" class="md:hidden bg-white border-t border-gray-200 hidden">
-        <div class="container mx-auto px-4 py-4 flex flex-col space-y-4 text-center">
-            <a href="#evenements" class="text-gray-600 hover:text-red-600 transition-colors py-2 font-medium">Événements</a>
-            <a href="#billets" class="text-gray-600 hover:text-red-600 transition-colors py-2 font-medium">Billetterie</a>
-            <a href="#contact" class="text-gray-600 hover:text-red-600 transition-colors py-2 font-medium">Contact</a>
+        <div class="px-4 py-4 flex flex-col space-y-3 text-center">
+            <a href="#accueil" class="nav-link py-2" data-nav-link>Accueil</a>
+            <a href="#evenements" class="nav-link py-2" data-nav-link>Événements</a>
+            <a href="#apropos" class="nav-link py-2" data-nav-link>À propos</a>
+            <a href="#contact" class="nav-link py-2" data-nav-link>Contact</a>
         </div>
     </div>
 </nav>
 
     <!-- Hero Section -->
-    <header class="relative bg-cover bg-center bg-fixed min-h-screen flex items-center justify-center pt-16 overflow-fix" 
+    <header id="accueil" class="relative bg-cover bg-center bg-fixed min-h-screen flex items-center justify-center pt-16 overflow-fix" 
             style="background-image: url('https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');">
         <div class="absolute inset-0 hero-gradient"></div>
         
@@ -549,6 +896,48 @@
             </div>
 
             <!-- Barre de recherche et filtres -->
+            @php
+                $resolveEventType = function ($eventItem) {
+                    $typeField = $eventItem['type_evenement'] ?? null;
+
+                    if (is_array($typeField)) {
+                        $rawType = $typeField['nom'] ?? $typeField['libelle'] ?? $typeField['label'] ?? null;
+                    } elseif (is_string($typeField)) {
+                        $rawType = $typeField;
+                    } else {
+                        $rawType = null;
+                    }
+
+                    $rawType = $rawType ?? ($eventItem['categorie'] ?? $eventItem['type'] ?? null);
+                    $label = trim((string) $rawType);
+
+                    return $label !== '' ? $label : 'Autre';
+                };
+
+                $categoryPairs = collect($evenements ?? [])
+                    ->map(function ($eventItem) use ($resolveEventType) {
+                        $label = $resolveEventType($eventItem);
+
+                        $key = strtolower($label);
+
+                        return [
+                            'key' => $key,
+                            'label' => ucwords(str_replace(['-', '_'], ' ', $label)),
+                        ];
+                    });
+
+                $categoryStats = $categoryPairs
+                    ->pluck('key')
+                    ->countBy()
+                    ->sortDesc();
+
+                $categoryLabels = $categoryPairs
+                    ->mapWithKeys(function ($item) {
+                        return [$item['key'] => $item['label']];
+                    });
+
+                $availableCategories = $categoryStats->keys()->values();
+            @endphp
             <div class="search-filter-container fade-in">
                 <div class="search-box">
                     <i data-lucide="search" class="search-icon w-5 h-5"></i>
@@ -557,35 +946,25 @@
                 
                 <div class="filter-section">
                     <div class="filter-group">
-                        <label class="filter-label text-center-mobile" for="status-filter">Statut</label>
-                        <select id="status-filter" class="filter-select">
-                            <option value="all">Tous les statuts</option>
-                            <option value="avenir">A venir</option>
-                            <option value="encours">En cours</option>
-                            <option value="passe">Passe</option>
-                        </select>
-                    </div>
-            
-                    <div class="filter-group">
-                        <label class="filter-label text-center-mobile" for="date-filter">Date</label>
-                        <select id="date-filter" class="filter-select">
-                            <option value="all">Toutes les dates</option>
-                            <option value="today">Aujourd'hui</option>
-                            <option value="week">Cette semaine</option>
-                            <option value="month">Ce mois</option>
-                            <option value="future">À venir</option>
-                        </select>
-                    </div>
-                    
-                    <div class="filter-group">
-                        <label class="filter-label text-center-mobile" for="price-filter">Categories</label>
-                        <select id="price-filter" class="filter-select">
-                            <option value="all">Tous les categories</option>
-                            <option value="Conference">Conference</option>
-                            <option value="Spectacle">Spectacle</option>
-                            <option value="Formation">Formation</option>
-                            <option value="Autre">Autre</option>
-                        </select>
+                        <label class="filter-label text-center-mobile">Catégories</label>
+                        <div class="filter-badges" id="category-badges">
+                            <button type="button" class="filter-badge active" data-category="all">Toutes<span class="filter-badge-count">{{ collect($evenements ?? [])->count() }}</span></button>
+                            @foreach($availableCategories as $categoryKey)
+                                <button type="button" class="filter-badge" data-category="{{ $categoryKey }}">
+                                    {{ $categoryLabels[$categoryKey] ?? 'Autre' }}
+                                    <span class="filter-badge-count">{{ $categoryStats[$categoryKey] ?? 0 }}</span>
+                                </button>
+                            @endforeach
+                        </div>
+
+                        <div class="status-combo-wrap">
+                            <select id="status-filter" class="status-combo" aria-label="Filtrer par statut">
+                                <option value="all" selected>Tous les événements</option>
+                                <option value="avenir">Événements à venir</option>
+                                <option value="encours">Événements en cours</option>
+                                <option value="passe">Événements passés</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -643,15 +1022,24 @@
                                                 $statusValue = 'encours';
                                             }
                                         @endphp
-                                        <div class="event-card bg-white rounded-2xl shadow-lg overflow-hidden group mx-auto-mobile"
+                                        @php
+                                            $eventTypeRaw = $resolveEventType($evenement);
+                                            $eventTypeLabel = ucwords(str_replace(['-', '_'], ' ', $eventTypeRaw));
+                                            $eventTypeKey = strtolower($eventTypeRaw);
+                                        @endphp
+                                        <div class="event-card group mx-auto-mobile"
                                             data-name="{{ strtolower($evenement['nom']) }}"
                                             data-status="{{ $statusValue }}"
                                             data-date="{{ $evenement['date_debut'] }}"
-                                            data-category="{{ strtolower($evenement['type_evenement']['nom'] ?? $evenement['categorie'] ?? 'autre') }}"
+                                            data-category="{{ $eventTypeKey }}"
                                             data-location="{{ $evenement['salle'] }}"
                                             data-price="{{ $evenement['type_billets'][0]['pivot']['prix'] ?? 0 }}">
+                                            <div class="event-category-badge">
+                                                {{ $eventTypeLabel }}
+                                            </div>
+
                                             <!-- Badge de statut -->
-                                            <div class="status-badge {{ $statusClass }} text-red-500 bg-white">
+                                            <div class="status-badge {{ $statusClass }}">
                                                 {{ $statusText }}
                                             </div>
 
@@ -665,19 +1053,27 @@
                                             </div>
 
                                             <!-- Contenu de la carte -->
-                                            <div class="p-4 sm:p-6">
+                                            <div class="event-card-content">
                                                 <h3 class="card-title text-xl sm:text-2xl font-bold mb-3 text-gray-800 group-hover:text-red-600 transition-colors text-center-mobile">
                                                     {{ ucfirst($evenement['nom']) }}
                                                 </h3>
 
-                                                <div class="sm:space-y-3 mb-4">
+                                                <div class="event-type-inline" aria-label="Type d'événement">
+                                                    <i data-lucide="tag"></i>
+                                                    {{ $eventTypeLabel }}
+                                                </div>
+
+                                                <div class="event-meta-list">
                                                     @php
                                                         $numeroOrganisateur = $evenement['organisateur']['telephone']
                                                             ?? $evenement['organisateur_telephone']
                                                             ?? $evenement['contact_organisateur']
                                                             ?? null;
                                                     @endphp
-                                                    <div class="flex items-center gap-3 text-gray-600">
+                                                    <div class="event-meta-item">
+                                                        <span class="event-meta-icon">
+                                                            <i data-lucide="calendar-days"></i>
+                                                        </span>
                                                         <span class="card-text text-sm">
                                                             {{ \Carbon\Carbon::parse($evenement['date_debut'])->translatedFormat('d F Y') }}
                                                             @if($evenement['date_debut'] !== $evenement['date_fin'])
@@ -686,18 +1082,27 @@
                                                         </span>
                                                     </div>
 
-                                                    <div class="flex items-center gap-3 text-gray-600">
+                                                    <div class="event-meta-item">
+                                                        <span class="event-meta-icon">
+                                                            <i data-lucide="map-pin"></i>
+                                                        </span>
                                                         <span class="card-text text-sm">{{ $evenement['salle'] }}, {{ $evenement['adresse'] }}</span>
                                                     </div>
 
                                                     @if(!empty($numeroOrganisateur))
-                                                        <div class="flex items-center gap-3 text-gray-600">
+                                                        <div class="event-meta-item">
+                                                            <span class="event-meta-icon">
+                                                                <i data-lucide="phone"></i>
+                                                            </span>
                                                             <span class="card-text text-sm">Numero organisateur: {{ $numeroOrganisateur }}</span>
                                                         </div>
                                                     @endif
 
                                                     @if(!empty($evenement['type_billets']))
-                                                        <div class="flex items-center gap-3 text-gray-600">
+                                                        <div class="event-meta-item">
+                                                            <span class="event-meta-icon">
+                                                                <i data-lucide="ticket"></i>
+                                                            </span>
                                                             <span class="card-text text-sm">
                                                                 {{ count($evenement['type_billets']) }} type(s) de billet disponible(s)
                                                             </span>
@@ -705,10 +1110,12 @@
                                                     @endif
                                                 </div>
 
-                                                <a href="/{{ $evenement['url_evenement'] ?? '1' }}"
-                                                    class="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2 group-hover:scale-105">
-                                                    Acheter
-                                                </a>
+                                                <div class="event-card-footer">
+                                                    <a href="/{{ $evenement['url_evenement'] ?? '1' }}" class="event-cta">
+                                                        Acheter
+                                                        <i data-lucide="arrow-right"></i>
+                                                    </a>
+                                                </div>
                                             </div>
                                         </div>
                                     @endforeach
@@ -729,66 +1136,115 @@
         </div>
     </section>
 
+    <section id="apropos" class="py-16 sm:py-20 px-4 md:px-12 bg-slate-50">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+                <div>
+                    <h2 class="section-title text-3xl sm:text-4xl font-bold text-slate-900 mb-4 text-center-mobile">À propos de KimiaTicket</h2>
+                    <p class="text-slate-600 leading-relaxed text-center-mobile mb-6">
+                        KimiaTicket simplifie l'accès aux événements culturels, business et grand public en RDC.
+                        Notre mission est d'offrir une expérience de billetterie fluide, fiable et rapide sur mobile comme sur desktop.
+                    </p>
+
+                    <div class="space-y-3">
+                        <div class="about-feature">
+                            <i data-lucide="check-circle-2"></i>
+                            <span>Découverte rapide d'événements vérifiés et régulièrement mis à jour.</span>
+                        </div>
+                        <div class="about-feature">
+                            <i data-lucide="check-circle-2"></i>
+                            <span>Réservation simple avec informations claires sur le lieu, la date et les types de billets.</span>
+                        </div>
+                        <div class="about-feature">
+                            <i data-lucide="check-circle-2"></i>
+                            <span>Plateforme pensée pour une utilisation mobile fluide et une navigation intuitive.</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 flex flex-wrap gap-3 justify-center md:justify-start">
+                        <span class="px-3 py-1.5 rounded-full border border-slate-200 bg-white text-slate-700 text-sm font-medium">Paiements sécurisés</span>
+                        <span class="px-3 py-1.5 rounded-full border border-slate-200 bg-white text-slate-700 text-sm font-medium">Support local</span>
+                        <span class="px-3 py-1.5 rounded-full border border-slate-200 bg-white text-slate-700 text-sm font-medium">Billets digitaux</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="about-metric">
+                        <p class="text-2xl font-bold text-red-600">100%</p>
+                        <p class="text-slate-600 text-sm mt-1">Digital</p>
+                    </div>
+                    <div class="about-metric">
+                        <p class="text-2xl font-bold text-red-600">24/7</p>
+                        <p class="text-slate-600 text-sm mt-1">Accessible</p>
+                    </div>
+                    <div class="about-metric">
+                        <p class="text-2xl font-bold text-red-600">Rapide</p>
+                        <p class="text-slate-600 text-sm mt-1">Réservation</p>
+                    </div>
+                    <div class="about-metric">
+                        <p class="text-2xl font-bold text-red-600">Fiable</p>
+                        <p class="text-slate-600 text-sm mt-1">Infos événement</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
 
     <footer id="contact" class="bg-gray-900 text-white py-12">
-        <div class="max-w-6xl mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-4  mb-8 stagger-animation">
-                <div class="md:col-span-2">
-                    <div class="flex items-center space-x-2 mb-4">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="footer-grid mb-10">
+                <div>
+                    <div class="flex items-center gap-2 mb-4 justify-center md:justify-start">
+                        <img src="{{ asset('icons/Icone_Kimia.png') }}" alt="KimiaTicket" class="h-10 w-auto">
                         <span class="text-xl font-bold">Kimia<span class="text-red-500">Ticket</span></span>
                     </div>
-                    <p class="text-gray-400 mb-6 text-center md:text-left">
-                        Votre plateforme de billetterie de confiance pour les meilleurs événements en République Démocratique du Congo.
+                    <p class="text-gray-400 text-center md:text-left leading-relaxed">
+                        Votre plateforme de billetterie pour découvrir, réserver et partager les meilleurs événements en RDC.
                     </p>
-                    <p class="text-gray-300 mb-6 text-center md:text-left font-medium">
-                        Contact: +243 824 307 504
-                    </p>
-                    <div class="flex space-x-4 justify-center md:justify-start ">
-                        <a href="https://www.facebook.com/share/1BfdJ6i7mD/" class="social-icon bg-gray-800 p-3 rounded-full text-gray-300 hover:bg-red-600 transition-all ">
-                            <i data-lucide="facebook" class="w-5 h-5"></i>
-                            <svg class="w-6 h-6 text-gray-800 cursor-pointer dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
-                            <path fill-rule="evenodd" d="M13.135 6H15V3h-1.865a4.147 4.147 0 0 0-4.142 
-                            4.142V9H7v3h2v9.938h3V12h2.021l.592-3H12V6.591A.6.6 0 0 1 12.592 6h.543Z" clip-rule="evenodd"/>
+                    <p class="text-gray-300 mt-4 text-center md:text-left font-medium">Contact: +243 824 307 504</p>
+                    <div class="flex gap-3 mt-5 justify-center md:justify-start">
+                        <a href="https://www.facebook.com/share/1BfdJ6i7mD/" class="social-icon bg-gray-800 p-3 rounded-full text-gray-300 hover:bg-red-600 transition-all" aria-label="Facebook">
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M13.5 9H16l-.5 3h-2v9h-3v-9H8V9h2.5V7.4C10.5 5.3 11.8 4 13.9 4H16v3h-1.6c-.6 0-.9.3-.9.9V9Z"></path>
                             </svg>
                         </a>
-                        <a href="https://www.instagram.com/menjidrc?igsh=NDg1dm56dDZ5OHQx" class="social-icon cursor-pointer bg-gray-800 p-3 rounded-full text-gray-300 hover:bg-red-600 transition-all ">
-                            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24">
-                            <path fill="currentColor" fill-rule="evenodd" d="M3 8a5 5 0 0 1 5-5h8a5 5 0 0 1 5 5v8a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5V8Zm5-3a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3V8a3 3 0 0 0-3-3H8Zm7.597 2.214a1 1 0 0 1 1-1h.01a1 1 0 1 1 0 2h-.01a1 1 0 0 1-1-1ZM12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm-5 3a5 5 0 1 1 10 0 5 5 0 0 1-10 0Z" clip-rule="evenodd"/>
-                            </svg>
-
-                        </a>
-                        <a href="https://wa.me/243824307504" class="social-icon cursor-pointer bg-gray-800 p-3 rounded-full text-gray-300 hover:bg-red-600 transition-all ">
-                            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24">
-                            <path fill="currentColor" fill-rule="evenodd" d="M12 4a8 8 0 0 0-6.895 12.06l.569.718-.697 2.359 2.32-.648.379.243A8 8 0 1 0 12 4ZM2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10a9.96 9.96 0 0 1-5.016-1.347l-4.948 1.382 1.426-4.829-.006-.007-.033-.055A9.958 9.958 0 0 1 2 12Z" clip-rule="evenodd"/>
-                            <path fill="currentColor" d="M16.735 13.492c-.038-.018-1.497-.736-1.756-.83a1.008 1.008 0 0 0-.34-.075c-.196 0-.362.098-.49.291-.146.217-.587.732-.723.886-.018.02-.042.045-.057.045-.013 0-.239-.093-.307-.123-1.564-.68-2.751-2.313-2.914-2.589-.023-.04-.024-.057-.024-.057.005-.021.058-.074.085-.101.08-.079.166-.182.249-.283l.117-.14c.121-.14.175-.25.237-.375l.033-.066a.68.68 0 0 0-.02-.64c-.034-.069-.65-1.555-.715-1.711-.158-.377-.366-.552-.655-.552-.027 0 0 0-.112.005-.137.005-.883.104-1.213.311-.35.22-.94.924-.94 2.16 0 1.112.705 2.162 1.008 2.561l.041.06c1.161 1.695 2.608 2.951 4.074 3.537 1.412.564 2.081.63 2.461.63.16 0 .288-.013.4-.024l.072-.007c.488-.043 1.56-.599 1.804-1.276.192-.534.243-1.117.115-1.329-.088-.144-.239-.216-.43-.308Z"/>
+                        <a href="https://www.instagram.com/menjidrc?igsh=NDg1dm56dDZ5OHQx" class="social-icon bg-gray-800 p-3 rounded-full text-gray-300 hover:bg-red-600 transition-all" aria-label="Instagram">
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10Zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z"></path>
+                                <path d="M16.8 3H7.2A4.2 4.2 0 0 0 3 7.2v9.6A4.2 4.2 0 0 0 7.2 21h9.6a4.2 4.2 0 0 0 4.2-4.2V7.2A4.2 4.2 0 0 0 16.8 3Zm2.2 13.8a2.2 2.2 0 0 1-2.2 2.2H7.2A2.2 2.2 0 0 1 5 16.8V7.2A2.2 2.2 0 0 1 7.2 5h9.6A2.2 2.2 0 0 1 19 7.2v9.6Z"></path>
+                                <circle cx="17.5" cy="6.5" r="1"></circle>
                             </svg>
                         </a>
-                      
+                        <a href="https://wa.me/243824307504" class="social-icon bg-gray-800 p-3 rounded-full text-gray-300 hover:bg-red-600 transition-all" aria-label="WhatsApp">
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M12 3a9 9 0 0 0-7.7 13.7L3 21l4.5-1.2A9 9 0 1 0 12 3Zm0 16a7 7 0 0 1-3.6-1l-.3-.2-2.7.7.7-2.6-.2-.3A7 7 0 1 1 12 19Zm3.8-5.3c-.2-.1-1.2-.6-1.4-.7-.2-.1-.3-.1-.4.1-.1.2-.5.7-.6.8-.1.1-.2.1-.4 0s-.9-.3-1.6-1c-.6-.5-1-1.2-1.1-1.4-.1-.2 0-.3.1-.4l.3-.3.2-.3c.1-.1.1-.2 0-.4l-.7-1.7c-.2-.4-.4-.4-.6-.4h-.5c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 2s.8 2.3.9 2.5c.1.2 1.5 2.3 3.6 3.2.5.2.9.4 1.2.5.5.2 1 .2 1.4.1.4-.1 1.2-.5 1.3-1 .2-.5.2-.9.1-1 0-.1-.2-.2-.4-.3Z"></path>
+                            </svg>
+                        </a>
                     </div>
                 </div>
-                
+
                 <div class="text-center-mobile">
-                    <h4 class="text-lg font-semibold mb-4">Liens rapides</h4>
-                    <ul class="space-y-2 text-gray-400">
-                        <li><a href="#evenements" class="hover:text-red-500 transition-colors">Accueil</a></li>
-                        <li><a href="#billets" class="hover:text-shadow-red-500 transition-colors">Evenement</a></li>
-                        <li><a href="#contact" class="hover:text-red-500 transition-colors">Demande de billeterie</a></li>
+                    <h4 class="text-lg font-semibold mb-4">Navigation</h4>
+                    <ul class="footer-list space-y-2">
+                        <li><a href="#accueil" data-nav-link>Accueil</a></li>
+                        <li><a href="#evenements" data-nav-link>Événements</a></li>
+                        <li><a href="#apropos" data-nav-link>À propos</a></li>
+                        <li><a href="#contact" data-nav-link>Contact</a></li>
                     </ul>
                 </div>
 
                 <div class="text-center-mobile">
-                    <h4 class="text-lg font-semibold mb-4">Politique</h4>
-                    <ul class="space-y-2 text-gray-400">
-                        <li><a href="#evenements" class="hover:text-red-500 transition-colors">FAQ</a></li>
-                        <li><a href="#billets" class="hover:text-red-500 transition-colors">Politique de confidentialité</a></li>
-                        <li><a href="#contact" class="hover:text-red-500 transition-colors">Politique d'utilisation</a></li>
+                    <h4 class="text-lg font-semibold mb-4">Informations</h4>
+                    <ul class="footer-list space-y-2">
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Politique de confidentialité</a></li>
+                        <li><a href="#">Conditions d'utilisation</a></li>
                     </ul>
                 </div>
-                
-               
             </div>
             
-            <div class="pt-8 border-t border-gray-800 text-center text-gray-500 fade-in text-center-mobile">
+            <div class="pt-6 border-t border-gray-800 text-center text-gray-500 fade-in text-center-mobile">
                 <p>© {{ date('Y') }} Menji DRC — Tous droits réservés.</p>
             </div>
         </div>
@@ -800,10 +1256,36 @@
         // Menu mobile
         const menuToggle = document.getElementById('menu-toggle');
         const mobileMenu = document.getElementById('mobile-menu');
+        const navLinks = document.querySelectorAll('[data-nav-link]');
+        const trackedSections = ['accueil', 'evenements', 'apropos', 'contact']
+            .map((id) => document.getElementById(id))
+            .filter(Boolean);
+
+        function setActiveLink(sectionId) {
+            navLinks.forEach((link) => {
+                const isActive = link.getAttribute('href') === `#${sectionId}`;
+                link.classList.toggle('active', isActive);
+                link.setAttribute('aria-current', isActive ? 'page' : 'false');
+            });
+        }
+
+        function updateActiveLinkOnScroll() {
+            const scrollPosition = window.scrollY + 140;
+            let activeSection = 'accueil';
+
+            trackedSections.forEach((section) => {
+                if (scrollPosition >= section.offsetTop) {
+                    activeSection = section.id;
+                }
+            });
+
+            setActiveLink(activeSection);
+        }
         
         if (menuToggle && mobileMenu) {
             menuToggle.addEventListener('click', () => {
                 mobileMenu.classList.toggle('hidden');
+                menuToggle.setAttribute('aria-expanded', (!mobileMenu.classList.contains('hidden')).toString());
                 const icon = menuToggle.querySelector('i');
                 if (mobileMenu.classList.contains('hidden')) {
                     icon.setAttribute('data-lucide', 'menu');
@@ -837,132 +1319,75 @@
         // Smooth scrolling pour les ancres
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href') || '';
+                if (href.length < 2 || href === '#') {
+                    return;
+                }
+
                 e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
+                const target = document.querySelector(href);
                 if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
+                    const navbarHeight = document.querySelector('nav')?.offsetHeight || 0;
+                    const targetPosition = target.getBoundingClientRect().top + window.scrollY - navbarHeight + 4;
+                    window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+
+                    if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                        menuToggle?.setAttribute('aria-expanded', 'false');
+                        const icon = menuToggle?.querySelector('i');
+                        if (icon) {
+                            icon.setAttribute('data-lucide', 'menu');
+                            lucide.createIcons();
+                        }
+                    }
+
+                    const sectionId = href.replace('#', '');
+                    if (sectionId) {
+                        setActiveLink(sectionId);
+                    }
                 }
             });
         });
+
+        window.addEventListener('scroll', updateActiveLinkOnScroll, { passive: true });
+        updateActiveLinkOnScroll();
         
         // FONCTIONNALITÉ DE FILTRAGE AMÉLIORÉE
         document.addEventListener('DOMContentLoaded', function() {
             const searchInput = document.getElementById('search-input');
+            const categoryBadges = document.querySelectorAll('#category-badges .filter-badge');
             const statusFilter = document.getElementById('status-filter');
-            const dateFilter = document.getElementById('date-filter');
-            // const locationFilter = document.getElementById('location-filter');
-            const categoryFilter = document.getElementById('price-filter');
             const eventCards = document.querySelectorAll('.event-card');
             const eventsContainer = document.getElementById('events-container');
             const eventSections = document.querySelectorAll('.event-section');
+            let selectedCategory = 'all';
+            let selectedStatus = statusFilter ? (statusFilter.value || 'all').toLowerCase() : 'all';
 
-            if (!searchInput || !statusFilter || !dateFilter || !categoryFilter || !eventsContainer) {
+            if (!searchInput || !eventsContainer) {
                 return;
-            }
-            
-            // Fonction pour formater la date
-            function formatDate(dateString) {
-                const date = new Date(dateString);
-                return date.toISOString().split('T')[0]; // Format YYYY-MM-DD
-            }
-            
-            // Fonction pour obtenir le début de la journée
-            function getStartOfDay(date) {
-                const newDate = new Date(date);
-                newDate.setHours(0, 0, 0, 0);
-                return newDate;
-            }
-            
-            // Fonction pour obtenir la fin de la journée
-            function getEndOfDay(date) {
-                const newDate = new Date(date);
-                newDate.setHours(23, 59, 59, 999);
-                return newDate;
-            }
-            
-            // Fonction pour obtenir le début de la semaine
-            function getStartOfWeek(date) {
-                const newDate = new Date(date);
-                const day = newDate.getDay();
-                const diff = newDate.getDate() - day + (day === 0 ? -6 : 1); // Ajuster pour lundi comme premier jour
-                return new Date(newDate.setDate(diff));
-            }
-            
-            // Fonction pour obtenir la fin de la semaine
-            function getEndOfWeek(date) {
-                const startOfWeek = getStartOfWeek(date);
-                const endOfWeek = new Date(startOfWeek);
-                endOfWeek.setDate(startOfWeek.getDate() + 6);
-                return getEndOfDay(endOfWeek);
-            }
-            
-            // Fonction pour obtenir le début du mois
-            function getStartOfMonth(date) {
-                return new Date(date.getFullYear(), date.getMonth(), 1);
-            }
-            
-            // Fonction pour obtenir la fin du mois
-            function getEndOfMonth(date) {
-                return new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59, 999);
             }
             
             // Fonction pour filtrer les événements
             function filterEvents() {
                 const searchTerm = searchInput.value.toLowerCase().trim();
-                const statusValue = statusFilter.value;
-                const dateValue = dateFilter.value;
-                // const locationValue = locationFilter.value;
-                const categoryValue = categoryFilter.value.toLowerCase();
-                
-                const today = new Date();
                 let visibleCount = 0;
                 
                 eventCards.forEach(card => {
-                    const eventName = card.getAttribute('data-name');
-                    const eventStatus = (card.getAttribute('data-status') || '').toLowerCase();
-                    const eventDate = new Date(card.getAttribute('data-date'));
-                    // const eventLocation = card.getAttribute('data-location');
+                    const eventName = (card.getAttribute('data-name') || '').toLowerCase();
                     const eventCategory = (card.getAttribute('data-category') || '').toLowerCase();
+                    const eventStatus = (card.getAttribute('data-status') || '').toLowerCase();
                     
                     // Vérifier la recherche par nom
                     const nameMatch = !searchTerm || eventName.includes(searchTerm);
                     
-                    // Vérifier le statut
-                    const statusMatch = statusValue === 'all' || eventStatus === statusValue;
-                    
-                    // Vérifier la date
-                    let dateMatch = true;
-                    if (dateValue !== 'all') {
-                        const eventDateOnly = getStartOfDay(eventDate);
-                        const todayOnly = getStartOfDay(today);
-                        
-                        if (dateValue === 'today') {
-                            dateMatch = eventDateOnly.getTime() === todayOnly.getTime();
-                        } else if (dateValue === 'week') {
-                            const startOfWeek = getStartOfWeek(today);
-                            const endOfWeek = getEndOfWeek(today);
-                            dateMatch = eventDate >= startOfWeek && eventDate <= endOfWeek;
-                        } else if (dateValue === 'month') {
-                            const startOfMonth = getStartOfMonth(today);
-                            const endOfMonth = getEndOfMonth(today);
-                            dateMatch = eventDate >= startOfMonth && eventDate <= endOfMonth;
-                        } else if (dateValue === 'future') {
-                            dateMatch = eventDate > today;
-                        }
-                    }
-                    
-                    // Vérifier le lieu
-                    // const locationMatch = locationValue === 'all' || 
-                    //     eventLocation.toLowerCase().includes(locationValue.toLowerCase());
-                    
                     // Vérifier la catégorie
-                    const categoryMatch = categoryValue === 'all' || eventCategory.includes(categoryValue);
+                    const categoryMatch = selectedCategory === 'all' || eventCategory === selectedCategory;
+
+                    // Vérifier le statut
+                    const statusMatch = selectedStatus === 'all' || eventStatus === selectedStatus;
                     
                     // Afficher ou masquer la carte selon les critères
-                    if (nameMatch && statusMatch && dateMatch && categoryMatch) {
+                    if (nameMatch && categoryMatch && statusMatch) {
                         card.style.display = '';
                         visibleCount++;
                     } else {
@@ -1008,39 +1433,29 @@
                 }
             }
             
-            // Réinitialiser les filtres
-            function resetFilters() {
-                searchInput.value = '';
-                statusFilter.value = 'all';
-                dateFilter.value = 'all';
-                // locationFilter.value = 'all';
-                categoryFilter.value = 'all';
-                filterEvents();
-            }
-            
-            // Ajouter un bouton de réinitialisation
-            function addResetButton() {
-                const filterSection = document.querySelector('.filter-section');
-                const resetButton = document.createElement('button');
-                resetButton.type = 'button';
-                resetButton.className = 'bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors mt-6';
-                resetButton.textContent = 'Réinitialiser les filtres';
-                resetButton.addEventListener('click', resetFilters);
-                filterSection.appendChild(resetButton);
-            }
-            
             // Écouter les changements dans les filtres
             searchInput.addEventListener('input', filterEvents);
-            statusFilter.addEventListener('change', filterEvents);
-            dateFilter.addEventListener('change', filterEvents);
-            // locationFilter.addEventListener('change', filterEvents);
-            categoryFilter.addEventListener('change', filterEvents);
+            categoryBadges.forEach((badge) => {
+                badge.addEventListener('click', () => {
+                    selectedCategory = (badge.getAttribute('data-category') || 'all').toLowerCase();
+                    categoryBadges.forEach((btn) => {
+                        btn.classList.toggle('active', btn === badge);
+                    });
+                    filterEvents();
+                });
+            });
+
+            if (statusFilter) {
+                statusFilter.addEventListener('change', () => {
+                    selectedStatus = (statusFilter.value || 'all').toLowerCase();
+                    filterEvents();
+                });
+            }
             
-            // Initialiser les filtres et ajouter le bouton de réinitialisation
+            // Initialiser les filtres
             filterEvents();
-            addResetButton();
-            
-            console.log('Système de filtrage initialisé avec succès');
+
+            console.log('Filtrage par nom et catégorie initialisé avec succès');
         })
     </script>
 
