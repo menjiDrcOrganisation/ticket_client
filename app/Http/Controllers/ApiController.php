@@ -11,7 +11,7 @@ class ApiController extends Controller
     {
         $response = http::withOptions([
     'verify' => false,
-])->get(env('ENV_POINT_URL') . "/api/evenements");
+])->get(env('ENV_POINT_URL') . "/api/v1/evenements");
 
         if ($response->successful()) {
             $data = $response->json();
@@ -26,7 +26,7 @@ class ApiController extends Controller
     {
         $response = Http::withOptions   ([
     'verify' => false,
-])->get(env('ENV_POINT_URL') . "/api/evenements/{$short_url}");
+])->get(env('ENV_POINT_URL') . "/api/v1/evenements/{$short_url}");
 
         if ($response->successful()) {
             $data = $response->json();
@@ -61,7 +61,7 @@ public function sendDemandeEvenement(Request $request)
             'affiche',
             $request->file('affiche') ? file_get_contents($request->file('affiche')->getRealPath()) : null,
             $request->file('affiche') ? $request->file('affiche')->getClientOriginalName() : null
-        )->post(env('ENV_POINT_URL') . "/api/demande-evenement", [
+        )->post(env('ENV_POINT_URL') . "/api/v1/demande-evenement", [
             'nom_evenement' => $validated['nom_evenement'],
             'contact_organisateur' => $validated['contact_organisateur'],
             'description' => $validated['description'],
@@ -96,7 +96,7 @@ public function telechargerBilletParCode(Request $request)
     try {
         $confirmationResponse = Http::withOptions([
             'verify' => false,
-        ])->get($baseUrl . '/api/transactions/' . rawurlencode($reference) . '/confirmation');
+        ])->get($baseUrl . '/api/v1/transactions/' . rawurlencode($reference) . '/confirmation');
 
         $confirmationData = $confirmationResponse->json();
 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kimiaticket Menjidrc</title>
+    <title>KimiaTicket Menjidrc</title>
     
 <!-- Favicon : logo dans l'onglet -->
 <link rel="icon" href="{{ asset('icons/Icone_Kimia.png') }}" type="image/png" />
@@ -29,14 +29,57 @@
         }
 
         .site-nav {
-            background: rgba(255, 255, 255, 0.92);
+            background: #ffffff;
             backdrop-filter: blur(12px);
-            border-bottom: 1px solid #f1f5f9;
+            border-bottom: 1px solid #e2e8f0;
+            box-shadow: 0 10px 28px rgba(15, 23, 42, 0.08);
         }
 
         .site-logo {
-            height: 2.6rem;
+            height: 3.2rem;
             width: auto;
+            max-width: 220px;
+            object-fit: contain;
+            object-position: left center;
+            display: block;
+        }
+
+        .nav-brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.62rem;
+            min-width: 190px;
+        }
+
+        .brand-title {
+            font-size: 1.05rem;
+            font-weight: 800;
+            letter-spacing: 0.01em;
+            color: #0f172a;
+            line-height: 1;
+            white-space: nowrap;
+        }
+
+        .hero-section {
+            min-height: 82vh;
+            padding-top: 5.25rem;
+            background-position: left center;
+            background-size: cover;
+            background-attachment: scroll;
+        }
+
+        .hero-content-wrap {
+            width: 100%;
+            max-width: 80rem;
+            margin: 0 auto;
+            padding: 0 1.25rem;
+        }
+
+        .hero-content {
+            max-width: 38rem;
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .nav-link {
@@ -70,6 +113,27 @@
 
         .nav-link.active::after {
             transform: scaleX(1);
+        }
+
+        #mobile-menu .nav-link {
+            display: block;
+            padding: 0.8rem 1rem;
+            border-radius: 0.75rem;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #334155;
+            text-align: left;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        #mobile-menu .nav-link::after {
+            display: none;
+        }
+
+        #mobile-menu .nav-link:hover,
+        #mobile-menu .nav-link.active {
+            background: #f8fafc;
+            color: #0f172a;
         }
 
         .footer-grid {
@@ -119,7 +183,7 @@
         }
 
         .about-feature i {
-            color: #dc2626;
+            color: #16a34a;
             width: 1rem;
             height: 1rem;
             margin-top: 0.2rem;
@@ -135,7 +199,7 @@
         }
         
         .hero-gradient {
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(225, 29, 72, 0.6) 100%);
+            background: linear-gradient(95deg, rgba(15, 23, 42, 0.86) 0%, rgba(15, 23, 42, 0.74) 40%, rgba(15, 23, 42, 0.28) 78%, rgba(15, 23, 42, 0.08) 100%);
         }
         
         .event-card {
@@ -143,12 +207,35 @@
             display: flex;
             flex-direction: column;
             height: 100%;
+            min-height: 35.5rem;
             background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
             border: 1px solid rgba(226, 232, 240, 0.9);
             border-radius: 1.35rem;
             overflow: hidden;
             box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
             transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .event-list-grid {
+            display: grid;
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+            gap: 1.5rem;
+            align-items: stretch;
+            grid-auto-rows: 1fr;
+        }
+
+        @media (min-width: 768px) {
+            .event-list-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 2rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .event-list-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
         }
         
         .event-card:hover {
@@ -286,14 +373,14 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            margin-left: 0.45rem;
-            min-width: 1.4rem;
-            min-height: 1.4rem;
-            padding: 0 0.35rem;
+            margin-left: 0.38rem;
+            min-width: 1.2rem;
+            min-height: 1.2rem;
+            padding: 0 0.3rem;
             border-radius: 9999px;
             background: #eef2f7;
             color: #334155;
-            font-size: 0.72rem;
+            font-size: 0.67rem;
             font-weight: 700;
             line-height: 1;
         }
@@ -306,25 +393,26 @@
         .status-combo-wrap {
             display: flex;
             justify-content: center;
-            margin-top: 0.95rem;
+            margin-top: 0;
+            flex-shrink: 0;
         }
 
         .status-combo {
-            width: min(23rem, 100%);
-            min-height: 3.15rem;
-            padding: 0.8rem 2.9rem 0.8rem 1.25rem;
+            width: min(18rem, 100%);
+            min-height: 2.6rem;
+            padding: 0.58rem 2.45rem 0.58rem 0.95rem;
             border: 1px solid #cfe0f5;
             border-radius: 9999px;
             background: #ffffff;
             color: #0f172a;
-            font-size: 1rem;
-            font-weight: 700;
+            font-size: 0.9rem;
+            font-weight: 600;
             appearance: none;
             -webkit-appearance: none;
             -moz-appearance: none;
             background-image: linear-gradient(45deg, transparent 50%, #475569 50%), linear-gradient(135deg, #475569 50%, transparent 50%);
-            background-position: calc(100% - 1.15rem) calc(50% - 0.12rem), calc(100% - 0.8rem) calc(50% - 0.12rem);
-            background-size: 0.52rem 0.52rem, 0.52rem 0.52rem;
+            background-position: calc(100% - 1rem) calc(50% - 0.1rem), calc(100% - 0.68rem) calc(50% - 0.1rem);
+            background-size: 0.45rem 0.45rem, 0.45rem 0.45rem;
             background-repeat: no-repeat;
             transition: border-color 0.25s ease, box-shadow 0.25s ease;
         }
@@ -351,10 +439,27 @@
         }
         
         .event-image {
-            height: 220px;
+            height: 280px;
             background-size: cover;
             background-position: center;
             position: relative;
+        }
+
+        .event-image-title {
+            position: absolute;
+            left: 1rem;
+            right: 1rem;
+            bottom: 0.9rem;
+            z-index: 2;
+            margin: 0;
+            color: #ffffff;
+            font-weight: 800;
+            line-height: 1.25;
+            text-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            overflow: hidden;
         }
 
         .event-image::before {
@@ -383,6 +488,16 @@
             padding: 1.2rem 1.2rem 1.3rem;
         }
 
+        .card-title {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            overflow: hidden;
+            min-height: 3.45rem;
+            margin-bottom: 0.2rem;
+            line-height: 1.35;
+        }
+
         .event-type-inline {
             display: inline-flex;
             align-items: center;
@@ -408,6 +523,7 @@
             display: flex;
             flex-direction: column;
             gap: 0.65rem;
+            min-height: 8.5rem;
         }
 
         .event-meta-item {
@@ -439,6 +555,16 @@
             padding-top: 0.3rem;
         }
 
+        .event-image-strip {
+            margin-top: 0.9rem;
+            height: 8px;
+            border-radius: 9999px;
+            background-size: cover;
+            background-position: center;
+            border: 1px solid #e2e8f0;
+            opacity: 0.9;
+        }
+
         .event-cta {
             width: 100%;
             min-height: 3.15rem;
@@ -460,7 +586,7 @@
             background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
             box-shadow: 0 20px 36px rgba(220, 38, 38, 0.3);
         }
-        
+
         /* Styles pour la recherche et filtres */
         .search-filter-container {
             background: white;
@@ -510,16 +636,34 @@
             gap: 0.65rem;
         }
 
+        .filter-inline-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.55rem;
+            flex-wrap: wrap;
+        }
+
         .filter-badge {
             border: 1px solid #dbe4ef;
             background: #ffffff;
             color: #0f172a;
-            padding: 0.55rem 1rem;
+            padding: 0.5rem 0.95rem;
             border-radius: 9999px;
-            font-size: 0.88rem;
+            font-size: 0.81rem;
             font-weight: 600;
             transition: all 0.25s ease;
             white-space: nowrap;
+            min-height: 2.45rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .filter-badge-icon {
+            width: 0.9rem;
+            height: 0.9rem;
+            opacity: 0.85;
         }
 
         .filter-badge:hover {
@@ -531,6 +675,13 @@
             background: #1e293b;
             border-color: #0f172a;
             color: #ffffff;
+        }
+
+        .status-badges {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.55rem;
         }
         
         .filter-section {
@@ -586,7 +737,32 @@
             }
 
             .site-logo {
-                height: 3rem;
+                height: 3.45rem;
+                max-width: 210px;
+            }
+
+            .nav-brand {
+                min-width: 160px;
+            }
+
+            .brand-title {
+                font-size: 0.95rem;
+            }
+
+            .hero-section {
+                min-height: 68vh;
+                padding-top: 5.6rem;
+                background-position: left center;
+            }
+
+            .hero-content-wrap {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+
+            .hero-content {
+                max-width: 100%;
+                text-align: center;
             }
 
             .footer-grid {
@@ -595,13 +771,13 @@
             }
             
             .hero-title {
-                font-size: 2.25rem !important;
-                line-height: 1.2;
+                font-size: 1.9rem !important;
+                line-height: 1.16;
                 text-align: center;
             }
             
             .hero-subtitle {
-                font-size: 1.125rem !important;
+                font-size: 0.98rem !important;
                 text-align: center;
                 padding: 0 0.5rem;
             }
@@ -621,6 +797,7 @@
             .event-card {
                 margin: 0 auto;
                 max-width: 100%;
+                min-height: 33rem;
             }
             
             .ticket-card {
@@ -638,12 +815,28 @@
                 width: 100%;
             }
 
+            .filter-inline-row {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.75rem;
+            }
+
+            .filter-badges {
+                justify-content: center;
+            }
+
+            .status-badges {
+                justify-content: center;
+            }
+
             .search-box {
                 width: 100%;
             }
 
             .status-combo {
                 width: 100%;
+                min-height: 2.5rem;
+                font-size: 0.88rem;
             }
             
             .search-filter-container {
@@ -653,7 +846,7 @@
             }
             
             .event-image {
-                height: 180px;
+                height: 220px;
             }
             
             .status-badge {
@@ -682,6 +875,11 @@
             .card-title {
                 font-size: 1.4rem !important;
                 text-align: left;
+                min-height: 3.15rem;
+            }
+
+            .event-meta-list {
+                min-height: 8rem;
             }
             
             .card-text {
@@ -704,7 +902,7 @@
         
         @media (max-width: 640px) {
             .hero-title {
-                font-size: 2rem !important;
+                font-size: 1.72rem !important;
             }
             
             .section-title {
@@ -713,13 +911,13 @@
             
             .hero-subtitle,
             .section-subtitle {
-                font-size: 1rem !important;
+                font-size: 0.92rem !important;
             }
         }
         
         @media (max-width: 480px) {
             .hero-title {
-                font-size: 1.75rem !important;
+                font-size: 1.52rem !important;
             }
             
             .section-title {
@@ -727,7 +925,7 @@
             }
             
             .event-image {
-                height: 160px;
+                height: 190px;
             }
 
             .event-meta-icon {
@@ -759,7 +957,7 @@
         
         @media (max-width: 360px) {
             .hero-title {
-                font-size: 1.5rem !important;
+                font-size: 1.34rem !important;
             }
             
             .section-title {
@@ -767,7 +965,7 @@
             }
             
             .event-image {
-                height: 140px;
+                height: 170px;
             }
 
             .event-cta {
@@ -777,7 +975,7 @@
             
             .hero-subtitle,
             .section-subtitle {
-                font-size: 0.875rem !important;
+                font-size: 0.82rem !important;
             }
         }
         
@@ -806,6 +1004,157 @@
                 margin-right: auto !important;
             }
         }
+
+        .theme-toggle-btn {
+            position: fixed;
+            right: 1rem;
+            bottom: 1rem;
+            z-index: 80;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 9999px;
+            padding: 0.55rem 0.9rem;
+            background: #ffffff;
+            color: #0f172a;
+            font-size: 0.82rem;
+            font-weight: 700;
+            box-shadow: 0 12px 28px rgba(15, 23, 42, 0.16);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .theme-toggle-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 16px 30px rgba(15, 23, 42, 0.2);
+        }
+
+        .theme-toggle-btn i {
+            width: 1rem;
+            height: 1rem;
+        }
+
+        body.dark-mode {
+            background: #0b1220;
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .site-nav {
+            background: rgba(15, 23, 42, 0.94);
+            border-bottom-color: #1e293b;
+            box-shadow: 0 10px 28px rgba(2, 6, 23, 0.45);
+        }
+
+        body.dark-mode .brand-title,
+        body.dark-mode .nav-link,
+        body.dark-mode #mobile-menu .nav-link {
+            color: #e2e8f0;
+        }
+
+        body.dark-mode #mobile-menu {
+            background: #0f172a;
+            border-top-color: #1e293b;
+        }
+
+        body.dark-mode #evenements,
+        body.dark-mode #apropos {
+            background: #0f172a;
+        }
+
+        body.dark-mode .section-title,
+        body.dark-mode #apropos .section-title,
+        body.dark-mode #evenements h3 {
+            color: #f8fafc;
+        }
+
+        body.dark-mode .section-subtitle,
+        body.dark-mode #apropos p,
+        body.dark-mode .about-feature {
+            color: #cbd5e1;
+        }
+
+        body.dark-mode .search-filter-container {
+            background: #111827;
+        }
+
+        body.dark-mode .search-input {
+            background: #0b1220;
+            border-color: #334155;
+            color: #f8fafc;
+        }
+
+        body.dark-mode .search-icon {
+            color: #94a3b8;
+        }
+
+        body.dark-mode .filter-badge {
+            background: #0f172a;
+            border-color: #334155;
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .filter-badge-count {
+            background: #1e293b;
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .event-card {
+            background: linear-gradient(180deg, #111827 0%, #0f172a 100%);
+            border-color: rgba(51, 65, 85, 0.92);
+            box-shadow: 0 16px 40px rgba(2, 6, 23, 0.5);
+        }
+
+        body.dark-mode .event-type-inline,
+        body.dark-mode .event-meta-icon,
+        body.dark-mode .about-metric {
+            background: #1e293b;
+            border-color: #334155;
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .event-meta-item,
+        body.dark-mode .card-text,
+        body.dark-mode .event-meta-item .text-red-600 {
+            color: #cbd5e1 !important;
+        }
+
+        body.dark-mode .theme-toggle-btn {
+            background: #0f172a;
+            color: #f8fafc;
+            border-color: #334155;
+        }
+
+        body:not(.dark-mode) .event-card {
+            background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+            border-color: rgba(226, 232, 240, 0.9);
+        }
+
+        body:not(.dark-mode) .event-meta-item,
+        body:not(.dark-mode) .card-text,
+        body:not(.dark-mode) .section-subtitle,
+        body:not(.dark-mode) .about-feature {
+            color: #475569;
+        }
+
+        body:not(.dark-mode) .search-filter-container {
+            background: #ffffff;
+        }
+
+        body:not(.dark-mode) .theme-toggle-btn {
+            background: #ffffff;
+            color: #0f172a;
+            border-color: #cbd5e1;
+        }
+
+        @media (max-width: 640px) {
+            .theme-toggle-btn span {
+                display: none;
+            }
+
+            .theme-toggle-btn {
+                padding: 0.7rem;
+            }
+        }
     </style>
 
 
@@ -815,14 +1164,16 @@
     <!-- Navigation -->
 <nav class="site-nav fixed top-0 left-0 w-full z-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-[auto_1fr_auto] items-center py-3 gap-3">
-            <a href="#accueil" class="flex items-center slide-in-left" data-nav-link>
+        <div class="flex items-center justify-between py-3.5 gap-3">
+            <a href="#accueil" class="nav-brand" data-nav-link>
                 <img src="{{ asset('icons/Icone_Kimia.png') }}" alt="KimiaTicket" class="site-logo">
+                <span class="brand-title">KimiaTicket</span>
             </a>
 
-            <div class="hidden md:flex items-center justify-center gap-8">
+            <div class="hidden md:flex items-center justify-end gap-8 ml-auto">
                 <a href="#accueil" class="nav-link" data-nav-link>Accueil</a>
                 <a href="#evenements" class="nav-link" data-nav-link>Événements</a>
+                <a href="{{ route('demandeEvenement.create') }}" class="nav-link" data-nav-link>Demander un événement</a>
                 <a href="#apropos" class="nav-link" data-nav-link>À propos</a>
                 <a href="#contact" class="nav-link" data-nav-link>Contact</a>
             </div>
@@ -836,9 +1187,10 @@
     </div>
 
     <div id="mobile-menu" class="md:hidden bg-white border-t border-gray-200 hidden">
-        <div class="px-4 py-4 flex flex-col space-y-3 text-center">
+        <div class="px-4 py-4 flex flex-col space-y-3 text-left">
             <a href="#accueil" class="nav-link py-2" data-nav-link>Accueil</a>
             <a href="#evenements" class="nav-link py-2" data-nav-link>Événements</a>
+            <a href="{{ route('demandeEvenement.create') }}" class="nav-link py-2" data-nav-link>Demander un événement</a>
             <a href="#apropos" class="nav-link py-2" data-nav-link>À propos</a>
             <a href="#contact" class="nav-link py-2" data-nav-link>Contact</a>
         </div>
@@ -846,33 +1198,32 @@
 </nav>
 
     <!-- Hero Section -->
-    <header id="accueil" class="relative bg-cover bg-center bg-fixed min-h-screen flex items-center justify-center pt-16 overflow-fix" 
+    <header id="accueil" class="hero-section relative flex items-center overflow-fix" 
             style="background-image: url('https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');">
         <div class="absolute inset-0 hero-gradient"></div>
         
         <div class="absolute inset-0 bg-pattern"></div>
 
-        <div class="relative z-10 text-center px-4 space-y-6 max-w-4xl mx-auto fade-in w-full mobile-padding">
-            <div class="inline-block bg-red-600/20 border border-red-500/30 rounded-full px-6 py-2 mb-4 mx-auto-mobile">
-                <span class="text-red-100 text-sm font-medium uppercase tracking-wide">Événements Exclusifs</span>
-            </div>
+        <div class="hero-content-wrap relative z-10 fade-in">
+            <div class="hero-content space-y-4 mobile-padding">
             
-            <h1 class="hero-title text-4xl md:text-6xl lg:text-7xl font-extrabold text-white mb-6 text-center-mobile">
+            <h1 class="hero-title text-3xl md:text-4xl lg:text-5xl font-extrabold text-white mb-3 text-center-mobile">
                 Vivez des <span class="text-gradient">expériences</span> inoubliables
             </h1>
             
-            <p class="hero-subtitle text-xl text-gray-200 mb-8 max-w-2xl mx-auto leading-relaxed text-center-mobile">
+            <p class="hero-subtitle text-base md:text-lg text-gray-200 mb-5 max-w-xl leading-relaxed text-center-mobile">
                 Découvrez les événements les plus excitants de Kinshasa et réservez vos billets en toute simplicité
             </p>
             
-            <div class="flex flex-col sm:flex-row gap-4 justify-center  mx-auto-mobile">
-                <a href="#evenements" class="bg-red-600 hover:bg-red-700 text-white  sm:px-8 py-3 sm:py-4 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 pulse-animation flex items-center justify-center  text-center-mobile">
+            <div class="flex flex-col sm:flex-row gap-3 sm:justify-center mx-auto-mobile">
+                <a href="#evenements" class="bg-red-600 hover:bg-red-700 text-white sm:px-6 py-2 sm:py-2.5 rounded-full font-semibold text-[0.92rem] transition-all duration-300 transform hover:scale-105 pulse-animation flex items-center justify-center text-center-mobile">
                     
                     Voir les événements
                 </a>
-                <a href="{{ route('demandeEvenement.create') }}" class="bg-white/20 hover:bg-white/30 text-white backdrop-blur-sm px-6 sm:px-8 py-3 sm:py-4 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 flex items-center justify-center  border border-white/30 text-center-mobile">
+                <a href="{{ route('demandeEvenement.create') }}" class="bg-white/20 hover:bg-white/30 text-white backdrop-blur-sm px-5 sm:px-6 py-2 sm:py-2.5 rounded-full font-semibold text-[0.92rem] transition-all duration-300 transform hover:scale-105 flex items-center justify-center border border-white/30 text-center-mobile">
                     Demander un evenement
                 </a>
+            </div>
             </div>
         </div>
         
@@ -898,20 +1249,17 @@
             <!-- Barre de recherche et filtres -->
             @php
                 $resolveEventType = function ($eventItem) {
-                    $typeField = $eventItem['type_evenement'] ?? null;
+                    $rawType = data_get($eventItem, 'type_evenement.nom_type')
+                        ?? data_get($eventItem, 'type_evenement.nom_type_evenement')
+                        ?? data_get($eventItem, 'type_evenement')
+                        ?? data_get($eventItem, 'type_evenement_nom');
 
-                    if (is_array($typeField)) {
-                        $rawType = $typeField['nom'] ?? $typeField['libelle'] ?? $typeField['label'] ?? null;
-                    } elseif (is_string($typeField)) {
-                        $rawType = $typeField;
-                    } else {
-                        $rawType = null;
+                    if (!is_string($rawType)) {
+                        return 'Type non renseigne';
                     }
 
-                    $rawType = $rawType ?? ($eventItem['categorie'] ?? $eventItem['type'] ?? null);
-                    $label = trim((string) $rawType);
-
-                    return $label !== '' ? $label : 'Autre';
+                    $label = trim($rawType);
+                    return $label !== '' ? $label : 'Type non renseigne';
                 };
 
                 $categoryPairs = collect($evenements ?? [])
@@ -924,7 +1272,11 @@
                             'key' => $key,
                             'label' => ucwords(str_replace(['-', '_'], ' ', $label)),
                         ];
-                    });
+                    })
+                    ->filter(function ($item) {
+                        return $item['key'] !== 'type non renseigne';
+                    })
+                    ->values();
 
                 $categoryStats = $categoryPairs
                     ->pluck('key')
@@ -937,6 +1289,28 @@
                     });
 
                 $availableCategories = $categoryStats->keys()->values();
+
+                $statusMap = collect($evenements ?? [])->map(function ($eventItem) {
+                    $today = now()->startOfDay();
+                    $eventStartDate = \Carbon\Carbon::parse($eventItem['date_debut'])->startOfDay();
+                    $eventEndDate = \Carbon\Carbon::parse($eventItem['date_fin'] ?? $eventItem['date_debut'])->endOfDay();
+
+                    if ($eventStartDate->greaterThan($today)) {
+                        return 'avenir';
+                    }
+
+                    if ($eventEndDate->lessThan($today)) {
+                        return 'passe';
+                    }
+
+                    return 'encours';
+                });
+
+                $statusStats = [
+                    'avenir' => $statusMap->filter(fn ($value) => $value === 'avenir')->count(),
+                    'encours' => $statusMap->filter(fn ($value) => $value === 'encours')->count(),
+                    'passe' => $statusMap->filter(fn ($value) => $value === 'passe')->count(),
+                ];
             @endphp
             <div class="search-filter-container fade-in">
                 <div class="search-box">
@@ -946,24 +1320,23 @@
                 
                 <div class="filter-section">
                     <div class="filter-group">
-                        <label class="filter-label text-center-mobile">Catégories</label>
-                        <div class="filter-badges" id="category-badges">
-                            <button type="button" class="filter-badge active" data-category="all">Toutes<span class="filter-badge-count">{{ collect($evenements ?? [])->count() }}</span></button>
-                            @foreach($availableCategories as $categoryKey)
-                                <button type="button" class="filter-badge" data-category="{{ $categoryKey }}">
-                                    {{ $categoryLabels[$categoryKey] ?? 'Autre' }}
-                                    <span class="filter-badge-count">{{ $categoryStats[$categoryKey] ?? 0 }}</span>
-                                </button>
-                            @endforeach
-                        </div>
+                        <div class="filter-inline-row">
+                            <div class="filter-badges" id="category-badges">
+                                <button type="button" class="filter-badge active" data-category="all"><i data-lucide="sparkles" class="filter-badge-icon"></i>Toutes<span class="filter-badge-count">{{ collect($evenements ?? [])->count() }}</span></button>
+                                @foreach($availableCategories as $categoryKey)
+                                    <button type="button" class="filter-badge" data-category="{{ $categoryKey }}">
+                                        <i data-lucide="tag" class="filter-badge-icon"></i>
+                                        {{ $categoryLabels[$categoryKey] ?? 'Type non renseigne' }}
+                                        <span class="filter-badge-count">{{ $categoryStats[$categoryKey] ?? 0 }}</span>
+                                    </button>
+                                @endforeach
+                            </div>
 
-                        <div class="status-combo-wrap">
-                            <select id="status-filter" class="status-combo" aria-label="Filtrer par statut">
-                                <option value="all" selected>Tous les événements</option>
-                                <option value="avenir">Événements à venir</option>
-                                <option value="encours">Événements en cours</option>
-                                <option value="passe">Événements passés</option>
-                            </select>
+                            <div class="status-badges" id="status-badges">
+                                <button type="button" class="filter-badge" data-status="encours"><i data-lucide="play-circle" class="filter-badge-icon"></i>En cours<span class="filter-badge-count">{{ $statusStats['encours'] }}</span></button>
+                                <button type="button" class="filter-badge active" data-status="avenir"><i data-lucide="calendar-clock" class="filter-badge-icon"></i>A venir<span class="filter-badge-count">{{ $statusStats['avenir'] }}</span></button>
+                                <button type="button" class="filter-badge" data-status="passe"><i data-lucide="check-circle-2" class="filter-badge-icon"></i>Passe<span class="filter-badge-count">{{ $statusStats['passe'] }}</span></button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1002,7 +1375,7 @@
                         @if($sectionEvents->isNotEmpty())
                             <div class="event-section">
                                 <h3 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-6 text-center-mobile">{{ $sectionTitle }}</h3>
-                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+                                <div class="event-list-grid">
                                     @foreach($sectionEvents as $evenement)
                                         @php
                                             $eventStartDate = \Carbon\Carbon::parse($evenement['date_debut'])->startOfDay();
@@ -1026,6 +1399,13 @@
                                             $eventTypeRaw = $resolveEventType($evenement);
                                             $eventTypeLabel = ucwords(str_replace(['-', '_'], ' ', $eventTypeRaw));
                                             $eventTypeKey = strtolower($eventTypeRaw);
+                                            $hasEventType = $eventTypeKey !== 'type non renseigne';
+                                            $eventPosterUrl = isset($evenement['ressource'][0]['photo_affiche'])
+                                                ? env('ENV_POINT_URL') . '/storage/app/public/' . $evenement['ressource'][0]['photo_affiche']
+                                                : 'https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80';
+                                            $totalBilletsRestants = collect($evenement['type_billets'] ?? [])->sum(function ($typeBillet) {
+                                                return (int) data_get($typeBillet, 'pivot.nombre_billet', 0);
+                                            });
                                         @endphp
                                         <div class="event-card group mx-auto-mobile"
                                             data-name="{{ strtolower($evenement['nom']) }}"
@@ -1033,10 +1413,16 @@
                                             data-date="{{ $evenement['date_debut'] }}"
                                             data-category="{{ $eventTypeKey }}"
                                             data-location="{{ $evenement['salle'] }}"
-                                            data-price="{{ $evenement['type_billets'][0]['pivot']['prix'] ?? 0 }}">
-                                            <div class="event-category-badge">
-                                                {{ $eventTypeLabel }}
-                                            </div>
+                                            data-price="{{ $evenement['type_billets'][0]['pivot']['prix'] ?? 0 }}"
+                                            data-href="/{{ $evenement['url_evenement'] ?? '1' }}"
+                                            role="link"
+                                            tabindex="0"
+                                            aria-label="Ouvrir l'evenement {{ ucfirst($evenement['nom']) }}">
+                                            @if($hasEventType)
+                                                <div class="event-category-badge">
+                                                    {{ $eventTypeLabel }}
+                                                </div>
+                                            @endif
 
                                             <!-- Badge de statut -->
                                             <div class="status-badge {{ $statusClass }}">
@@ -1045,23 +1431,20 @@
 
                                             <!-- Image de l'événement -->
                                             <div class="event-image"
-                                                style="background-image: url('{{
-                                                    isset($evenement['ressource'][0]['photo_affiche'])
-                                                        ? env('ENV_POINT_URL') . '/storage/app/public/' . $evenement['ressource'][0]['photo_affiche']
-                                                        : 'https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80'
-                                                }}');">
+                                                style="background-image: url('{{ $eventPosterUrl }}');">
+                                                <h3 class="event-image-title text-xl sm:text-2xl">
+                                                    {{ ucfirst($evenement['nom']) }}
+                                                </h3>
                                             </div>
 
                                             <!-- Contenu de la carte -->
                                             <div class="event-card-content">
-                                                <h3 class="card-title text-xl sm:text-2xl font-bold mb-3 text-gray-800 group-hover:text-red-600 transition-colors text-center-mobile">
-                                                    {{ ucfirst($evenement['nom']) }}
-                                                </h3>
-
-                                                <div class="event-type-inline" aria-label="Type d'événement">
-                                                    <i data-lucide="tag"></i>
-                                                    {{ $eventTypeLabel }}
-                                                </div>
+                                                @if($hasEventType)
+                                                    <div class="event-type-inline" aria-label="Type d'événement">
+                                                        <i data-lucide="tag"></i>
+                                                        {{ $eventTypeLabel }}
+                                                    </div>
+                                                @endif
 
                                                 <div class="event-meta-list">
                                                     @php
@@ -1089,25 +1472,30 @@
                                                         <span class="card-text text-sm">{{ $evenement['salle'] }}, {{ $evenement['adresse'] }}</span>
                                                     </div>
 
-                                                    @if(!empty($numeroOrganisateur))
-                                                        <div class="event-meta-item">
-                                                            <span class="event-meta-icon">
-                                                                <i data-lucide="phone"></i>
-                                                            </span>
-                                                            <span class="card-text text-sm">Numero organisateur: {{ $numeroOrganisateur }}</span>
-                                                        </div>
-                                                    @endif
+                                                    <div class="event-meta-item">
+                                                        <span class="event-meta-icon">
+                                                            <i data-lucide="phone"></i>
+                                                        </span>
+                                                        <span class="card-text text-sm">Numero organisateur: {{ $numeroOrganisateur ?? 'Non disponible' }}</span>
+                                                    </div>
 
-                                                    @if(!empty($evenement['type_billets']))
-                                                        <div class="event-meta-item">
-                                                            <span class="event-meta-icon">
-                                                                <i data-lucide="ticket"></i>
-                                                            </span>
-                                                            <span class="card-text text-sm">
-                                                                {{ count($evenement['type_billets']) }} type(s) de billet disponible(s)
-                                                            </span>
-                                                        </div>
-                                                    @endif
+                                                    <div class="event-meta-item">
+                                                        <span class="event-meta-icon">
+                                                            <i data-lucide="ticket"></i>
+                                                        </span>
+                                                        <span class="card-text text-sm">
+                                                            {{ count($evenement['type_billets'] ?? []) }} type(s) de billet disponible(s)
+                                                        </span>
+                                                    </div>
+
+                                                    <div class="event-meta-item">
+                                                        <span class="event-meta-icon">
+                                                            <i data-lucide="package"></i>
+                                                        </span>
+                                                        <span class="card-text text-sm text-red-600 font-semibold">
+                                                            {{ number_format($totalBilletsRestants, 0, ',', ' ') }} billet(s) restant(s)
+                                                        </span>
+                                                    </div>
                                                 </div>
 
                                                 <div class="event-card-footer">
@@ -1115,6 +1503,8 @@
                                                         Acheter
                                                         <i data-lucide="arrow-right"></i>
                                                     </a>
+
+                                                    <div class="event-image-strip" style="background-image: url('{{ $eventPosterUrl }}');"></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -1250,7 +1640,50 @@
         </div>
     </footer>
 
+    <button id="theme-toggle" class="theme-toggle-btn" type="button" aria-label="Basculer le thème">
+        <i data-lucide="moon"></i>
+        <span id="theme-toggle-label">Mode sombre</span>
+    </button>
+
     <script>
+        const THEME_STORAGE_KEY = 'kimia_ticket_theme';
+
+        function applyTheme(theme) {
+            const isDark = theme === 'dark';
+            document.body.classList.toggle('dark-mode', isDark);
+
+            const themeIcon = document.querySelector('#theme-toggle i');
+            const themeLabel = document.getElementById('theme-toggle-label');
+            if (themeIcon) {
+                themeIcon.setAttribute('data-lucide', isDark ? 'sun' : 'moon');
+            }
+            if (themeLabel) {
+                themeLabel.textContent = isDark ? 'Mode clair' : 'Mode sombre';
+            }
+
+            if (window.lucide && typeof lucide.createIcons === 'function') {
+                lucide.createIcons();
+            }
+        }
+
+        function initThemeToggle() {
+            const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+            const preferredTheme = savedTheme || 'light';
+            applyTheme(preferredTheme);
+
+            const themeToggle = document.getElementById('theme-toggle');
+            if (!themeToggle) {
+                return;
+            }
+
+            themeToggle.addEventListener('click', () => {
+                const nextTheme = document.body.classList.contains('dark-mode') ? 'light' : 'dark';
+                localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
+                applyTheme(nextTheme);
+            });
+        }
+
+        initThemeToggle();
         lucide.createIcons();
         
         // Menu mobile
@@ -1356,12 +1789,12 @@
         document.addEventListener('DOMContentLoaded', function() {
             const searchInput = document.getElementById('search-input');
             const categoryBadges = document.querySelectorAll('#category-badges .filter-badge');
-            const statusFilter = document.getElementById('status-filter');
+            const statusBadges = document.querySelectorAll('#status-badges .filter-badge');
             const eventCards = document.querySelectorAll('.event-card');
             const eventsContainer = document.getElementById('events-container');
             const eventSections = document.querySelectorAll('.event-section');
             let selectedCategory = 'all';
-            let selectedStatus = statusFilter ? (statusFilter.value || 'all').toLowerCase() : 'all';
+            let selectedStatus = 'avenir';
 
             if (!searchInput || !eventsContainer) {
                 return;
@@ -1445,12 +1878,36 @@
                 });
             });
 
-            if (statusFilter) {
-                statusFilter.addEventListener('change', () => {
-                    selectedStatus = (statusFilter.value || 'all').toLowerCase();
+            statusBadges.forEach((badge) => {
+                badge.addEventListener('click', () => {
+                    selectedStatus = (badge.getAttribute('data-status') || 'avenir').toLowerCase();
+                    statusBadges.forEach((btn) => {
+                        btn.classList.toggle('active', btn === badge);
+                    });
                     filterEvents();
                 });
-            }
+            });
+
+            eventCards.forEach((card) => {
+                const href = card.getAttribute('data-href');
+                if (!href) {
+                    return;
+                }
+
+                card.addEventListener('click', (event) => {
+                    if (event.target.closest('a, button, input, select, textarea, label')) {
+                        return;
+                    }
+                    window.location.href = href;
+                });
+
+                card.addEventListener('keydown', (event) => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        window.location.href = href;
+                    }
+                });
+            });
             
             // Initialiser les filtres
             filterEvents();
