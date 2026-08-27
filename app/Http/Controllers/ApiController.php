@@ -72,11 +72,11 @@ public function sendDemandeEvenement(Request $request)
         if ($response->successful()) {
             return redirect()->back()->with('success', 'Demande envoyée avec succès, vous serez contacté dans les plus brefs délais');
         } else {
-            return redirect()->back()->with('error', 'Erreur lors de l\'envoi : ');
+            return redirect()->back()->with('error', 'Erreur lors de l\'envoi.');
         }
 
     } catch (\Exception $e) {
-        return redirect()->back()->with('error', 'Exception rencontrée : ');
+        return redirect()->back()->with('error', 'Exception rencontrée.');
     }
 }
 
@@ -117,7 +117,7 @@ public function telechargerBilletParCode(Request $request)
 
         return redirect()->away($downloadUrl);
     } catch (\Throwable $e) {
-        return redirect()->back()->withInput()->with('ticket_download_error', 'Impossible de telecharger le billet pour le moment.');
+        return redirect()->back()->withInput()->with('ticket_download_error', 'Impossible de télécharger le billet pour le moment.');
     }
 }
 
