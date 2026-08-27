@@ -186,7 +186,7 @@
         </div>
 
         <div>
-            <label class="block font-semibold text-gray-700 mb-1">Contact organisateur(mettre l'email ou votre numero de telephone) *</label>
+            <label class="block font-semibold text-gray-700 mb-1">Contact organisateur (mettre l'email ou votre numéro de téléphone) *</label>
             <input type="text" name="contact_organisateur" value="{{ old('contact_organisateur') }}"
                    class="w-full border border-gray-300 rounded p-2">
             @error('contact_organisateur')

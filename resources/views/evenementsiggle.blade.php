@@ -149,16 +149,17 @@
             background: #0f172a;
         }
 
-        .about-content {
-            max-width: 64rem;
-        }
-
         .about-text {
             text-align: left;
-            color: #e2e8f0;
+            color: #f1f5f9;
             line-height: 1.6;
-            max-width: 56rem;
+            max-width: 100%;
             font-size: clamp(1.15rem, 1.9vw, 1.95rem);
+        }
+
+        .about-heading {
+            color: #f8fafc;
+            letter-spacing: -0.01em;
         }
 
         .clean-panel-slate {
@@ -1249,13 +1250,20 @@
 
         body.light-mode #about .section-title,
         body.light-mode #galerie .section-title,
-        body.light-mode #tickets .section-title,
-        body.light-mode #about p {
+        body.light-mode #tickets .section-title {
+            color: #0f172a !important;
+        }
+
+        body.light-mode #about {
+            background: #f1f5f9 !important;
+        }
+
+        body.light-mode #about .about-heading {
             color: #0f172a !important;
         }
 
         body.light-mode .about-text {
-            color: #334155 !important;
+            color: #1e293b !important;
         }
 
         body.light-mode .clean-panel-dark,
@@ -1509,8 +1517,8 @@
 
     <!-- Section description -->
     <section id="about" class="about-section py-16 md:py-20 section-padding">
-        <div class="about-content mx-auto">
-            <h2 class="section-title section-title-right text-white text-3xl md:text-4xl font-bold">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="section-title section-title-right about-heading text-3xl md:text-4xl font-bold">
                 À propos de l'événement
             </h2>
             @php
@@ -1681,9 +1689,9 @@
             </div>
 
             <div class="mt-10 clean-panel clean-panel-slate p-6 md:p-8 max-w-3xl mr-auto">
-                <h3 class="text-xl md:text-2xl font-bold text-white text-left mb-2">Telecharger mon billet</h3>
+                <h3 class="text-xl md:text-2xl font-bold text-white text-left mb-2">Télécharger mon billet</h3>
                 <p class="text-gray-300 mb-5">
-                    Entrez votre code transaction pour recuperer votre billet deja paye.
+                    Entrez votre code transaction pour récupérer votre billet déjà payé.
                 </p>
 
                 @if(session('ticket_download_error'))
@@ -1706,7 +1714,7 @@
                         type="submit"
                         class="bg-yellow-500 hover:bg-yellow-600 text-black px-5 py-3 rounded-lg font-bold transition-all duration-300"
                     >
-                        Telecharger
+                        Télécharger
                     </button>
                 </form>
             </div>
@@ -1830,7 +1838,7 @@
         </div>
     </div>
 
-    <!-- Modal recapitulatif transaction -->
+    <!-- Modal récapitulatif transaction -->
     <div id="recap-modal" class="modal">
         <div class="modal-content max-w-lg bg-gray-900">
             <button class="close-modal" onclick="closeRecapModal()">
@@ -1838,10 +1846,10 @@
             </button>
 
             <h3 class="text-xl md:text-2xl text-white font-bold mb-2">
-                Recapitulatif de votre achat
+                Récapitulatif de votre achat
             </h3>
            
-            <label for="transaction-reference" class="block text-sm font-medium text-gray-300 mb-1">Reference d'achat</label>
+            <label for="transaction-reference" class="block text-sm font-medium text-gray-300 mb-1">Référence d'achat</label>
             <div class="flex flex-col md:flex-row gap-2 mb-3">
                 <input id="transaction-reference" type="text" readonly class="form-input bg-gray-800" value="" />
                 <button type="button" id="btnCopyReference" class="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg font-semibold transition-all duration-300">
@@ -1875,7 +1883,7 @@
             </button>
             
             <h2 class="text-xl md:text-2xl font-bold text-white text-center mb-4">
-                Votre billet est pret
+                Votre billet est prêt
             </h2>
             
             <div class="qr-wrapper flex justify-center mb-6">
@@ -2220,7 +2228,7 @@
     }
 
     function setStatusDownloadReadyLink(prefixText) {
-        setStatus(`${prefixText} <a href="#" id="status-download-link" data-download-ticket class="status-recap-link">telecharger ici</a>.`, 'success', true);
+        setStatus(`${prefixText} <a href="#" id="status-download-link" data-download-ticket class="status-recap-link">télécharger ici</a>.`, 'success', true);
 
         const downloadLinkEl = document.getElementById('status-download-link');
         if (downloadLinkEl) {
@@ -2237,7 +2245,7 @@
 
     function openRecapFromStatus() {
         if (!currentReference && !recapEl?.innerHTML?.trim()) {
-            setStatus('Aucun recapitulatif disponible pour le moment.', 'error');
+            setStatus('Aucun récapitulatif disponible pour le moment.', 'error');
             return;
         }
 
@@ -2353,7 +2361,7 @@
                     <div class="recap-value">${quantite}</div>
                 </div>
                 <div class="recap-field md:col-span-2">
-                    <span class="recap-label">Total a payer</span>
+                    <span class="recap-label">Total à payer</span>
                     <div class="recap-value recap-total">${total} ${devise}</div>
                 </div>
             </div>
@@ -2435,7 +2443,7 @@
 
     function downloadTicketNow() {
         if (!currentDownloadUrl) {
-            setStatus('Le lien de telechargement n\'est pas encore disponible.', 'warning');
+            setStatus('Le lien de téléchargement n\'est pas encore disponible.', 'warning');
             return;
         }
 
@@ -2470,7 +2478,7 @@
             const tx = data.transaction || {};
 
             if (!tx.reference) {
-                throw new Error('Reference de transaction absente');
+                throw new Error('Référence de transaction absente');
             }
 
             currentReference = tx.reference;
@@ -2510,7 +2518,7 @@
             const data = await apiPost(`${API_BASE}/transactions/${currentReference}/valider-paiement`);
 
             if (data.pending) {
-                setLoading(btnConfirmerRecap, true, 'Verification...');
+                setLoading(btnConfirmerRecap, true, 'Vérification...');
             }
 
             startPollingConfirmation(currentReference);
@@ -2540,17 +2548,17 @@
             highlightDownloadAction();
             setAcheterDisabled(false);
             setLoading(btnConfirmerRecap, false);
-            setStatusDownloadReadyLink('Votre billet est deja pret,');
+            setStatusDownloadReadyLink('Votre billet est déjà prêt,');
             return;
         }
 
         if (statut === 'paye' && !downloadUrl) {
-            setLoading(btnConfirmerRecap, true, 'Generation du billet...');
+            setLoading(btnConfirmerRecap, true, 'Génération du billet...');
             return;
         }
 
         if (statut === 'paye_sans_billet') {
-            setLoading(btnConfirmerRecap, true, 'Generation du billet...');
+            setLoading(btnConfirmerRecap, true, 'Génération du billet...');
             return;
         }
 
@@ -2565,7 +2573,7 @@
         }
 
         if (statut === 'en_attente' || statut === 'paiement_en_cours') {
-            setLoading(btnConfirmerRecap, true, 'Verification...');
+            setLoading(btnConfirmerRecap, true, 'Vérification...');
             return;
         }
     }
@@ -2609,7 +2617,7 @@
                     reference,
                     error: error?.message || error,
                 });
-                setLoading(btnConfirmerRecap, true, 'Verification...');
+                setLoading(btnConfirmerRecap, true, 'Vérification...');
             } finally {
                 pollInFlight = false;
             }
@@ -2632,7 +2640,7 @@
 
         if (btnConfirmerRecap) {
             btnConfirmerRecap.style.display = 'block';
-            setLoading(btnConfirmerRecap, true, 'Verification...');
+            setLoading(btnConfirmerRecap, true, 'Vérification...');
         }
 
         chargerRecap(saved);
@@ -2919,7 +2927,7 @@
             btnCopyReference.addEventListener('click', async function () {
                 const reference = transactionReferenceEl ? transactionReferenceEl.value.trim() : '';
                 if (!reference) {
-                    setStatus('Aucune reference d\'achat a copier.', 'warning');
+                    setStatus('Aucune référence d\'achat à copier.', 'warning');
                     return;
                 }
 
@@ -2934,7 +2942,7 @@
                         document.execCommand('copy');
                     }
 
-                    setStatus('Reference d\'achat copiee avec succes.', 'success');
+                    setStatus('Référence d\'achat copiée avec succès.', 'success');
                 } catch (error) {
                     setStatus('Copie automatique impossible. Copiez le code manuellement.', 'warning');
                 }
@@ -2967,7 +2975,7 @@
                 recapConfirmed = true;
                 try {
                     setLoading(btnConfirmerRecap, true, 'Validation...');
-                    setStatus('Recapitulatif confirme. Lancement du paiement...', 'progress');
+                    setStatus('Récapitulatif confirmé. Lancement du paiement...', 'progress');
                     await validerPaiement();
                 } catch (error) {
                     setLoading(btnConfirmerRecap, false);

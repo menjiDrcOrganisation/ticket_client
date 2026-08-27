@@ -1221,7 +1221,7 @@
                     Voir les événements
                 </a>
                 <a href="{{ route('demandeEvenement.create') }}" class="bg-white/20 hover:bg-white/30 text-white backdrop-blur-sm px-5 sm:px-6 py-2 sm:py-2.5 rounded-full font-semibold text-[0.92rem] transition-all duration-300 transform hover:scale-105 flex items-center justify-center border border-white/30 text-center-mobile">
-                    Demander un evenement
+                    Demander un événement
                 </a>
             </div>
             </div>
@@ -1326,7 +1326,7 @@
                                 @foreach($availableCategories as $categoryKey)
                                     <button type="button" class="filter-badge" data-category="{{ $categoryKey }}">
                                         <i data-lucide="tag" class="filter-badge-icon"></i>
-                                        {{ $categoryLabels[$categoryKey] ?? 'Type non renseigne' }}
+                                        {{ $categoryLabels[$categoryKey] ?? 'Type non renseigné' }}
                                         <span class="filter-badge-count">{{ $categoryStats[$categoryKey] ?? 0 }}</span>
                                     </button>
                                 @endforeach
@@ -1334,8 +1334,8 @@
 
                             <div class="status-badges" id="status-badges">
                                 <button type="button" class="filter-badge" data-status="encours"><i data-lucide="play-circle" class="filter-badge-icon"></i>En cours<span class="filter-badge-count">{{ $statusStats['encours'] }}</span></button>
-                                <button type="button" class="filter-badge active" data-status="avenir"><i data-lucide="calendar-clock" class="filter-badge-icon"></i>A venir<span class="filter-badge-count">{{ $statusStats['avenir'] }}</span></button>
-                                <button type="button" class="filter-badge" data-status="passe"><i data-lucide="check-circle-2" class="filter-badge-icon"></i>Passe<span class="filter-badge-count">{{ $statusStats['passe'] }}</span></button>
+                                <button type="button" class="filter-badge active" data-status="avenir"><i data-lucide="calendar-clock" class="filter-badge-icon"></i>À venir<span class="filter-badge-count">{{ $statusStats['avenir'] }}</span></button>
+                                <button type="button" class="filter-badge" data-status="passe"><i data-lucide="check-circle-2" class="filter-badge-icon"></i>Passé<span class="filter-badge-count">{{ $statusStats['passe'] }}</span></button>
                             </div>
                         </div>
                     </div>
@@ -1383,11 +1383,11 @@
 
                                             if ($eventStartDate->greaterThan(now()->startOfDay())) {
                                                 $statusClass = 'status-upcoming';
-                                                $statusText = 'A venir';
+                                                $statusText = 'À venir';
                                                 $statusValue = 'avenir';
                                             } elseif ($eventEndDate->lessThan(now()->startOfDay())) {
                                                 $statusClass = 'status-soldout';
-                                                $statusText = 'Passe';
+                                                $statusText = 'Passé';
                                                 $statusValue = 'passe';
                                             } else {
                                                 $statusClass = 'status-active';
@@ -1476,7 +1476,7 @@
                                                         <span class="event-meta-icon">
                                                             <i data-lucide="phone"></i>
                                                         </span>
-                                                        <span class="card-text text-sm">Numero organisateur: {{ $numeroOrganisateur ?? 'Non disponible' }}</span>
+                                                        <span class="card-text text-sm">Numéro organisateur: {{ $numeroOrganisateur ?? 'Non disponible' }}</span>
                                                     </div>
 
                                                     <div class="event-meta-item">
