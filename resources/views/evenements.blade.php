@@ -1334,8 +1334,8 @@
 
                             <div class="status-badges" id="status-badges">
                                 <button type="button" class="filter-badge" data-status="encours"><i data-lucide="play-circle" class="filter-badge-icon"></i>En cours<span class="filter-badge-count">{{ $statusStats['encours'] }}</span></button>
-                                <button type="button" class="filter-badge active" data-status="avenir"><i data-lucide="calendar-clock" class="filter-badge-icon"></i>À venir<span class="filter-badge-count">{{ $statusStats['avenir'] }}</span></button>
-                                <button type="button" class="filter-badge" data-status="passe"><i data-lucide="check-circle-2" class="filter-badge-icon"></i>Passé<span class="filter-badge-count">{{ $statusStats['passe'] }}</span></button>
+                                <button type="button" class="filter-badge" data-status="avenir"><i data-lucide="calendar-clock" class="filter-badge-icon"></i>À venir<span class="filter-badge-count">{{ $statusStats['avenir'] }}</span></button>
+                                <button type="button" class="filter-badge active" data-status="passe"><i data-lucide="check-circle-2" class="filter-badge-icon"></i>Passé<span class="filter-badge-count">{{ $statusStats['passe'] }}</span></button>
                             </div>
                         </div>
                     </div>
@@ -1794,7 +1794,7 @@
             const eventsContainer = document.getElementById('events-container');
             const eventSections = document.querySelectorAll('.event-section');
             let selectedCategory = 'all';
-            let selectedStatus = 'avenir';
+            let selectedStatus = 'passe';
 
             if (!searchInput || !eventsContainer) {
                 return;
